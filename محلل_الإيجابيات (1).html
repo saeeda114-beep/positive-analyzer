@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>محلل الإيجابيات — متوسطة الحارث بن هشام</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+:root {
+  --primary: #1a3a5c;
+  --accent: #c8973a;
+  --bg: #eef2f7;
+  --surface: #ffffff;
+  --surface2: #f4f6f9;
+  --border: #d0d8e4;
+  --text: #1e2a38;
+  --muted: #6b7a8d;
+  --green: #1e7a4a;
+  --gold: #c8973a;
+  --radius: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Tajawal',sans-serif; background:var(--bg); color:var(--text); font-size:14px; min-height:100vh; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background:var(--primary);
+  color:white;
+  padding:0 28px;
+  height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,0.18);
+}
+.topbar-brand { display:flex; align-items:center; gap:12px; }
+.topbar-brand .icon { font-size:22px; }
+.topbar-brand h1 { font-size:16px; font-weight:700; line-height:1.2; }
+.topbar-brand p { font-size:11px; opacity:.65; }
+.topbar-actions { display:flex; gap:10px; align-items:center; }
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:7px 16px; border-radius:20px; border:1.5px solid rgba(255,255,255,0.3);
+  background:rgba(255,255,255,0.08); color:white;
+  font-family:'Tajawal',sans-serif; font-size:13px; font-weight:500;
+  cursor:pointer; transition:all 0.15s;
+}
+.btn:hover { background:rgba(255,255,255,0.18); }
+.btn.accent { background:var(--accent); border-color:var(--accent); color:white; }
+.btn.accent:hover { background:#b5842e; }
+.btn:disabled { opacity:0.4; cursor:default; }
+
+/* ── MAIN ── */
+.main { max-width:1000px; margin:0 auto; padding:28px 20px; }
+
+/* ── DROP ZONE ── */
+.drop-zone {
+  border:2px dashed var(--border);
+  border-radius:var(--radius);
+  background:var(--surface);
+  padding:48px 24px;
+  text-align:center;
+  cursor:pointer;
+  transition:border-color 0.2s, background 0.2s;
+}
+.drop-zone:hover, .drop-zone.drag { border-color:var(--primary); background:#edf3fb; }
+.drop-zone .dz-icon { font-size:52px; margin-bottom:12px; }
+.drop-zone h2 { font-size:17px; font-weight:700; margin-bottom:6px; }
+.drop-zone p { font-size:13px; color:var(--muted); }
+.drop-zone .dz-sub { margin-top:18px; font-size:12px; color:var(--muted); }
+
+/* ── STATS ── */
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:22px; }
+.stat-card {
+  background:var(--surface); border-radius:var(--radius);
+  border:0.5px solid var(--border);
+  padding:14px 16px;
+}
+.stat-card .s-label { font-size:12px; color:var(--muted); margin-bottom:5px; }
+.stat-card .s-val { font-size:26px; font-weight:800; color:var(--primary); }
+.stat-card.accent-card .s-val { color:var(--accent); }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:10px; margin-bottom:14px;
+}
+.search-wrap { position:relative; }
+.search-wrap input {
+  padding:8px 36px 8px 14px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  font-family:'Tajawal',sans-serif;
+  font-size:13px;
+  width:240px;
+  background:var(--surface);
+  outline:none;
+  transition:border-color 0.15s;
+}
+.search-wrap input:focus { border-color:var(--primary); }
+.search-wrap .s-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:15px; pointer-events:none; }
+.toolbar-right { display:flex; gap:8px; flex-wrap:wrap; }
+.tbtn {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:7px 16px; border-radius:20px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  font-family:'Tajawal',sans-serif; font-size:13px;
+  cursor:pointer; color:var(--text); transition:all 0.15s;
+}
+.tbtn:hover { background:var(--surface2); border-color:var(--primary); }
+.tbtn.primary { background:var(--primary); color:white; border-color:var(--primary); }
+.tbtn.primary:hover { background:#112d4a; }
+
+/* ── TABLE ── */
+.table-wrap {
+  background:var(--surface);
+  border-radius:var(--radius);
+  border:0.5px solid var(--border);
+  overflow:hidden;
+}
+table { width:100%; border-collapse:collapse; }
+thead th {
+  background:var(--primary);
+  color:white;
+  padding:11px 16px;
+  font-size:12px;
+  font-weight:600;
+  text-align:center;
+  white-space:nowrap;
+}
+thead th.name-col { text-align:right; }
+tbody tr { border-bottom:0.5px solid var(--border); transition:background 0.1s; }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:nth-child(even) { background:var(--surface2); }
+tbody tr:hover { background:#dde9f7; }
+td { padding:10px 16px; text-align:center; vertical-align:middle; }
+td.name-col { text-align:right; font-weight:500; font-size:14px; }
+.rank-badge {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:30px; height:30px; border-radius:50%;
+  font-weight:700; font-size:12px;
+  background:var(--border); color:var(--muted);
+}
+.bar-wrap { display:flex; align-items:center; gap:8px; }
+.bar-track { flex:1; height:8px; background:var(--border); border-radius:4px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:4px; }
+.bar-fill.hi  { background:linear-gradient(90deg,#c8973a,#e8b84b); }
+.bar-fill.mid { background:linear-gradient(90deg,#1e7a4a,#29a86a); }
+.bar-fill.lo  { background:linear-gradient(90deg,#1a3a5c,#2e6bb5); }
+.score-num { font-weight:700; min-width:24px; }
+.count-pill {
+  display:inline-block; background:var(--surface2);
+  border:1px solid var(--border); border-radius:10px;
+  padding:2px 10px; font-size:12px; color:var(--muted);
+}
+.table-footer {
+  padding:10px 16px; font-size:12px; color:var(--muted);
+  text-align:center; border-top:0.5px solid var(--border);
+  background:var(--surface2);
+}
+
+/* ── EMPTY / STATUS ── */
+.status-msg { text-align:center; padding:20px; color:var(--muted); font-size:13px; }
+.hidden { display:none !important; }
+
+/* ── PRINT ── */
+@media print {
+  body { background:white; }
+  .topbar, .toolbar, .search-wrap, .no-print { display:none !important; }
+  .main { padding:0; max-width:100%; }
+  .table-wrap { border:none; border-radius:0; }
+  thead th { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  tbody tr:nth-child(even) { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .bar-fill { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .print-header { display:block !important; }
+}
+.print-header {
+  display:none;
+  background:var(--primary);
+  color:white;
+  padding:18px 24px;
+  margin-bottom:16px;
+}
+.print-header h1 { font-size:17px; font-weight:800; }
+.print-header p { font-size:12px; opacity:.7; margin-top:3px; }
+
+/* ── SETTINGS BAR ── */
+.settings-bar {
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:10px 28px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.settings-group { display:flex; align-items:center; gap:8px; }
+.settings-group label { font-size:12px; color:var(--muted); white-space:nowrap; }
+.settings-group input {
+  padding:7px 12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  font-family:'Tajawal',sans-serif;
+  font-size:13px;
+  background:var(--surface2);
+  color:var(--text);
+  outline:none;
+  transition:border-color 0.15s;
+  width:210px;
+}
+.settings-group input:focus { border-color:var(--primary); background:white; }
+.settings-hint { font-size:11px; color:var(--muted); margin-right:auto; }
+@media print { .settings-bar { display:none !important; } }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <span class="icon">📋</span>
+    <div>
+      <h1>محلل الإيجابيات</h1>
+      <p id="topbar-sub">متوسطة الحارث بن هشام — التوجيه الطلابي</p>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn" id="btn-new" onclick="resetApp()">📂 ملف جديد</button>
+    <button class="btn accent" id="btn-print" onclick="window.print()" disabled>🖨️ طباعة</button>
+  </div>
+</div>
+
+<!-- SETTINGS BAR -->
+<div class="settings-bar no-print">
+  <div class="settings-group">
+    <label>🏫 اسم المدرسة</label>
+    <input type="text" id="schoolName" value="متوسطة الحارث بن هشام" placeholder="اكتب اسم المدرسة..." oninput="updateBranding()">
+  </div>
+  <div class="settings-group">
+    <label>📅 العام الدراسي</label>
+    <input type="text" id="schoolYear" value="1446 / 1447هـ" placeholder="مثال: 1446 / 1447هـ" oninput="updateBranding()">
+  </div>
+  <span class="settings-hint">يظهر في الترويسة وعند الطباعة</span>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PRINT HEADER (visible only on print) -->
+  <div class="print-header">
+    <h1>إحصائية الإيجابيات — ملخص درجات الطلاب</h1>
+    <p id="print-sub">متوسطة الحارث بن هشام — التوجيه الطلابي — 1446 / 1447هـ</p>
+  </div>
+
+  <!-- DROP ZONE -->
+  <div class="drop-zone" id="dropZone"
+    onclick="document.getElementById('fileInput').click()"
+    ondragover="event.preventDefault();this.classList.add('drag')"
+    ondragleave="this.classList.remove('drag')"
+    ondrop="handleDrop(event)">
+    <div class="dz-icon">📊</div>
+    <h2>ارفع ملف الإيجابيات هنا</h2>
+    <p>اضغط للاختيار أو اسحب الملف مباشرة</p>
+    <p class="dz-sub">يدعم ملفات Excel‏ (.xlsx / .xls)</p>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this.files[0])">
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results" class="hidden">
+
+    <!-- STATS -->
+    <div class="stats-grid no-print" id="statsGrid"></div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar no-print">
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="ابحث باسم الطالب..." oninput="renderTable()">
+        <span class="s-icon">🔍</span>
+      </div>
+      <div class="toolbar-right">
+        <button class="tbtn" onclick="sortBy('name')">🔤 ترتيب أبجدي</button>
+        <button class="tbtn" onclick="sortBy('score')">🔢 ترتيب بالدرجة</button>
+        <button class="tbtn primary" onclick="window.print()">🖨️ طباعة التقرير</button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:54px">#</th>
+            <th class="name-col">اسم الطالب</th>
+            <th style="width:200px">مجموع الدرجات</th>
+            <th style="width:90px">السجلات</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div class="table-footer" id="tableFooter"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SheetJS (bundled via CDN — needs internet on first open only if cached) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+let allStudents = [];
+let maxScore = 1;
+let currentSort = 'score';
+
+function updateBranding() {
+  const school = document.getElementById('schoolName').value || 'اسم المدرسة';
+  const year   = document.getElementById('schoolYear').value || '';
+  document.getElementById('topbar-sub').textContent = school + ' — التوجيه الطلابي';
+  document.getElementById('print-sub').textContent  = school + ' — التوجيه الطلابي' + (year ? ' — ' + year : '');
+  document.title = 'محلل الإيجابيات — ' + school;
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+}
+
+function handleFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const wb = XLSX.read(e.target.result, {type:'array'});
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const data = XLSX.utils.sheet_to_json(ws, {defval:''});
+      if (!data.length) { alert('الملف فارغ أو لا يحتوي بيانات.'); return; }
+      processData(data, file.name);
+    } catch(err) {
+      alert('تعذّر قراءة الملف. تأكد أنه ملف Excel صحيح (.xlsx أو .xls).');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function detectKeys(sample) {
+  const keys = Object.keys(sample);
+  const nameKey = keys.find(k => /اسم|إسم|طالب/.test(k)) || keys[keys.length-1];
+  const scoreKey = keys.find(k => /مقدار|درجة|زيادة|نقطة/.test(k)) || keys[1];
+  return {nameKey, scoreKey};
+}
+
+function processData(data, filename) {
+  const {nameKey, scoreKey} = detectKeys(data[0]);
+  const map = {};
+  data.forEach(row => {
+    const name = (row[nameKey]||'').toString().trim();
+    const score = parseFloat(row[scoreKey]) || 0;
+    if (!name) return;
+    if (!map[name]) map[name] = {name, total:0, count:0};
+    map[name].total += score;
+    map[name].count++;
+  });
+
+  allStudents = Object.values(map);
+  sortBy('score', false);
+  maxScore = allStudents[0]?.total || 1;
+
+  const totalScore = allStudents.reduce((s,x)=>s+x.total,0);
+  const avg = (totalScore / allStudents.length).toFixed(1);
+
+  document.getElementById('statsGrid').innerHTML = [
+    {label:'عدد الطلاب', val:allStudents.length, accent:false},
+    {label:'إجمالي السجلات', val:data.length, accent:false},
+    {label:'أعلى مجموع', val:maxScore, accent:true},
+    {label:'المتوسط العام', val:avg, accent:false},
+    {label:'إجمالي الدرجات', val:totalScore, accent:false},
+  ].map(s=>`
+    <div class="stat-card${s.accent?' accent-card':''}">
+      <div class="s-label">${s.label}</div>
+      <div class="s-val">${s.val}</div>
+    </div>`).join('');
+
+  document.getElementById('dropZone').classList.add('hidden');
+  document.getElementById('results').classList.remove('hidden');
+  document.getElementById('btn-print').disabled = false;
+  renderTable();
+}
+
+function sortBy(key, rerender=true) {
+  if (key === 'score') {
+    allStudents.sort((a,b) => b.total - a.total || a.name.localeCompare(b.name, 'ar'));
+  } else {
+    allStudents.sort((a,b) => a.name.localeCompare(b.name, 'ar'));
+  }
+  currentSort = key;
+  if (rerender) renderTable();
+}
+
+function renderTable() {
+  const q = document.getElementById('searchInput').value.trim();
+  const filtered = q ? allStudents.filter(s=>s.name.includes(q)) : allStudents;
+  const body = document.getElementById('tableBody');
+
+  body.innerHTML = filtered.map((s, i) => {
+    const globalRank = allStudents.indexOf(s) + 1;
+    const pct = Math.round(s.total / maxScore * 100);
+    const cls = s.total >= 20 ? 'hi' : s.total >= 10 ? 'mid' : 'lo';
+    let badge = '';
+    if (globalRank === 1) badge = '<span style="font-size:20px">🥇</span>';
+    else if (globalRank === 2) badge = '<span style="font-size:20px">🥈</span>';
+    else if (globalRank === 3) badge = '<span style="font-size:20px">🥉</span>';
+    else badge = `<span class="rank-badge">${globalRank}</span>`;
+
+    return `<tr>
+      <td>${badge}</td>
+      <td class="name-col">${s.name}</td>
+      <td>
+        <div class="bar-wrap">
+          <div class="bar-track"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>
+          <span class="score-num">${s.total}</span>
+        </div>
+      </td>
+      <td><span class="count-pill">${s.count} سجل</span></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('tableFooter').textContent =
+    q ? `نتائج البحث: ${filtered.length} من ${allStudents.length} طالب`
+      : `إجمالي الطلاب: ${allStudents.length}`;
+}
+
+function resetApp() {
+  allStudents = [];
+  maxScore = 1;
+  document.getElementById('results').classList.add('hidden');
+  document.getElementById('dropZone').classList.remove('hidden');
+  document.getElementById('fileInput').value = '';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('btn-print').disabled = true;
+}
+</script>
+</body>
+</html>
