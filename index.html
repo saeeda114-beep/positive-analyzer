@@ -333,9 +333,35 @@ function handleFile(file) {
     try {
       const wb = XLSX.read(e.target.result, {type:'array'});
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const data = XLSX.utils.sheet_to_json(ws, {defval:''});
-      if (!data.length) { alert('الملف فارغ أو لا يحتوي بيانات.'); return; }
-      processData(data, file.name);
+
+      // ── الطريقة الذكية: نقرأ كل الصفوف كمصفوفة خام ونبحث عن صف الرأس
+      const raw = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+
+      // نبحث عن الصف الذي يحتوي كلمات المفاتيح (اسم الطالب + مقدار)
+      let headerRow = -1;
+      let nameCol = -1, scoreCol = -1;
+      for (let r = 0; r < raw.length; r++) {
+        const row = raw[r].map(c => (c||'').toString());
+        const ni = row.findIndex(c => /اسم|إسم|طالب/.test(c));
+        const si = row.findIndex(c => /مقدار|درجة|زيادة|نقطة/.test(c));
+        if (ni !== -1 && si !== -1) { headerRow = r; nameCol = ni; scoreCol = si; break; }
+      }
+
+      // إذا ما لقينا رأس واضح، نجرب القراءة العادية
+      let data, totalRows;
+      if (headerRow === -1) {
+        data = XLSX.utils.sheet_to_json(ws, {defval:''});
+        totalRows = data.length;
+        if (!data.length) { alert('الملف فارغ أو لا يحتوي بيانات.'); return; }
+        processDataKeyed(data, file.name);
+        return;
+      }
+
+      // بنينا بيانات من الصفوف بعد الرأس
+      const dataRows = raw.slice(headerRow + 1);
+      totalRows = dataRows.filter(r => (r[nameCol]||'').toString().trim()).length;
+      processDataRaw(dataRows, nameCol, scoreCol, file.name, totalRows);
+
     } catch(err) {
       alert('تعذّر قراءة الملف. تأكد أنه ملف Excel صحيح (.xlsx أو .xls).');
     }
@@ -343,15 +369,11 @@ function handleFile(file) {
   reader.readAsArrayBuffer(file);
 }
 
-function detectKeys(sample) {
-  const keys = Object.keys(sample);
+// للملفات المرتبة (رأس في الصف الأول)
+function processDataKeyed(data, filename) {
+  const keys = Object.keys(data[0]);
   const nameKey = keys.find(k => /اسم|إسم|طالب/.test(k)) || keys[keys.length-1];
   const scoreKey = keys.find(k => /مقدار|درجة|زيادة|نقطة/.test(k)) || keys[1];
-  return {nameKey, scoreKey};
-}
-
-function processData(data, filename) {
-  const {nameKey, scoreKey} = detectKeys(data[0]);
   const map = {};
   data.forEach(row => {
     const name = (row[nameKey]||'').toString().trim();
@@ -361,7 +383,28 @@ function processData(data, filename) {
     map[name].total += score;
     map[name].count++;
   });
+  buildResults(map, data.length, filename);
+}
 
+// للملفات غير المرتبة (رأس في منتصف الملف)
+function processDataRaw(rows, nameCol, scoreCol, filename, totalRows) {
+  const map = {};
+  rows.forEach(row => {
+    const name = (row[nameCol]||'').toString().trim();
+    const score = parseFloat(row[scoreCol]) || 0;
+    if (!name || name === '' ) return;
+    if (!map[name]) map[name] = {name, total:0, count:0};
+    map[name].total += score;
+    map[name].count++;
+  });
+  buildResults(map, totalRows, filename);
+}
+
+function processData(data, filename) {
+  processDataKeyed(data, filename);
+}
+
+function buildResults(map, totalRows, filename) {
   allStudents = Object.values(map);
   sortBy('score', false);
   maxScore = allStudents[0]?.total || 1;
@@ -371,7 +414,7 @@ function processData(data, filename) {
 
   document.getElementById('statsGrid').innerHTML = [
     {label:'عدد الطلاب', val:allStudents.length, accent:false},
-    {label:'إجمالي السجلات', val:data.length, accent:false},
+    {label:'إجمالي السجلات', val:totalRows, accent:false},
     {label:'أعلى مجموع', val:maxScore, accent:true},
     {label:'المتوسط العام', val:avg, accent:false},
     {label:'إجمالي الدرجات', val:totalScore, accent:false},
