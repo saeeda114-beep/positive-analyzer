@@ -1,912 +1,132 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
-<title>تقرير الإيجابيات</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>منصة السلوك والمواظبة</title>
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
 
-:root {
-  --dark:   #1a3a4a;
-  --teal:   #1d5c6e;
-  --green:  #2e7d52;
-  --gold:   #c8973a;
-  --accent: #4ab5a0;
-  --bg:     #f0f4f6;
-  --surface:#fff;
-  --border: #d4dde4;
-  --text:   #1a2a35;
-  --muted:  #6b808c;
-  --r:      10px;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);font-size:14px;}
-
-/* ══ SCREEN TOOLBAR ══ */
-.screen-toolbar{
-  background:var(--dark);padding:10px 28px;
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:100;
-}
-.screen-toolbar .brand{color:rgba(255,255,255,.8);font-size:13px;font-weight:500;}
-.abtn{display:inline-flex;align-items:center;gap:6px;padding:7px 18px;border-radius:20px;
-  font-family:'Tajawal',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:none;}
-.abtn-ghost{background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2);}
-.abtn-ghost:hover{background:rgba(255,255,255,.2);}
-.abtn-gold{background:var(--gold);color:white;}
-.abtn-gold:hover{background:#b5832e;}
-.abtn:disabled{opacity:.4;cursor:default;pointer-events:none;}
-.toolbar-btns{display:flex;gap:8px;}
-
-/* ══ SETTINGS BAR ══ */
-.settings-bar{background:var(--surface);border-bottom:2px solid var(--border);
-  padding:11px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-.sg{display:flex;align-items:center;gap:7px;}
-.sg label{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:500;}
-.sg input{padding:7px 11px;border:1px solid var(--border);border-radius:8px;
-  font-family:'Tajawal',sans-serif;font-size:13px;background:#f8fafb;
-  color:var(--text);outline:none;transition:all .15s;width:200px;}
-.sg input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,92,110,.1);}
-
-/* ══ MAIN SCREEN WRAP ══ */
-.main{max-width:1100px;margin:0 auto;padding:24px 20px 48px;}
-
-/* ══ DROP ZONE ══ */
-.drop-zone{border:2px dashed var(--border);border-radius:var(--r);background:var(--surface);
-  padding:64px 24px;text-align:center;cursor:pointer;transition:all .2s;}
-.drop-zone:hover,.drop-zone.drag{border-color:var(--teal);background:#edf6f4;}
-.drop-zone h2{font-size:18px;font-weight:700;margin:12px 0 6px;}
-.drop-zone p{font-size:13px;color:var(--muted);}
-
-/* ══ SECTION TITLE ══ */
-.sec-title{font-size:16px;font-weight:800;color:var(--dark);
-  margin:26px 0 13px;display:flex;align-items:center;gap:8px;
-  border-right:4px solid var(--teal);padding-right:12px;}
-
-/* ══ STATS ══ */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:4px;}
-.stat-card{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);padding:16px 18px;position:relative;overflow:hidden;}
-.stat-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:var(--teal);border-radius:0 var(--r) var(--r) 0;}
-.stat-card.gold::before{background:var(--gold);}
-.stat-card.green::before{background:var(--green);}
-.stat-card.accent::before{background:var(--accent);}
-.s-label{font-size:12px;color:var(--muted);margin-bottom:5px;}
-.s-val{font-size:28px;font-weight:900;color:var(--dark);}
-.s-note{font-size:11px;color:var(--muted);margin-top:3px;}
-
-/* ══ TOP 3 ══ */
-.top-students{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.top-card{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);padding:20px;text-align:center;}
-.top-card.rank1{border-color:#FFD700;background:linear-gradient(145deg,#fffbeb,#fff8d6);}
-.top-card.rank2{border-color:#C0C0C0;background:linear-gradient(145deg,#f8f8f8,#f0f0f0);}
-.top-card.rank3{border-color:#CD7F32;background:linear-gradient(145deg,#fdf5ec,#faebd4);}
-.medal{font-size:34px;margin-bottom:8px;display:block;}
-.tc-name{font-size:13px;font-weight:700;line-height:1.4;margin-bottom:6px;}
-.tc-score{font-size:34px;font-weight:900;color:var(--dark);}
-.tc-label{font-size:11px;color:var(--muted);}
-
-/* ══ CHARTS ══ */
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.chart-card{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);padding:18px;}
-.chart-card h3{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:14px;text-align:center;}
-.chart-wrap{position:relative;height:210px;}
-.chart-full{grid-column:1/-1;}
-.chart-wrap-bar{position:relative;height:260px;}
-
-/* ══ DIST ══ */
-.dist-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.dist-card{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:12px;}
-.dist-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
-.d-label{font-size:12px;color:var(--muted);}
-.d-val{font-size:18px;font-weight:800;color:var(--dark);}
-.d-pct{font-size:11px;color:var(--muted);}
-
-/* ══ TOOLBAR ══ */
-.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
-.search-wrap{position:relative;}
-.search-wrap input{padding:8px 36px 8px 14px;border:1px solid var(--border);border-radius:20px;
-  font-family:'Tajawal',sans-serif;font-size:13px;width:240px;background:var(--surface);outline:none;transition:all .15s;}
-.search-wrap input:focus{border-color:var(--teal);}
-.s-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
-.tbtn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:20px;
-  border:1px solid var(--border);background:var(--surface);font-family:'Tajawal',sans-serif;
-  font-size:13px;cursor:pointer;color:var(--text);transition:all .15s;}
-.tbtn:hover{background:#edf6f4;border-color:var(--teal);color:var(--teal);}
-.tbtn.primary{background:var(--teal);color:white;border-color:var(--teal);}
-.tbtn.primary:hover{background:#17495a;}
-
-/* ══ TABLE ══ */
-.table-wrap{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);overflow:hidden;}
-table{width:100%;border-collapse:collapse;}
-thead th{background:var(--dark);color:white;padding:11px 16px;font-size:12px;font-weight:600;text-align:center;white-space:nowrap;}
-thead th.nc{text-align:right;}
-tbody tr{border-bottom:.5px solid var(--border);transition:background .1s;}
-tbody tr:last-child{border-bottom:none;}
-tbody tr:nth-child(even){background:#f7fafb;}
-tbody tr:hover{background:#e8f4f0;}
-td{padding:10px 16px;text-align:center;vertical-align:middle;}
-td.nc{text-align:right;font-weight:500;font-size:13px;}
-.rank-badge{display:inline-flex;align-items:center;justify-content:center;
-  width:28px;height:28px;border-radius:50%;font-weight:700;font-size:12px;background:var(--border);color:var(--muted);}
-.bar-wrap{display:flex;align-items:center;gap:8px;}
-.bar-track{flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:4px;}
-.bar-fill.hi{background:linear-gradient(90deg,#c8973a,#e8c86a);}
-.bar-fill.mid{background:linear-gradient(90deg,#2e7d52,#4ab87a);}
-.bar-fill.lo{background:linear-gradient(90deg,#1d5c6e,#3a9bb5);}
-.score-num{font-weight:700;min-width:22px;font-size:13px;}
-.count-pill{display:inline-block;background:#f0f4f6;border:1px solid var(--border);
-  border-radius:10px;padding:2px 10px;font-size:11px;color:var(--muted);}
-.table-footer{padding:10px 16px;font-size:12px;color:var(--muted);text-align:center;
-  border-top:.5px solid var(--border);background:#f7fafb;}
-
-/* ══ BEHAVIORS ══ */
-.behav-table-wrap{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);overflow:hidden;}
-.behav-table-wrap table{width:100%;border-collapse:collapse;}
-.behav-table-wrap thead th{background:var(--dark);color:white;padding:10px 16px;font-size:12px;font-weight:600;text-align:right;}
-.behav-table-wrap thead th:last-child{text-align:center;width:160px;}
-.behav-table-wrap thead th:nth-child(3){text-align:center;width:90px;}
-.behav-table-wrap thead th:first-child{text-align:center;width:50px;}
-.behav-table-wrap tbody tr{border-bottom:.5px solid var(--border);}
-.behav-table-wrap tbody tr:last-child{border-bottom:none;}
-.behav-table-wrap tbody tr:nth-child(even){background:#f7fafb;}
-.behav-table-wrap tbody tr:hover{background:#e8f4f0;}
-.behav-table-wrap td{padding:9px 16px;font-size:13px;vertical-align:middle;}
-.behav-rank{display:inline-flex;align-items:center;justify-content:center;
-  width:26px;height:26px;border-radius:50%;font-weight:700;font-size:12px;background:var(--border);color:var(--muted);margin-left:8px;}
-.behav-score-pill{display:inline-flex;align-items:center;gap:6px;}
-.behav-bar-track{width:80px;height:7px;background:var(--border);border-radius:4px;overflow:hidden;display:inline-block;}
-.behav-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#1d5c6e,#4ab5a0);}
-.behav-num{font-weight:700;font-size:13px;min-width:24px;}
-
-/* ══ FOOTER ══ */
-.page-footer{text-align:center;padding:16px;font-size:12px;color:var(--muted);
-  border-top:1px solid var(--border);background:var(--surface);margin-top:32px;}
-
-/* ══ UTILS ══ */
-.hidden{display:none!important;}
-.gap-top{margin-top:20px;}
-
-/* ════════════════════════════════
-   PRINT STYLES
-════════════════════════════════ */
-@media print {
-  /* هوامش A4 مثالية — 20mm أعلى وأسفل، 15mm يمين ويسار */
-  @page {
-    size: A4 portrait;
-    margin: 20mm 15mm 20mm 15mm;
-  }
-
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-
-  body { background: white; font-size: 11px; font-family: 'Tajawal', sans-serif; }
-  .screen-toolbar, .settings-bar, .toolbar, .page-footer { display: none !important; }
-  .main { padding: 0; max-width: 100%; }
-
-  /* ══ إطار ديكوري لكل صفحة ══ */
-  .cover-page,
-  .summary-page,
-  .charts-page,
-  .behaviors-page,
-  .detail-page {
-    box-shadow: none;
-    border: 1.5px solid #b0bec5;
-    border-radius: 0;
-    padding: 8mm 10mm;
-    position: relative;
-  }
-
-  /* ── صفحة الغلاف ── */
-  .cover-page {
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 237mm;   /* A4 - هوامش */
-    page-break-after: always;
-    text-align: center;
-  }
-  .cover-body {
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    width: 100%;
-    padding: 10mm 0;
-  }
-  .cover-page .cover-school { font-size: 18pt; font-weight: 900; color: #1a3a4a; margin-bottom: 6mm; }
-  .cover-page .cover-year   { font-size: 12pt; color: #6b808c; margin-bottom: 16mm; }
-  .cover-page .cover-title  {
-    font-size: 24pt; font-weight: 900; color: white;
-    background: #1d5c6e;
-    padding: 5mm 14mm; border-radius: 3mm;
-    margin-bottom: 10mm;
-  }
-  .cover-page .cover-date { font-size: 10pt; color: #6b808c; }
-  .cover-footer {
-    display: block !important;
-    width: 100%;
-    text-align: center;
-    font-size: 9pt; color: #6b808c;
-    border-top: 1px solid #d4dde4;
-    padding-top: 3mm;
-    margin-top: 4mm;
-  }
-  .cover-footer strong { color: #1a3a4a; }
-
-  /* ── صفحة الملخص ── */
-  .summary-page { page-break-after: always; }
-  .summary-page .stats-grid   { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .summary-page .top-students { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .s-val  { font-size: 22px !important; }
-  .medal  { font-size: 24px !important; margin-bottom: 4px; }
-  .tc-score { font-size: 26px !important; }
-
-  /* ── صفحة الرسوم ── */
-  .charts-page { page-break-after: always; }
-  .charts-page .charts-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .charts-page .chart-wrap     { height: 120px; }
-  .charts-page .chart-full .top15Table table { font-size: 10px; }
-  .charts-page .chart-full .top15Table td,
-  .charts-page .chart-full .top15Table th { padding: 4px 8px !important; }
-  .charts-page .dist-grid { grid-template-columns: repeat(4,1fr); gap: 6px; margin-top: 6px; }
-  .charts-page .sec-title { margin: 3mm 0 2mm; }
-  .chart-card { padding: 8px; break-inside: avoid; }
-  .chart-card h3 { font-size: 10px; margin-bottom: 6px; text-align: center; }
-  .dist-card { padding: 7px 9px; }
-  .d-val  { font-size: 13px !important; }
-  .d-pct  { font-size: 10px; }
-  .d-label { font-size: 10px; }
-
-  /* ── صفحة الإيجابيات ── */
-  .behaviors-page { page-break-after: always; }
-  .behav-table-wrap td  { padding: 7px 10px; font-size: 11px; }
-  .behav-table-wrap thead th { padding: 8px 10px; font-size: 11px; }
-
-  /* ── كشف الطلاب — جداول مقسّمة 25 اسم ── */
-  .detail-page { page-break-before: always; border: none !important; padding: 0 !important; }
-  #printTables { display: block !important; }
-  .print-table-page {
-    page-break-after: always;
-    border: 1.5px solid #b0bec5;
-    padding: 8mm 10mm;
-    -webkit-print-color-adjust: exact; print-color-adjust: exact;
-  }
-  .print-table-page:last-child { page-break-after: auto; }
-  .print-detail-table { width: 100%; border-collapse: collapse; margin-top: 3mm; }
-  .print-detail-table thead th {
-    background: #1a3a4a !important; color: white !important;
-    padding: 8px 12px; font-size: 11px; font-weight: 700;
-    -webkit-print-color-adjust: exact; print-color-adjust: exact;
-  }
-  .print-detail-table tbody tr { border-bottom: 0.5px solid #d4dde4; break-inside: avoid; }
-  .print-detail-table tbody tr:nth-child(even) {
-    background: #f0f4f6 !important;
-    -webkit-print-color-adjust: exact; print-color-adjust: exact;
-  }
-  .print-detail-table td { padding: 7px 12px; font-size: 11px; vertical-align: middle; }
-  .print-table-footer {
-    font-size: 10px; color: #6b808c; text-align: center;
-    padding-top: 3px; margin-top: 3px;
-    border-top: 0.5px solid #d4dde4;
-  }
-
-  /* عناوين الأقسام */
-  .sec-title {
-    font-size: 13px; font-weight: 800;
-    margin: 4mm 0 3mm;
-    border-right: 3px solid #1d5c6e;
-    padding-right: 8px;
-  }
-  .print-section-header {
-    display: flex !important;
-    align-items: center; justify-content: space-between;
-    margin-bottom: 4mm; padding-bottom: 2mm;
-    border-bottom: 1.5px solid #1d5c6e;
-  }
-  .print-section-header .psh-school { font-size: 10pt; font-weight: 800; color: #1a3a4a; }
-  .print-section-header .psh-year   { font-size: 9pt; color: #6b808c; }
+body{
+    margin:0;
+    font-family:Tahoma, Arial;
+    background:#f3f6f8;
+    color:#1a2a35;
 }
 
-/* ══ PRINT TABLE PAGES ══ */
-#printTables { display: none; }
-
-/* غلاف الطباعة — مخفي على الشاشة */
-.cover-page{display:none;}
-.cover-body{display:none;}
-.cover-footer{display:none;}
-.print-section-header{display:none;}
-
-/* ════════════════════════════════
-   FIXES: no duplicate student lists + A4 print layout
-════════════════════════════════ */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-
-  body {
-    background: #fff !important;
-    margin: 0 !important;
-  }
-
-  .main {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  /* منع طباعة جدول الشاشة الكبير؛ يطبع فقط الجداول المقسمة */
-  .detail-page > .table-wrap,
-  .detail-page > .toolbar {
-    display: none !important;
-  }
-
-  /* ضبط الصفحات */
-  .summary-page,
-  .charts-page,
-  .behaviors-page,
-  .print-table-page {
-    width: 100% !important;
-    min-height: auto !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  /* تقليل الفراغات */
-  .summary-page,
-  .charts-page,
-  .behaviors-page {
-    padding: 7mm 9mm !important;
-  }
-
-  .sec-title {
-    margin: 3mm 0 2.5mm !important;
-  }
-
-  /* إصلاح قص الرسوم */
-  .charts-page .charts-grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 7px !important;
-    width: 100% !important;
-    overflow: visible !important;
-  }
-
-  .charts-page .chart-card {
-    min-width: 0 !important;
-    overflow: hidden !important;
-    padding: 7px !important;
-  }
-
-  .charts-page .chart-wrap {
-    width: 100% !important;
-    height: 115px !important;
-    overflow: hidden !important;
-  }
-
-  .charts-page canvas {
-    max-width: 100% !important;
-    max-height: 115px !important;
-  }
-
-  .charts-page .chart-full {
-    grid-column: 1 / -1 !important;
-  }
-
-  #top15Table table {
-    table-layout: fixed !important;
-    width: 100% !important;
-  }
-
-  #top15Table th,
-  #top15Table td {
-    font-size: 9.5px !important;
-    padding: 3.5px 6px !important;
-    line-height: 1.25 !important;
-    white-space: normal !important;
-    word-break: normal !important;
-  }
-
-  /* جدول الطلاب المطبوع */
-  .print-table-page {
-    padding: 7mm 9mm !important;
-    border: 1px solid #c8d2d9 !important;
-    page-break-after: always !important;
-  }
-
-  .print-detail-table th {
-    padding: 6px 9px !important;
-    font-size: 10.5px !important;
-  }
-
-  .print-detail-table td {
-    padding: 5.5px 9px !important;
-    font-size: 10.5px !important;
-    line-height: 1.35 !important;
-  }
-
-  .print-table-footer {
-    font-size: 9.5px !important;
-    margin-top: 2mm !important;
-  }
+.header{
+    background:#0f3d4c;
+    color:white;
+    padding:35px 20px;
+    text-align:center;
 }
 
-@media screen {
-  #printTables {
-    display: none !important;
-  }
+.header h1{
+    margin:0;
+    font-size:38px;
+}
+
+.header p{
+    margin-top:10px;
+    opacity:.9;
+}
+
+.tools-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    max-width:1000px;
+    margin:50px auto;
+    padding:0 20px;
+}
+
+.tool-card{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    text-decoration:none;
+    color:#1a2a35;
+    box-shadow:0 4px 14px rgba(0,0,0,.08);
+    border:1px solid #d4dde4;
+    transition:.2s;
+}
+
+.tool-card:hover{
+    transform:translateY(-5px);
+    border-color:#1d5c6e;
+}
+
+.tool-icon{
+    font-size:55px;
+    margin-bottom:15px;
+}
+
+.tool-card h3{
+    margin:0 0 10px;
+    color:#0f3d4c;
+    font-size:24px;
+}
+
+.tool-card p{
+    margin:0;
+    color:#607d8b;
+    line-height:1.8;
+}
+
+.footer{
+    text-align:center;
+    padding:30px;
+    color:#78909c;
+    font-size:14px;
 }
 
 </style>
+
 </head>
+
 <body>
 
-<!-- ══ TOOLBAR ══ -->
-<div class="screen-toolbar no-print">
-  <span class="brand">📋 أداة تحليل السلوك الإيجابي — التوجيه الطلابي</span>
-  <div class="toolbar-btns">
-    <button class="abtn abtn-ghost" onclick="resetApp()">📂 ملف جديد</button>
-    <button class="abtn abtn-gold" id="btn-print" onclick="window.print()" disabled>🖨️ طباعة التقرير</button>
-  </div>
+<div class="header">
+    <h1>📊 منصة السلوك والمواظبة</h1>
+    <p>
+        أدوات تحليل السلوك الإيجابي والغياب والمخالفات المدرسية
+    </p>
 </div>
 
-<!-- ══ SETTINGS ══ -->
-<div class="settings-bar no-print">
-  <div class="sg"><label>🏫 اسم المدرسة</label>
-    <input id="schoolName" value="متوسطة الحارث بن هشام" oninput="updateBranding()"></div>
-  <div class="sg"><label>👥 عدد طلاب المدرسة</label>
-    <input type="number" id="totalStudents" value="300" min="1" oninput="refreshAnalysis()"></div>
-  <div class="sg"><label>📅 العام الدراسي</label>
-    <input id="schoolYear" value="1446 / 1447هـ" oninput="updateBranding()"></div>
+<section class="tools-grid">
+
+    <a class="tool-card" href="positive.html">
+
+        <div class="tool-icon">⭐</div>
+
+        <h3>محلل الإيجابيات</h3>
+
+        <p>
+            تحليل السلوك الإيجابي وإنشاء التقارير والرسوم البيانية.
+        </p>
+
+    </a>
+
+    <a class="tool-card" href="attendance.html">
+
+        <div class="tool-icon">📋</div>
+
+        <h3>محلل الغياب</h3>
+
+        <p>
+            تحليل الغياب والمواظبة والمقارنات الزمنية والتقارير.
+        </p>
+
+    </a>
+
+</section>
+
+<div class="footer">
+    منصة مدرسية لتحليل السلوك والمواظبة © 2025
 </div>
 
-<!-- ══ MAIN ══ -->
-<div class="main">
-
-  <!-- DROP ZONE -->
-  <div class="drop-zone" id="dropZone"
-    onclick="document.getElementById('fileInput').click()"
-    ondragover="event.preventDefault();this.classList.add('drag')"
-    ondragleave="this.classList.remove('drag')"
-    ondrop="handleDrop(event)">
-    <div style="font-size:54px">📊</div>
-    <h2>ارفع ملف الإيجابيات هنا</h2>
-    <p>اضغط للاختيار أو اسحب الملف مباشرة</p>
-    <p style="font-size:12px;color:var(--muted);margin-top:8px">يدعم Excel ‏(.xlsx / .xls) — المرتب وغير المرتب</p>
-    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this.files[0])">
-  </div>
-
-  <!-- ══════════ RESULTS ══════════ -->
-  <div id="results" class="hidden">
-
-    <!-- ────────────────────────────
-         صفحة 1: الغلاف (طباعة فقط)
-    ──────────────────────────────── -->
-    <div class="cover-page">
-      <!-- محتوى وسط الغلاف -->
-      <div class="cover-body">
-        <div class="cover-school" id="cover-school">متوسطة الحارث بن هشام</div>
-        <div class="cover-year" id="cover-year">العام الدراسي: 1446 / 1447هـ</div>
-        <div class="cover-title">تقرير الإيجابيات</div>
-        <div class="cover-date" id="cover-date"></div>
-      </div>
-      <!-- تذييل الغلاف -->
-      <div class="cover-footer">
-        إعداد: التوجيه الطلابي &nbsp;|&nbsp; تصميم الأستاذ <strong>سعيد أحمد المالكي</strong>
-      </div>
-    </div>
-
-    <!-- ────────────────────────────
-         صفحة 2: الملخص الإحصائي
-    ──────────────────────────────── -->
-    <div class="summary-page">
-      <div class="print-section-header">
-        <span class="psh-school" id="ph-school-2"></span>
-        <span class="psh-year" id="ph-year-2"></span>
-      </div>
-
-      <div class="sec-title">📊 الملخص الإحصائي</div>
-      <div class="stats-grid" id="statsGrid"></div>
-
-      <div class="sec-title gap-top">🏆 أعلى الطلاب درجات</div>
-      <div class="top-students" id="topStudents"></div>
-    </div>
-
-    <!-- ────────────────────────────
-         صفحة 3: الرسوم البيانية
-    ──────────────────────────────── -->
-    <div class="charts-page">
-      <div class="print-section-header">
-        <span class="psh-school" id="ph-school-3"></span>
-        <span class="psh-year" id="ph-year-3"></span>
-      </div>
-
-      <div class="sec-title">📈 الرسوم البيانية والتحليل</div>
-      <div class="charts-grid">
-        <div class="chart-card">
-          <h3>توزيع الطلاب حسب مستوى الأداء</h3>
-          <div class="chart-wrap"><canvas id="chartDist"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>نسبة المشاركة في الإيجابيات</h3>
-          <div class="chart-wrap"><canvas id="chartParticipation"></canvas></div>
-        </div>
-        <div class="chart-card chart-full">
-          <h3>أعلى 15 طالب</h3>
-          <div id="top15Table"></div>
-        </div>
-      </div>
-
-      <div class="sec-title" style="margin-top:16px">📋 توزيع مستويات الأداء</div>
-      <div class="dist-grid" id="distGrid"></div>
-    </div>
-
-    <!-- ────────────────────────────
-         صفحة 4: الإيجابيات الأكثر
-    ──────────────────────────────── -->
-    <div class="behaviors-page">
-      <div class="print-section-header">
-        <span class="psh-school" id="ph-school-4"></span>
-        <span class="psh-year" id="ph-year-4"></span>
-      </div>
-
-      <div class="sec-title">⭐ الإيجابيات الأكثر تسجيلاً (تنازلي)</div>
-      <div id="behaviorsSection"></div>
-    </div>
-
-    <!-- ────────────────────────────
-         صفحة 5+: كشف الطلاب (25 لكل صفحة)
-    ──────────────────────────────── -->
-    <div class="detail-page">
-      <div class="toolbar no-print">
-        <div class="sec-title" style="border:none;margin:0;padding:0;font-size:15px">📄 كشف الطلاب التفصيلي</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="search-wrap">
-            <input type="text" id="searchInput" placeholder="ابحث باسم الطالب..." oninput="renderTable()">
-            <span class="s-icon">🔍</span>
-          </div>
-          <button class="tbtn" onclick="sortBy('name')">🔤 أبجدي</button>
-          <button class="tbtn" onclick="sortBy('score')">🔢 بالدرجة</button>
-          <button class="tbtn primary" onclick="window.print()">🖨️ طباعة</button>
-        </div>
-      </div>
-      <!-- جدول الشاشة -->
-      <div class="table-wrap no-print">
-        <table>
-          <thead>
-            <tr>
-              <th style="width:50px">#</th>
-              <th class="nc">اسم الطالب</th>
-              <th style="width:160px">مجموع الدرجات</th>
-              <th style="width:85px">السجلات</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-        <div class="table-footer" id="tableFooter"></div>
-      </div>
-      <!-- جداول الطباعة (25 اسم لكل جدول) — تُبنى ديناميكياً -->
-      <div id="printTables"></div>
-    </div>
-
-  </div><!-- /results -->
-
-  <!-- SCREEN FOOTER -->
-  <footer class="page-footer" id="screenFooter" style="display:none">
-    <span id="footer-school">متوسطة الحارث بن هشام</span> — تقرير السلوك الإيجابي —
-    <span id="footer-sub">1446 / 1447هـ</span><br>
-    <span style="font-size:11px">تصميم الأستاذ <strong style="color:var(--dark)">سعيد أحمد المالكي</strong> — التوجيه الطلابي</span>
-  </footer>
-
-</div><!-- /main -->
-
-<script>
-let allStudents=[], maxScore=1, totalRows=0, charts={};
-
-function updateBranding(){
-  const school = document.getElementById('schoolName').value || 'اسم المدرسة';
-  const year   = document.getElementById('schoolYear').value || '';
-  const label  = school + (year ? ' — ' + year : '');
-  // cover
-  const cs = document.getElementById('cover-school');
-  const cy = document.getElementById('cover-year');
-  if(cs) cs.textContent = school;
-  if(cy) cy.textContent = 'العام الدراسي: ' + year;
-  // page headers
-  [2,3,4,5].forEach(n=>{
-    const s = document.getElementById('ph-school-'+n);
-    const y = document.getElementById('ph-year-'+n);
-    if(s) s.textContent = school;
-    if(y) y.textContent = year;
-  });
-  // footer
-  const fs = document.getElementById('footer-school');
-  const fy = document.getElementById('footer-sub');
-  if(fs) fs.textContent = school;
-  if(fy) fy.textContent = year;
-  document.title = 'تقرير الإيجابيات — ' + school;
-}
-updateBranding();
-
-// set cover date
-(function(){
-  const d = document.getElementById('cover-date');
-  if(d) d.textContent = new Date().toLocaleDateString('ar-SA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'});
-})();
-
-function handleDrop(e){
-  e.preventDefault();
-  document.getElementById('dropZone').classList.remove('drag');
-  if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-}
-
-function handleFile(file){
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      const wb=XLSX.read(e.target.result,{type:'array'});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      const raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-      let headerRow=-1,nameCol=-1,scoreCol=-1;
-      for(let r=0;r<raw.length;r++){
-        const row=raw[r].map(c=>(c||'').toString());
-        const ni=row.findIndex(c=>/اسم|إسم|طالب/.test(c));
-        const si=row.findIndex(c=>/مقدار|درجة|زيادة|نقطة/.test(c));
-        if(ni!==-1&&si!==-1){headerRow=r;nameCol=ni;scoreCol=si;break;}
-      }
-      let map={}, behaviorMap={};
-      if(headerRow===-1){
-        const data=XLSX.utils.sheet_to_json(ws,{defval:''});
-        if(!data.length){alert('الملف فارغ.');return;}
-        const keys=Object.keys(data[0]);
-        const nk=keys.find(k=>/اسم|إسم|طالب/.test(k))||keys[keys.length-1];
-        const sk=keys.find(k=>/مقدار|درجة|زيادة|نقطة/.test(k))||keys[1];
-        const bk=keys.find(k=>/^نوع/.test(k.trim()))||keys.find(k=>/نوع الإيجابية/.test(k))||null;
-        data.forEach(row=>{
-          const name=(row[nk]||'').toString().trim();
-          const score=parseFloat(row[sk])||0;
-          if(!name)return;
-          if(!map[name])map[name]={name,total:0,count:0};
-          map[name].total+=score; map[name].count++;
-          if(bk){
-            const b=cleanBehavior((row[bk]||'').toString());
-            if(b){if(!behaviorMap[b])behaviorMap[b]={name:b,total:0,count:0};behaviorMap[b].total+=score;behaviorMap[b].count++;}
-          }
-        });
-        totalRows=data.length;
-      } else {
-        const dataRows=raw.slice(headerRow+1);
-        totalRows=dataRows.filter(r=>(r[nameCol]||'').toString().trim()).length;
-        const bColArr=raw[headerRow]||[];
-        let bCol=bColArr.findIndex(c=>/^نوع/.test((c||'').toString().trim()));
-        if(bCol===-1) bCol=bColArr.findIndex(c=>/نوع الإيجابية|نوع الايجابية/.test((c||'').toString()));
-        dataRows.forEach(row=>{
-          const name=(row[nameCol]||'').toString().trim();
-          const score=parseFloat(row[scoreCol])||0;
-          if(!name)return;
-          if(!map[name])map[name]={name,total:0,count:0};
-          map[name].total+=score; map[name].count++;
-          if(bCol!==-1){
-            const b=cleanBehavior((row[bCol]||'').toString());
-            if(b){if(!behaviorMap[b])behaviorMap[b]={name:b,total:0,count:0};behaviorMap[b].total+=score;behaviorMap[b].count++;}
-          }
-        });
-      }
-      buildResults(map, behaviorMap);
-    }catch(err){alert('تعذّر قراءة الملف.');}
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-function buildResults(map, behaviorMap){
-  allStudents=Object.values(map);
-  allStudents.sort((a,b)=>b.total-a.total);
-  maxScore=allStudents[0]?.total||1;
-  renderAll();
-  renderBehaviors(behaviorMap||{});
-  document.getElementById('dropZone').classList.add('hidden');
-  document.getElementById('results').classList.remove('hidden');
-  document.getElementById('screenFooter').style.display='block';
-  document.getElementById('btn-print').disabled=false;
-  updateBranding();
-}
-
-function refreshAnalysis(){if(allStudents.length)renderAll();}
-
-function renderAll(){
-  const total=allStudents.length;
-  const totalScore=allStudents.reduce((s,x)=>s+x.total,0);
-  const avg=totalScore/total;
-  const totalSchool=parseInt(document.getElementById('totalStudents').value)||0;
-  const participationPct=totalSchool>0?((total/totalSchool)*100).toFixed(1)+'%':'—';
-
-  document.getElementById('statsGrid').innerHTML=[
-    {l:'الطلاب المشاركون',v:total,n:'في الإيجابيات',c:''},
-    {l:'إجمالي السجلات',v:totalRows,n:'إجمالي الحالات',c:''},
-    {l:'أعلى مجموع درجات',v:maxScore,n:'أعلى طالب',c:'gold'},
-    {l:'متوسط الدرجات',v:avg.toFixed(1),n:'لكل طالب',c:''},
-    {l:'إجمالي الدرجات',v:totalScore,n:'جميع الطلاب',c:'green'},
-    {l:'نسبة المشاركة',v:participationPct,n:totalSchool?'من إجمالي الطلاب':'أدخل عدد الطلاب',c:'accent'},
-  ].map(s=>`<div class="stat-card ${s.c}"><div class="s-label">${s.l}</div><div class="s-val">${s.v}</div><div class="s-note">${s.n}</div></div>`).join('');
-
-  const medals=['🥇','🥈','🥉'],rc=['rank1','rank2','rank3'];
-  document.getElementById('topStudents').innerHTML=allStudents.slice(0,3).map((s,i)=>`
-    <div class="top-card ${rc[i]}">
-      <span class="medal">${medals[i]}</span>
-      <div class="tc-name">${s.name}</div>
-      <div class="tc-score">${s.total}</div>
-      <div class="tc-label">درجة — ${s.count} سجل</div>
-    </div>`).join('');
-
-  const levels=[
-    {label:'ممتاز (20+)',min:20,max:999,color:'#c8973a',bg:'#fff8e6'},
-    {label:'جيد جداً (12–19)',min:12,max:19,color:'#2e7d52',bg:'#e8f5ee'},
-    {label:'جيد (6–11)',min:6,max:11,color:'#1d5c6e',bg:'#e4f2f6'},
-    {label:'مقبول (2–5)',min:2,max:5,color:'#6b808c',bg:'#f0f4f6'},
-  ];
-  levels.forEach(l=>{
-    l.count=allStudents.filter(s=>s.total>=l.min&&s.total<=l.max).length;
-    l.pct=((l.count/total)*100).toFixed(1);
-  });
-  document.getElementById('distGrid').innerHTML=levels.map(l=>`
-    <div class="dist-card" style="border-right:4px solid ${l.color};background:${l.bg}">
-      <div class="dist-dot" style="background:${l.color}"></div>
-      <div class="dist-info">
-        <div class="d-label">${l.label}</div>
-        <div class="d-val">${l.count} طالب</div>
-        <div class="d-pct">${l.pct}% من المشاركين</div>
-      </div>
-    </div>`).join('');
-
-  destroyCharts();
-  setTimeout(()=>{
-    charts.dist=new Chart(document.getElementById('chartDist'),{
-      type:'doughnut',
-      data:{labels:levels.map(l=>l.label),datasets:[{data:levels.map(l=>l.count),backgroundColor:levels.map(l=>l.color),borderWidth:2,borderColor:'#fff'}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:'Tajawal',size:11},padding:8}}}}
-    });
-    const notPart=parseInt(document.getElementById('totalStudents').value)||0;
-    const np=notPart>total?notPart-total:0;
-    charts.part=new Chart(document.getElementById('chartParticipation'),{
-      type:'doughnut',
-      data:{labels:['مشاركون','غير مشاركين'],datasets:[{data:[total,np],backgroundColor:['#2e7d52','#d4dde4'],borderWidth:2,borderColor:'#fff'}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:'Tajawal',size:11},padding:8}}}}
-    });
-    // جدول أعلى 15 طالب بدلاً من الرسم البياني
-    const top15=allStudents.slice(0,15);
-    const t15el=document.getElementById('top15Table');
-    if(t15el){
-      t15el.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:12px;">
-        <thead><tr>
-          <th style="background:#1a3a4a;color:white;padding:6px 10px;text-align:center;width:40px">#</th>
-          <th style="background:#1a3a4a;color:white;padding:6px 10px;text-align:right">اسم الطالب</th>
-          <th style="background:#1a3a4a;color:white;padding:6px 10px;text-align:center;width:100px">الدرجات</th>
-          <th style="background:#1a3a4a;color:white;padding:6px 10px;text-align:center;width:80px">السجلات</th>
-        </tr></thead>
-        <tbody>${top15.map((s,i)=>{
-          const badge=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-          const bg=i%2===0?'#f7fafb':'#fff';
-          return `<tr style="background:${bg};border-bottom:0.5px solid #d4dde4">
-            <td style="text-align:center;padding:5px 10px">${badge}</td>
-            <td style="text-align:right;padding:5px 10px;font-weight:500">${s.name}</td>
-            <td style="text-align:center;padding:5px 10px;font-weight:700">${s.total}</td>
-            <td style="text-align:center;padding:5px 10px;color:#6b808c">${s.count}</td>
-          </tr>`;
-        }).join('')}</tbody>
-      </table>`;
-    }
-  },60);
-  renderTable();
-}
-
-function destroyCharts(){Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}});charts={};}
-
-function sortBy(key){
-  if(key==='score') allStudents.sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name,'ar'));
-  else allStudents.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
-  renderTable();
-}
-
-function renderTable(){
-  const q=(document.getElementById('searchInput').value||'').trim();
-  const filtered=q?allStudents.filter(s=>s.name.includes(q)):allStudents;
-  document.getElementById('tableBody').innerHTML=filtered.map(s=>{
-    const gr=allStudents.indexOf(s)+1;
-    const badge=gr===1?'🥇':gr===2?'🥈':gr===3?'🥉':`<span class="rank-badge">${gr}</span>`;
-    return `<tr><td>${badge}</td><td class="nc">${s.name}</td>
-      <td style="text-align:center;font-weight:700">${s.total}</td>
-      <td><span class="count-pill">${s.count} سجل</span></td></tr>`;
-  }).join('');
-  document.getElementById('tableFooter').textContent=
-    q?`نتائج البحث: ${filtered.length} من ${allStudents.length} طالب`:`إجمالي الطلاب المشاركين: ${allStudents.length}`;
-  renderPrintTables();
-}
-
-function renderPrintTables(){
-  const container = document.getElementById('printTables');
-  if(!container) return;
-  const school = document.getElementById('schoolName').value || '';
-  const year   = document.getElementById('schoolYear').value || '';
-  const PER_PAGE = 22;
-  const pages = Math.ceil(allStudents.length / PER_PAGE);
-  let html = '';
-  for(let p=0; p<pages; p++){
-    const slice = allStudents.slice(p*PER_PAGE, (p+1)*PER_PAGE);
-    const pageNum = p+1;
-    html += `<div class="print-table-page">
-      <div class="print-section-header">
-        <span class="psh-school">${school}</span>
-        <span class="psh-year">${year}</span>
-      </div>
-      <div class="sec-title">📄 كشف الطلاب التفصيلي — الصفحة ${pageNum} من ${pages}</div>
-      <table class="print-detail-table">
-        <thead><tr>
-          <th style="width:46px;text-align:center">#</th>
-          <th style="text-align:right">اسم الطالب</th>
-          <th style="width:110px;text-align:center">مجموع الدرجات</th>
-          <th style="width:80px;text-align:center">السجلات</th>
-        </tr></thead>
-        <tbody>${slice.map(s=>{
-          const gr = allStudents.indexOf(s)+1;
-          const badge = gr===1?'🥇':gr===2?'🥈':gr===3?'🥉':gr;
-          return `<tr>
-            <td style="text-align:center">${badge}</td>
-            <td style="text-align:right">${s.name}</td>
-            <td style="text-align:center;font-weight:700">${s.total}</td>
-            <td style="text-align:center">${s.count}</td>
-          </tr>`;
-        }).join('')}</tbody>
-      </table>
-      <div class="print-table-footer">إجمالي الطلاب المشاركين: ${allStudents.length} — عرض ${p*PER_PAGE+1} إلى ${Math.min((p+1)*PER_PAGE, allStudents.length)}</div>
-    </div>`;
-  }
-  container.innerHTML = html;
-}
-
-function cleanBehavior(s){
-  return s.replace(/\(سلوك متميز\)/g,'').replace(/\(سلوك.*?\)/g,'').replace(/[\n\r]/g,' ').trim().replace(/^\s*\.\s*/,'').replace(/\.\s*$/,'').trim();
-}
-
-function renderBehaviors(bmap){
-  const sec=document.getElementById('behaviorsSection');
-  if(!sec)return;
-  const list=Object.values(bmap).sort((a,b)=>b.total-a.total||b.count-a.count);
-  if(!list.length){sec.innerHTML='';return;}
-  const maxT=list[0].total;
-  sec.innerHTML=`<div class="behav-table-wrap"><table>
-    <thead><tr>
-      <th>#</th><th>نوع الإيجابية</th>
-      <th style="text-align:center">عدد المرات</th>
-      <th style="text-align:center">إجمالي الدرجات</th>
-    </tr></thead>
-    <tbody>${list.map((b,i)=>{
-      const pct=Math.round(b.total/maxT*100);
-      const badge=i===0?'🥇':i===1?'🥈':i===2?'🥉':`<span class="behav-rank">${i+1}</span>`;
-      return `<tr>
-        <td style="text-align:center">${badge}</td>
-        <td>${b.name}</td>
-        <td style="text-align:center">${b.count}</td>
-        <td style="text-align:center;font-weight:700">${b.total}</td>
-      </tr>`;
-    }).join('')}</tbody>
-  </table></div>`;
-}
-
-function resetApp(){
-  allStudents=[];maxScore=1;totalRows=0;destroyCharts();
-  document.getElementById('results').classList.add('hidden');
-  document.getElementById('dropZone').classList.remove('hidden');
-  document.getElementById('screenFooter').style.display='none';
-  document.getElementById('fileInput').value='';
-  document.getElementById('searchInput').value='';
-  document.getElementById('btn-print').disabled=true;
-}
-</script>
 </body>
 </html>
