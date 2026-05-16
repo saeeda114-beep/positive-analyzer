@@ -3,8 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <title>محلل الغياب والمواظبة</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+function updateCover(){
+  const school=document.getElementById('schoolName')?.value || '';
+  const year=document.getElementById('schoolYear')?.value || '';
+  const d=new Date();
+  const dateStr=d.toLocaleDateString('ar-SA');
+
+  const cs=document.getElementById('coverSchool');
+  const cy=document.getElementById('coverYear');
+  const cd=document.getElementById('coverDate');
+
+  if(cs) cs.textContent=school;
+  if(cy) cy.textContent=year;
+  if(cd) cd.textContent=dateStr;
+}
+
+setInterval(updateCover,500);
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js">
+function updateCover(){
+  const school=document.getElementById('schoolName')?.value || '';
+  const year=document.getElementById('schoolYear')?.value || '';
+  const d=new Date();
+  const dateStr=d.toLocaleDateString('ar-SA');
+
+  const cs=document.getElementById('coverSchool');
+  const cy=document.getElementById('coverYear');
+  const cd=document.getElementById('coverDate');
+
+  if(cs) cs.textContent=school;
+  if(cy) cy.textContent=year;
+  if(cd) cd.textContent=dateStr;
+}
+
+setInterval(updateCover,500);
+
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
 
@@ -233,6 +269,68 @@ td.nc{text-align:right;font-weight:600;font-size:13px}
   }
 }
 
+
+.cover-page{
+  background:white;
+  border:1px solid #d4dde4;
+  border-radius:18px;
+  min-height:88vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:40px;
+  margin-bottom:25px;
+}
+.cover-logo{
+  font-size:78px;
+  margin-bottom:18px;
+}
+.cover-title{
+  font-size:42px;
+  font-weight:900;
+  color:#1a3a4a;
+  margin-bottom:12px;
+}
+.cover-sub{
+  font-size:20px;
+  color:#607d8b;
+  margin-bottom:40px;
+}
+.cover-info{
+  background:#f7fafb;
+  border:1px solid #d4dde4;
+  border-radius:16px;
+  padding:24px 35px;
+  width:min(650px,100%);
+  line-height:2.2;
+  font-size:18px;
+}
+.cover-footer{
+  margin-top:40px;
+  color:#607d8b;
+  font-size:16px;
+  line-height:2;
+}
+@media print{
+  .cover-page{
+    page-break-after:always;
+    min-height:auto;
+    border:1px solid #c8d2d9;
+  }
+}
+
+
+.report-credit{
+  text-align:center;
+  font-size:11px !important;
+  color:#78909c !important;
+  margin-top:18px !important;
+  line-height:1.8;
+  font-weight:500;
+}
+
 </style>
 </head>
 <body>
@@ -265,6 +363,30 @@ td.nc{text-align:right;font-weight:600;font-size:13px}
   </div>
 
   <div id="results" class="hidden">
+
+<div class="cover-page">
+  <div class="cover-logo">📋</div>
+
+  <div class="cover-title">
+    تقرير تحليل الغياب والمواظبة
+  </div>
+
+  <div class="cover-sub">
+    منصة السلوك والمواظبة المدرسية
+  </div>
+
+  <div class="cover-info">
+    <div><strong>اسم المدرسة:</strong> <span id="coverSchool">متوسطة الحارث بن هشام</span></div>
+    <div><strong>العام الدراسي:</strong> <span id="coverYear">1446 / 1447هـ</span></div>
+    <div><strong>تاريخ إنشاء التقرير:</strong> <span id="coverDate"></span></div>
+    <div><strong>نوع التقرير:</strong> تحليل الغياب والمواظبة</div>
+  </div>
+
+  <div class="cover-footer report-credit">
+    إعداد وتصميم: الأستاذ سعيد أحمد المالكي
+  </div>
+</div>
+
     <div class="summary-page">
       <div class="print-section-header"><span class="psh-school" id="ph-school-1"></span><span class="psh-year" id="ph-year-1"></span></div>
 
@@ -372,6 +494,10 @@ td.nc{text-align:right;font-weight:600;font-size:13px}
           <tbody id="tableBody"></tbody>
         </table>
         <div class="table-footer" id="tableFooter"></div>
+<div class="report-credit">
+إعداد وتصميم: الأستاذ سعيد أحمد المالكي
+</div>
+
       </div>
 
       <div id="printTables"></div>
@@ -917,6 +1043,24 @@ function resetApp(){
   const s=document.getElementById('searchInput'); if(s) s.value='';
   document.getElementById('btn-print').disabled=true;
 }
+
+function updateCover(){
+  const school=document.getElementById('schoolName')?.value || '';
+  const year=document.getElementById('schoolYear')?.value || '';
+  const d=new Date();
+  const dateStr=d.toLocaleDateString('ar-SA');
+
+  const cs=document.getElementById('coverSchool');
+  const cy=document.getElementById('coverYear');
+  const cd=document.getElementById('coverDate');
+
+  if(cs) cs.textContent=school;
+  if(cy) cy.textContent=year;
+  if(cd) cd.textContent=dateStr;
+}
+
+setInterval(updateCover,500);
+
 </script>
 </body>
 </html>
