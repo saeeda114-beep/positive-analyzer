@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محلل المخالفات السلوكية</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+function updateCoverInfo(){
+  const d=new Date();
+  const dateStr=d.toLocaleDateString('ar-SA');
+
+  const cd=document.getElementById('coverDate');
+  if(cd) cd.textContent=dateStr;
+}
+
+updateCoverInfo();
+updateCoverFields();
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js">
+function updateCoverInfo(){
+  const d=new Date();
+  const dateStr=d.toLocaleDateString('ar-SA');
+
+  const cd=document.getElementById('coverDate');
+  if(cd) cd.textContent=dateStr;
+}
+
+updateCoverInfo();
+updateCoverFields();
+
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&display=swap');
+:root{--dark:#1a3a4a;--red:#b94444;--gold:#c8973a;--bg:#f0f4f6;--surface:#fff;--border:#d4dde4;--muted:#6b808c;}
+body{margin:0;font-family:'Tajawal',sans-serif;background:var(--bg);color:#1a2a35}
+.top{background:var(--dark);color:white;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+.back{color:white;text-decoration:none;background:rgba(255,255,255,.12);padding:8px 16px;border-radius:10px}
+.main{max-width:1100px;margin:auto;padding:20px}
+.cover{background:white;border-radius:18px;padding:60px 30px;text-align:center;border:1px solid var(--border);margin-bottom:20px}
+.cover h1{font-size:42px;margin:10px 0;color:var(--dark)}
+.cover p{color:var(--muted)}
+.credit{font-size:11px;color:#78909c;margin-top:25px}
+.upload{background:white;border:2px dashed var(--border);padding:60px 20px;border-radius:18px;text-align:center;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:20px}
+.card{background:white;border-radius:14px;padding:18px;border:1px solid var(--border)}
+.card h3{margin:0;font-size:13px;color:var(--muted)}
+.num{font-size:34px;font-weight:900;color:var(--dark);margin-top:8px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.chart-card{background:white;border-radius:14px;padding:16px;border:1px solid var(--border)}
+.chart-card h3{text-align:center;font-size:14px}
+.chart-wrap{height:320px}
+.report{background:white;border-radius:14px;padding:20px;border:1px solid var(--border);margin-top:20px;line-height:2}
+table{width:100%;border-collapse:collapse;background:white;margin-top:20px;border-radius:14px;overflow:hidden}
+th{background:var(--dark);color:white;padding:12px}
+td{padding:10px;border-bottom:1px solid #e9eef1;text-align:center}
+tr:nth-child(even){background:#f8fafc}
+.nc{text-align:right;font-weight:700}
+.risk{padding:4px 10px;border-radius:10px;font-size:11px;font-weight:800}
+.high{background:#fdecec;color:#b94444}
+.mid{background:#fff4df;color:#9b6a11}
+.low{background:#e8f5ee;color:#2e7d52}
+.hidden{display:none}
+
+@media print{
+.upload,.top{
+display:none !important;
+}
+body{
+background:white;
+}
+.cover,.report,.card,.chart-card,table{
+box-shadow:none !important;
+break-inside:avoid;
+}
+.chart-wrap{
+height:220px !important;
+}
+.credit{
+display:block !important;
+}
+}
+
+
+.cover-page{
+  background:white;
+  border:1px solid #d4dde4;
+  border-radius:18px;
+  min-height:88vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:40px;
+  margin-bottom:25px;
+}
+.cover-logo{
+  font-size:54px;
+  margin-bottom:10px;
+}
+.cover-title{
+  font-size:36px;
+  font-weight:900;
+  color:#1a3a4a;
+  margin-bottom:12px;
+}
+.cover-sub{
+  font-size:20px;
+  color:#607d8b;
+  margin-bottom:40px;
+}
+.cover-info{
+  background:#f7fafb;
+  border:1px solid #d4dde4;
+  border-radius:16px;
+  padding:24px 35px;
+  width:min(650px,100%);
+  line-height:2.2;
+  font-size:18px;
+}
+.report-credit{
+  text-align:center;
+  font-size:11px;
+  color:#78909c;
+  margin-top:25px;
+  line-height:1.8;
+}
+@media print{
+  .cover-page{
+    page-break-after:always;
+    min-height:auto;
+  }
+}
+
+
+.settings-bar{
+  background:white;
+  border:1px solid #d4dde4;
+  border-radius:14px;
+  padding:12px 16px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-bottom:18px;
+}
+.settings-bar label{
+  font-size:12px;
+  color:#6b808c;
+  font-weight:700;
+  display:block;
+  margin-bottom:5px;
+}
+.settings-bar input{
+  padding:8px 10px;
+  border:1px solid #d4dde4;
+  border-radius:8px;
+  min-width:220px;
+  font-family:'Tajawal',sans-serif;
+}
+@media print{
+  .settings-bar{display:none!important;}
+}
+
+
+@media print{
+  .cover-page{page-break-after:always!important;}
+  .report{page-break-inside:avoid!important;}
+  .chart-card{page-break-inside:avoid!important;}
+  table{font-size:12px;}
+  th,td{padding:8px!important;}
+  .credit,.report-credit{font-size:10px!important;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="top">
+<div>⚠️ محلل المخالفات السلوكية</div>
+
+<div style="display:flex;gap:10px;align-items:center">
+<a class="back" href="index.html">⬅ الرئيسية</a>
+<button class="back" onclick="window.print()" style="border:none;cursor:pointer;font-family:Tajawal">🖨️ طباعة</button>
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="cover-page">
+  <div class="cover-logo">⚠️</div>
+
+  <div class="cover-title">
+    تقرير تحليل المخالفات السلوكية
+  </div>
+
+  <div class="cover-sub">
+    منصة السلوك والمواظبة المدرسية
+  </div>
+
+  <div class="cover-info">
+    <div><strong>اسم المدرسة:</strong> <span id="coverSchool">اسم المدرسة</span></div>
+    <div><strong>العام الدراسي:</strong> <span id="coverYear">1446 / 1447هـ</span></div>
+    <div><strong>تاريخ إنشاء التقرير:</strong> <span id="coverDate"></span></div>
+    <div><strong>نوع التقرير:</strong> تحليل المخالفات السلوكية</div>
+  </div>
+
+  <div class="report-credit">
+    إعداد وتصميم: الأستاذ سعيد أحمد المالكي
+  </div>
+</div>
+
+
+
+<div class="settings-bar">
+  <div>
+    <label>اسم المدرسة</label>
+    <input id="schoolInput" value="اسم المدرسة" oninput="updateCoverFields()">
+  </div>
+  <div>
+    <label>العام الدراسي</label>
+    <input id="yearInput" value="1446 / 1447هـ" oninput="updateCoverFields()">
+  </div>
+</div>
+
+<div class="upload" onclick="document.getElementById('file').click()">
+<h2>ارفع ملف المخالفات من نور</h2>
+<p>تحليل المخالفات السلوكية والرسوم البيانية والتقرير المختصر</p>
+<input type="file" id="file" hidden accept=".xlsx,.xls">
+</div>
+
+<div id="results" class="hidden">
+
+<div class="stats" id="stats"></div>
+
+<div class="report" id="report"></div>
+
+<div class="charts">
+<div class="chart-card">
+<h3>توزيع درجات المخالفات</h3>
+<div class="chart-wrap"><canvas id="chartTypes"></canvas></div>
+</div>
+
+<div class="chart-card">
+<h3>أعلى الطلاب مخالفة</h3>
+<div class="chart-wrap"><canvas id="chartStudents"></canvas></div>
+</div>
+
+<div class="chart-card" style="grid-column:1/-1">
+<h3>المخالفات حسب الأشهر</h3>
+<div class="chart-wrap"><canvas id="chartMonths"></canvas></div>
+</div>
+</div>
+
+<div class="report" style="margin-top:14px">
+<strong>ملاحظة تحليلية:</strong>
+تم تبسيط الرسوم البيانية للتركيز على مؤشرات المخالفات الأكثر أهمية إداريًا، مع إبراز توزيع درجات المخالفات وأعلى الطلاب تكرارًا للمخالفات والتحليل الزمني الشهري.
+</div>
+
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th class="nc">اسم الطالب</th>
+<th>نوع المخالفة</th>
+<th>أعلى درجة</th>
+<th>عدد المخالفات</th>
+<th>آخر مخالفة</th>
+<th>المؤشر</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+
+<div class="credit">إعداد وتصميم: الأستاذ سعيد أحمد المالكي</div>
+
+</div>
+</div>
+
+<script>
+let charts={};
+
+document.getElementById('file').addEventListener('change',e=>{
+ const f=e.target.files[0];
+ if(!f)return;
+ const reader=new FileReader();
+ reader.onload=x=>{
+   const wb=XLSX.read(new Uint8Array(x.target.result),{type:'array'});
+   const ws=wb.Sheets[wb.SheetNames[0]];
+   const raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+   analyze(raw);
+ };
+ reader.readAsArrayBuffer(f);
+});
+
+
+function cleanDateText(v){
+ const s=String(v||'').trim();
+ const parts=s.split('--');
+ let datePart = parts.length>1 ? parts[1].trim() : s;
+ const m=datePart.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+ if(m){
+   return `${m[1].padStart(2,'0')}/${m[2].padStart(2,'0')}/${m[3]}`;
+ }
+ return s.replace(/12:00:00 AM/gi,'').replace(/AM/gi,'').trim();
+}
+
+function monthKey(v){
+ const s=String(v||'').trim();
+ const parts=s.split('--');
+ let datePart = parts.length>1 ? parts[1].trim() : s;
+ const m=datePart.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+ if(m){
+   return `${m[3]}-${m[2].padStart(2,'0')}`;
+ }
+ return 'غير محدد';
+}
+
+function updateCoverFields(){
+ const school=document.getElementById('schoolInput')?.value || 'اسم المدرسة';
+ const year=document.getElementById('yearInput')?.value || '1446 / 1447هـ';
+ const cs=document.getElementById('coverSchool');
+ const cy=document.getElementById('coverYear');
+ if(cs) cs.textContent=school;
+ if(cy) cy.textContent=year;
+}
+
+function norm(v){
+ return String(v||'').replace(/[إأآا]/g,'ا').trim();
+}
+
+function analyze(raw){
+ let student=-1,type=-1,date=-1,head=-1;
+
+ for(let r=0;r<60;r++){
+   const row=(raw[r]||[]).map(norm);
+
+   row.forEach((c,i)=>{
+     if(student==-1 && c.includes('الطالب')) student=i;
+     if(type==-1 && c.includes('نوع')) type=i;
+     if(date==-1 && c.includes('تاريخ')) date=i;
+   });
+
+   if(student!=-1){head=r;break;}
+ }
+
+ if(student==-1){
+   alert('تعذر قراءة الملف');
+   return;
+ }
+
+ const students={};
+ const types={};
+ const months={};
+
+ for(let i=head+1;i<raw.length;i++){
+   const row=raw[i]||[];
+   const name=String(row[student]||'').trim();
+   if(!name) continue;
+
+   const violation=String(row[type]||'غير محدد').trim();
+   const d=cleanDateText(row[date]);
+   const mKey=monthKey(row[date]);
+
+   if(!students[name]){
+     students[name]={name,total:0,last:d,types:{},maxDegree:0};
+   }
+
+   students[name].total++;
+   students[name].last=d;
+
+   students[name].types[violation]=(students[name].types[violation]||0)+1;
+   students[name].maxDegree=Math.max(students[name].maxDegree, violationDegree(violation));
+
+   types[violation]=(types[violation]||0)+1;
+
+   months[mKey]=(months[mKey]||0)+1;
+ }
+
+ const arr=Object.values(students).sort((a,b)=>b.total-a.total);
+
+ render(arr,types,months);
+}
+
+
+function violationDegree(text){
+ const t = norm(text);
+ if(t.includes('الخامسه') || t.includes('الدرجة الخامسة') || t.includes('درجه خامسه') || t.includes('خامسة')) return 5;
+ if(t.includes('الرابعه') || t.includes('الدرجة الرابعة') || t.includes('درجه رابعه') || t.includes('رابعة')) return 4;
+ if(t.includes('الثالثه') || t.includes('الدرجة الثالثة') || t.includes('درجه ثالثه') || t.includes('ثالثة')) return 3;
+ if(t.includes('الثانيه') || t.includes('الدرجة الثانية') || t.includes('درجه ثانيه') || t.includes('ثانية')) return 2;
+ if(t.includes('الاولي') || t.includes('الاولى') || t.includes('الدرجة الأولى') || t.includes('درجه اولي') || t.includes('أولى')) return 1;
+ const m = t.match(/(?:درجه|الدرجه|درجة|الدرجة)\s*(\d)/);
+ if(m) return parseInt(m[1]);
+ return 0;
+}
+
+function riskFromDegree(maxDegree,total){
+ if(maxDegree >= 5) return ['خطر جدًا','high'];
+ if(maxDegree === 4) return ['عالٍ','high'];
+ if(maxDegree === 3) return ['متوسط','mid'];
+ if(maxDegree === 2) return ['منخفض إلى متوسط','mid'];
+ if(maxDegree === 1) return ['منخفض','low'];
+
+ if(total >= 5) return ['عالٍ','high'];
+ if(total >= 3) return ['متوسط','mid'];
+ return ['منخفض','low'];
+}
+
+
+function render(arr,types,months){
+
+ document.getElementById('results').classList.remove('hidden');
+
+ const total=arr.reduce((a,b)=>a+b.total,0);
+
+ const degreeCounts={1:0,2:0,3:0,4:0,5:0,0:0};
+ Object.entries(types).forEach(([name,count])=>{
+   const d=violationDegree(name);
+   if(degreeCounts[d]!==undefined) degreeCounts[d]+=count;
+   else degreeCounts[0]+=count;
+ });
+
+
+ document.getElementById('stats').innerHTML=`
+ <div class="card"><h3>إجمالي المخالفات</h3><div class="num">${total}</div></div>
+ <div class="card"><h3>عدد الطلاب</h3><div class="num">${arr.length}</div></div>
+ <div class="card"><h3>أكثر طالب مخالفة</h3><div class="num" style="font-size:18px">${arr[0]?.name||'-'}</div></div>
+ <div class="card"><h3>مخالفات الدرجة الأولى</h3><div class="num">${degreeCounts[1]}</div></div>
+ <div class="card"><h3>مخالفات الدرجة الخامسة</h3><div class="num">${degreeCounts[5]}</div></div>
+ `;
+
+ document.getElementById('report').innerHTML=`
+ <h3>📌 التقرير المختصر</h3>
+ بلغ إجمالي المخالفات السلوكية <strong>${total}</strong> مخالفة، موزعة على <strong>${arr.length}</strong> طالبًا.
+ أكثر الطلاب تكرارًا للمخالفات: <strong>${arr[0]?.name||'-'}</strong>.
+ تم تصنيف المؤشر حسب أعلى درجة مخالفة لدى الطالب؛ الدرجة الأولى منخفضة، والثانية منخفضة إلى متوسطة، والثالثة متوسطة، والرابعة عالية، والخامسة خطر جدًا. يوصى بمتابعة الطلاب ذوي المؤشر العالي أو الخطر وتنفيذ خطط تعديل السلوك والمتابعة الإرشادية.
+ `;
+
+ document.getElementById('tbody').innerHTML=arr.map((s,i)=>{
+   const topType=Object.entries(s.types).sort((a,b)=>b[1]-a[1])[0]?.[0]||'غير محدد';
+   const r=riskFromDegree(s.maxDegree,s.total);
+   return `
+   <tr>
+   <td>${i+1}</td>
+   <td class="nc">${s.name}</td>
+   <td>${topType}</td>
+   <td>${s.maxDegree ? 'الدرجة ' + s.maxDegree : 'غير محدد'}</td>
+   <td>${s.total}</td>
+   <td>${s.last}</td>
+   <td><span class="risk ${r[1]}">${r[0]}</span></td>
+   </tr>`;
+ }).join('');
+
+ Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}});
+
+ const degreeMap={'الدرجة 1':0,'الدرجة 2':0,'الدرجة 3':0,'الدرجة 4':0,'الدرجة 5':0};
+
+ arr.forEach(s=>{
+   const key='الدرجة ' + (s.maxDegree || 1);
+   if(degreeMap[key]!==undefined){
+     degreeMap[key]++;
+   }
+ });
+
+ charts.a=new Chart(document.getElementById('chartTypes'),{
+   type:'bar',
+   data:{
+     labels:Object.keys(degreeMap),
+     datasets:[{
+       data:Object.values(degreeMap),
+       backgroundColor:['#2e7d52','#c8973a','#d98b2b','#c65d2e','#b94444'],
+       borderRadius:8
+     }]
+   },
+   options:{
+     plugins:{legend:{display:false}},
+     maintainAspectRatio:false,
+     scales:{y:{beginAtZero:true,ticks:{precision:0}}}
+   }
+ });
+
+ charts.b=new Chart(document.getElementById('chartStudents'),{
+   type:'bar',
+   data:{
+     labels:arr.slice(0,5).map(x=>x.name),
+     datasets:[{
+       data:arr.slice(0,5).map(x=>x.total),
+       backgroundColor:'#b94444',
+       borderRadius:6
+     }]
+   },
+   options:{plugins:{legend:{display:false}},maintainAspectRatio:false}
+ });
+
+ charts.c=new Chart(document.getElementById('chartMonths'),{
+   type:'bar',
+   data:{
+     labels:Object.keys(months),
+     datasets:[{
+       data:Object.values(months),
+       backgroundColor:'#1d5c6e',
+       borderRadius:8
+     }]
+   },
+   options:{plugins:{legend:{display:false}},maintainAspectRatio:false}
+ });
+}
+
+function updateCoverInfo(){
+  const d=new Date();
+  const dateStr=d.toLocaleDateString('ar-SA');
+
+  const cd=document.getElementById('coverDate');
+  if(cd) cd.textContent=dateStr;
+}
+
+updateCoverInfo();
+updateCoverFields();
+
+</script>
+</body>
+</html>
