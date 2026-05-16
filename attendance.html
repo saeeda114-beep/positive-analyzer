@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>محلل الغياب والمواظبة</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+
+:root{
+  --dark:#1a3a4a;
+  --teal:#1d5c6e;
+  --green:#2e7d52;
+  --gold:#c8973a;
+  --red:#b94444;
+  --accent:#4ab5a0;
+  --bg:#f0f4f6;
+  --surface:#fff;
+  --border:#d4dde4;
+  --text:#1a2a35;
+  --muted:#6b808c;
+  --r:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+
+/* شريط علوي مثل صفحة الإيجابيات */
+.screen-toolbar{
+  background:var(--dark);padding:10px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.screen-toolbar .brand{color:rgba(255,255,255,.85);font-size:13px;font-weight:600}
+.toolbar-btns{display:flex;gap:8px;flex-wrap:wrap}
+.abtn{display:inline-flex;align-items:center;gap:6px;padding:7px 18px;border-radius:20px;
+  font-family:'Tajawal',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;border:none}
+.abtn-ghost{background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2)}
+.abtn-ghost:hover{background:rgba(255,255,255,.2)}
+.abtn-gold{background:var(--gold);color:white}
+.abtn-gold:hover{background:#b5832e}
+.abtn:disabled{opacity:.45;cursor:default;pointer-events:none}
+
+/* إعدادات */
+.settings-bar{background:var(--surface);border-bottom:2px solid var(--border);
+  padding:11px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sg{display:flex;align-items:center;gap:7px}
+.sg label{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:600}
+.sg input{padding:7px 11px;border:1px solid var(--border);border-radius:8px;
+  font-family:'Tajawal',sans-serif;font-size:13px;background:#f8fafb;color:var(--text);outline:none;width:205px}
+.sg input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,92,110,.1);background:white}
+
+.main{max-width:1100px;margin:0 auto;padding:24px 20px 48px}
+.drop-zone{border:2px dashed var(--border);border-radius:var(--r);background:var(--surface);
+  padding:64px 24px;text-align:center;cursor:pointer;transition:.2s}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--teal);background:#edf6f4}
+.drop-zone h2{font-size:18px;font-weight:800;margin:12px 0 6px}
+.drop-zone p{font-size:13px;color:var(--muted)}
+
+.sec-title{font-size:16px;font-weight:900;color:var(--dark);
+  margin:26px 0 13px;display:flex;align-items:center;gap:8px;border-right:4px solid var(--teal);padding-right:12px}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:4px}
+.stat-card{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);padding:16px 18px;position:relative;overflow:hidden}
+.stat-card:before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:var(--teal);border-radius:0 var(--r) var(--r) 0}
+.stat-card.gold:before{background:var(--gold)}
+.stat-card.green:before{background:var(--green)}
+.stat-card.red:before{background:var(--red)}
+.stat-card.accent:before{background:var(--accent)}
+.s-label{font-size:12px;color:var(--muted);margin-bottom:5px}
+.s-val{font-size:28px;font-weight:900;color:var(--dark)}
+.s-note{font-size:11px;color:var(--muted);margin-top:3px}
+
+.report-box{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:18px 22px;line-height:2;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.report-box h3{font-size:15px;color:var(--dark);margin-bottom:8px}
+.report-box strong{color:var(--teal)}
+.alert-note{background:#fff8e6;border-right:4px solid var(--gold);padding:10px 14px;border-radius:8px;margin-top:10px;color:#6f5420}
+
+.top-students{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.top-card{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);padding:18px;text-align:center}
+.top-card.rank1{border-color:#FFD700;background:linear-gradient(145deg,#fffbeb,#fff8d6)}
+.top-card.rank2{border-color:#C0C0C0;background:linear-gradient(145deg,#f8f8f8,#f0f0f0)}
+.top-card.rank3{border-color:#CD7F32;background:linear-gradient(145deg,#fdf5ec,#faebd4)}
+.medal{font-size:32px;margin-bottom:8px;display:block}
+.tc-name{font-size:13px;font-weight:800;line-height:1.4;margin-bottom:6px}
+.tc-score{font-size:34px;font-weight:900;color:var(--dark)}
+.tc-label{font-size:11px;color:var(--muted)}
+
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-card{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);padding:18px}
+.chart-card h3{font-size:13px;font-weight:800;color:var(--dark);margin-bottom:14px;text-align:center}
+.chart-wrap{position:relative;height:250px}
+.chart-full{grid-column:1/-1}
+.chart-wrap-wide{position:relative;height:290px}
+
+.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.search-wrap{position:relative}
+.search-wrap input{padding:8px 36px 8px 14px;border:1px solid var(--border);border-radius:20px;
+  font-family:'Tajawal',sans-serif;font-size:13px;width:240px;background:var(--surface);outline:none}
+.search-wrap input:focus{border-color:var(--teal)}
+.s-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.tbtn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:20px;
+  border:1px solid var(--border);background:var(--surface);font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer;color:var(--text)}
+.tbtn:hover{background:#edf6f4;border-color:var(--teal);color:var(--teal)}
+.tbtn.primary{background:var(--teal);color:white;border-color:var(--teal)}
+
+.table-wrap{background:var(--surface);border-radius:var(--r);border:.5px solid var(--border);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead th{background:var(--dark);color:white;padding:11px 16px;font-size:12px;font-weight:700;text-align:center;white-space:nowrap}
+thead th.nc{text-align:right}
+tbody tr{border-bottom:.5px solid var(--border)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:nth-child(even){background:#f7fafb}
+tbody tr:hover{background:#e8f4f0}
+td{padding:10px 16px;text-align:center;vertical-align:middle}
+td.nc{text-align:right;font-weight:600;font-size:13px}
+.rank-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-weight:800;font-size:12px;background:var(--border);color:var(--muted)}
+.count-pill{display:inline-block;background:#f0f4f6;border:1px solid var(--border);border-radius:10px;padding:2px 10px;font-size:11px;color:var(--muted)}
+.risk{font-weight:800;border-radius:10px;padding:3px 9px;font-size:11px;display:inline-block}
+.risk.low{background:#e8f5ee;color:#2e7d52}
+.risk.mid{background:#fff8e6;color:#956b16}
+.risk.high{background:#fdecec;color:#b94444}
+.table-footer{padding:10px 16px;font-size:12px;color:var(--muted);text-align:center;border-top:.5px solid var(--border);background:#f7fafb}
+
+.hidden{display:none!important}
+.gap-top{margin-top:20px}
+.page-footer{text-align:center;padding:16px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);background:var(--surface);margin-top:32px}
+
+#printTables{display:none}
+.print-section-header{display:none}
+
+@media print{
+  @page{size:A4 portrait;margin:13mm 10mm 13mm 10mm}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body{background:white;font-size:11px}
+  .screen-toolbar,.settings-bar,.toolbar,.page-footer,.drop-zone,.no-print{display:none!important}
+  .main{padding:0;max-width:100%}
+
+  .summary-page,.charts-page,.detail-page{box-shadow:none;border:1px solid #c8d2d9;padding:7mm 9mm;position:relative;overflow:hidden}
+  .summary-page{page-break-after:always}
+  .charts-page{page-break-after:always}
+  .detail-page{border:none!important;padding:0!important;page-break-before:always}
+
+  .print-section-header{display:flex!important;align-items:center;justify-content:space-between;margin-bottom:4mm;padding-bottom:2mm;border-bottom:1.5px solid #1d5c6e}
+  .print-section-header .psh-school{font-size:10pt;font-weight:900;color:#1a3a4a}
+  .print-section-header .psh-year{font-size:9pt;color:#6b808c}
+
+  .summary-page .stats-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .summary-page .top-students{grid-template-columns:repeat(3,1fr);gap:8px}
+  .report-box{box-shadow:none;padding:10px 12px;line-height:1.75}
+  .s-val{font-size:22px!important}
+  .medal{font-size:24px!important;margin-bottom:4px}
+  .tc-score{font-size:26px!important}
+
+  .charts-page .charts-grid{grid-template-columns:1fr 1fr;gap:8px;width:100%;overflow:visible}
+  .chart-card{padding:8px;break-inside:avoid;overflow:hidden}
+  .chart-card h3{font-size:10px;margin-bottom:5px}
+  .chart-wrap{height:180px;width:100%;overflow:visible}
+  .chart-wrap-wide{height:220px;width:100%;overflow:visible}
+  canvas{max-width:100%!important}
+  .chart-full{grid-column:1/-1!important}
+
+  .detail-page>.table-wrap,.detail-page>.toolbar{display:none!important}
+  #printTables{display:block!important}
+  .print-table-page{page-break-after:always;border:1px solid #c8d2d9;padding:7mm 9mm}
+  .print-table-page:last-child{page-break-after:auto}
+  .print-detail-table{width:100%;border-collapse:collapse;margin-top:3mm}
+  .print-detail-table th{background:#1a3a4a!important;color:white!important;padding:6px 9px;font-size:10.5px}
+  .print-detail-table td{padding:5.5px 9px;font-size:10.5px;line-height:1.35;border-bottom:.5px solid #d4dde4}
+  .print-detail-table tbody tr:nth-child(even){background:#f0f4f6!important}
+  .print-table-footer{font-size:9.5px;color:#6b808c;text-align:center;padding-top:2mm;margin-top:2mm;border-top:.5px solid #d4dde4}
+  .sec-title{font-size:13px;margin:3mm 0 2.5mm;border-right:3px solid #1d5c6e;padding-right:8px}
+}
+
+.period-tools{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.period-form{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:10px;
+  align-items:end;
+  background:#f7fafb;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+}
+.period-form label{
+  display:block;
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:5px;
+  font-weight:700;
+}
+.period-form input{
+  width:100%;
+  padding:8px 10px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  font-family:'Tajawal',sans-serif;
+}
+.period-result{
+  margin-top:12px;
+  background:#fff;
+  border-right:4px solid var(--teal);
+  padding:12px 14px;
+  border-radius:8px;
+  line-height:1.8;
+  display:none;
+}
+
+@media print{
+  .charts-page .chart-card{
+    page-break-inside:avoid !important;
+    break-inside:avoid !important;
+  }
+  .charts-page .chart-wrap{
+    height:155px !important;
+    overflow:visible !important;
+  }
+  .charts-page .chart-wrap-wide{
+    height:190px !important;
+    overflow:visible !important;
+  }
+  .charts-page canvas{
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="screen-toolbar no-print">
+  <span class="brand">📋 محلل الغياب والمواظبة — التوجيه الطلابي</span>
+  <div class="toolbar-btns">
+    <button class="abtn abtn-ghost" onclick="resetApp()">📂 ملف جديد</button>
+    <button class="abtn abtn-gold" id="btn-print" onclick="window.print()" disabled>🖨️ طباعة التقرير</button>
+  </div>
+</div>
+
+<div class="settings-bar no-print">
+  <div class="sg"><label>🏫 اسم المدرسة</label><input id="schoolName" value="متوسطة الحارث بن هشام" oninput="updateBranding()"></div>
+  <div class="sg"><label>👥 عدد طلاب المدرسة</label><input type="number" id="totalStudents" value="300" min="1" oninput="refreshAnalysis()"></div>
+  <div class="sg"><label>📅 العام الدراسي</label><input id="schoolYear" value="1446 / 1447هـ" oninput="updateBranding()"></div>
+</div>
+
+<div class="main">
+  <div class="drop-zone" id="dropZone"
+    onclick="document.getElementById('fileInput').click()"
+    ondragover="event.preventDefault();this.classList.add('drag')"
+    ondragleave="this.classList.remove('drag')"
+    ondrop="handleDrop(event)">
+    <div style="font-size:54px">📊</div>
+    <h2>ارفع ملف الغياب من نور</h2>
+    <p>تحليل دقيق للغياب بعذر وبدون عذر، وأكثر الطلاب، والمقارنة الشهرية والأسبوعية</p>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px">يدعم Excel ‏(.xlsx / .xls) — ملفات نور المرتبة وغير المرتبة</p>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this.files[0])">
+  </div>
+
+  <div id="results" class="hidden">
+    <div class="summary-page">
+      <div class="print-section-header"><span class="psh-school" id="ph-school-1"></span><span class="psh-year" id="ph-year-1"></span></div>
+
+      <div class="sec-title">📊 الملخص الإحصائي</div>
+      <div class="stats-grid" id="statsGrid"></div>
+
+      <div class="sec-title gap-top">📝 التقرير المختصر</div>
+      <div class="report-box" id="summaryReport"></div>
+
+      
+<div class="sec-title gap-top">📌 تحليل الأيام</div>
+<div class="report-box" id="daysAnalysis"></div>
+
+<div class="sec-title gap-top">🚩 أعلى الطلاب غيابًا</div>
+      <div class="top-students" id="topStudents"></div>
+    </div>
+
+    <div class="charts-page">
+      <div class="print-section-header"><span class="psh-school" id="ph-school-2"></span><span class="psh-year" id="ph-year-2"></span></div>
+
+      <div class="sec-title">📈 الرسوم البيانية والتحليل</div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>توزيع الغياب حسب النوع</h3>
+          <div class="chart-wrap"><canvas id="chartType"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>نسبة الطلاب المتغيبين</h3>
+          <div class="chart-wrap"><canvas id="chartParticipation"></canvas></div>
+        </div>
+        <div class="chart-card chart-full" id="monthlyCard">
+          <h3>المقارنة الشهرية للغياب</h3>
+          <div class="chart-wrap-wide"><canvas id="chartMonthly"></canvas></div>
+        </div>
+        <div class="chart-card chart-full">
+          <h3>أعلى 10 طلاب في الغياب</h3>
+          <div class="chart-wrap-wide"><canvas id="chartTop"></canvas></div>
+        </div>
+        
+<div class="chart-card chart-full no-print">
+  <h3>خيارات التحليل الزمني والمقارنة بين فترتين</h3>
+
+  <div class="period-tools">
+    <button class="tbtn primary" onclick="toggleTrend('monthly')">📅 عرض شهري</button>
+    <button class="tbtn" onclick="toggleTrend('weekly')">🗓️ عرض أسبوعي</button>
+  </div>
+
+  <div class="period-form">
+    <div>
+      <label>بداية الفترة الأولى</label>
+      <input type="date" id="p1Start">
+    </div>
+    <div>
+      <label>نهاية الفترة الأولى</label>
+      <input type="date" id="p1End">
+    </div>
+    <div>
+      <label>بداية الفترة الثانية</label>
+      <input type="date" id="p2Start">
+    </div>
+    <div>
+      <label>نهاية الفترة الثانية</label>
+      <input type="date" id="p2End">
+    </div>
+    <button class="tbtn primary" onclick="compareCustomPeriods()">📊 تحليل الفترتين</button>
+  </div>
+
+  <div id="periodCompareResult" class="period-result"></div>
+</div>
+
+<div class="chart-card chart-full" id="weeklyCard" style="display:none">
+          <h3>المقارنة الأسبوعية للغياب</h3>
+          <div class="chart-wrap-wide"><canvas id="chartWeekly"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-page">
+      <div class="toolbar no-print">
+        <div class="sec-title" style="border:none;margin:0;padding:0;font-size:15px">📄 كشف الطلاب التفصيلي</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <div class="search-wrap">
+            <input type="text" id="searchInput" placeholder="ابحث باسم الطالب..." oninput="renderTable()">
+            <span class="s-icon">🔍</span>
+          </div>
+          <button class="tbtn" onclick="sortBy('name')">🔤 أبجدي</button>
+          <button class="tbtn" onclick="sortBy('count')">🔢 بالأكثر غيابًا</button>
+          <button class="tbtn primary" onclick="window.print()">🖨️ طباعة</button>
+        </div>
+      </div>
+
+      <div class="table-wrap no-print">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:50px">#</th>
+              <th class="nc">اسم الطالب</th>
+              <th style="width:120px">أيام بعذر</th>
+              <th style="width:120px">أيام بدون عذر</th>
+              <th style="width:120px">الإجمالي</th>
+              <th style="width:120px">آخر غياب</th>
+              <th style="width:100px">المؤشر</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+        <div class="table-footer" id="tableFooter"></div>
+      </div>
+
+      <div id="printTables"></div>
+    </div>
+  </div>
+
+  <footer class="page-footer" id="screenFooter" style="display:none">
+    <span id="footer-school">متوسطة الحارث بن هشام</span> — تقرير الغياب والمواظبة —
+    <span id="footer-sub">1446 / 1447هـ</span><br>
+    <span style="font-size:11px">أداة تحليل مدرسية — معالجة الملف داخل المتصفح</span>
+  </footer>
+</div>
+
+<script>
+let allStudents=[], records=[], charts={}, currentSort='count';
+
+function normalizeArabic(v){
+  return String(v ?? '')
+    .replace(/[إأآا]/g,'ا')
+    .replace(/ة/g,'ه')
+    .replace(/ى/g,'ي')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+function updateBranding(){
+  const school=document.getElementById('schoolName').value||'اسم المدرسة';
+  const year=document.getElementById('schoolYear').value||'';
+  [1,2].forEach(n=>{
+    const s=document.getElementById('ph-school-'+n), y=document.getElementById('ph-year-'+n);
+    if(s) s.textContent=school;
+    if(y) y.textContent=year;
+  });
+  document.getElementById('footer-school').textContent=school;
+  document.getElementById('footer-sub').textContent=year;
+  document.title='محلل الغياب — '+school;
+}
+updateBranding();
+
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag');
+  if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+}
+
+function handleFile(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      processRaw(raw);
+    }catch(err){
+      console.error(err);
+      alert('تعذر قراءة الملف. تأكد أنه ملف Excel صحيح.');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function findColumns(raw){
+  let headerRow=-1, studentCol=-1, typeCol=-1, dateCol=-1;
+  for(let r=0;r<Math.min(raw.length,80);r++){
+    const row=raw[r].map(c=>String(c||'').trim());
+    for(let c=0;c<row.length;c++){
+      const cell=normalizeArabic(row[c]);
+      if(studentCol===-1 && (cell.includes('اسم الطالب') || cell.includes('اسم طالب') || cell==='الطالب')) studentCol=c;
+      if(typeCol===-1 && (cell.includes('نوع المخالفه') || cell.includes('نوع الغياب') || cell.includes('نوع'))) typeCol=c;
+      if(dateCol===-1 && (cell.includes('تاريخ المخالفه') || cell.includes('تاريخ الغياب') || cell.includes('التاريخ'))) dateCol=c;
+    }
+    if(studentCol!==-1 && (typeCol!==-1 || dateCol!==-1)){headerRow=r;break;}
+  }
+  return {headerRow,studentCol,typeCol,dateCol};
+}
+
+function parseDateInfo(rawDate){
+  const s=String(rawDate||'').trim();
+  // ملفات نور غالبًا: 15/08/1447 -- 03/02/2026 12:00 AM
+  let greg='';
+  const parts=s.split('--');
+  if(parts.length>1) greg=parts[1].trim();
+  else greg=s;
+
+  const m=greg.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if(!m) return {display:s||'غير محدد', date:null, month:'غير محدد', week:'غير محدد'};
+  const day=parseInt(m[1],10), month=parseInt(m[2],10), year=parseInt(m[3],10);
+  const d=new Date(year, month-1, day);
+  if(isNaN(d.getTime())) return {display:s||'غير محدد', date:null, month:'غير محدد', week:'غير محدد'};
+  return {
+    display:`${String(day).padStart(2,'0')}/${String(month).padStart(2,'0')}/${year}`,
+    date:d,
+    month:`${year}-${String(month).padStart(2,'0')}`,
+    week:getWeekKey(d)
+  };
+}
+
+function getWeekKey(d){
+  const onejan=new Date(d.getFullYear(),0,1);
+  const millis=d-onejan;
+  const dayOfYear=Math.floor(millis/86400000)+1;
+  const week=Math.ceil((dayOfYear+onejan.getDay())/7);
+  return `${d.getFullYear()}-W${String(week).padStart(2,'0')}`;
+}
+
+function classifyType(typeText){
+  const t=normalizeArabic(typeText);
+  if(t.includes('بدون') || t.includes('بلا عذر') || t.includes('غير مبرر')) return 'بدون عذر';
+  if(t.includes('بعذر') || t.includes('عذر')) return 'بعذر';
+  return 'غير محدد';
+}
+
+function processRaw(raw){
+  const cols=findColumns(raw);
+  if(cols.studentCol===-1){
+    alert('تعذر العثور على عمود اسم الطالب في الملف.');
+    return;
+  }
+  const map={};
+  records=[];
+  for(let i=cols.headerRow+1;i<raw.length;i++){
+    const row=raw[i]||[];
+    const name=String(row[cols.studentCol]||'').trim();
+    if(!name || name.includes('الإدارة') || name.includes('المدرسة') || name.includes('تقرير') || name.includes('عدد')) continue;
+
+    const type=cols.typeCol>=0 ? String(row[cols.typeCol]||'').trim() : '';
+    const dateRaw=cols.dateCol>=0 ? String(row[cols.dateCol]||'').trim() : '';
+    const absenceType=classifyType(type);
+    const dateInfo=parseDateInfo(dateRaw);
+
+    const rec={name,type:absenceType,typeRaw:type,dateRaw,dateInfo};
+    records.push(rec);
+
+    if(!map[name]) map[name]={name,total:0,excused:0,unexcused:0,unknown:0,lastDate:null,lastDateText:'غير محدد',months:{},weeks:{}};
+    const s=map[name];
+    s.total++;
+    if(absenceType==='بعذر') s.excused++;
+    else if(absenceType==='بدون عذر') s.unexcused++;
+    else s.unknown++;
+
+    if(dateInfo.month!=='غير محدد') s.months[dateInfo.month]=(s.months[dateInfo.month]||0)+1;
+    if(dateInfo.week!=='غير محدد') s.weeks[dateInfo.week]=(s.weeks[dateInfo.week]||0)+1;
+    if(dateInfo.date && (!s.lastDate || dateInfo.date>s.lastDate)){
+      s.lastDate=dateInfo.date;
+      s.lastDateText=dateInfo.display;
+    }
+  }
+  allStudents=Object.values(map).sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name,'ar'));
+  renderAll();
+  document.getElementById('dropZone').classList.add('hidden');
+  document.getElementById('results').classList.remove('hidden');
+  document.getElementById('screenFooter').style.display='block';
+  document.getElementById('btn-print').disabled=false;
+}
+
+function refreshAnalysis(){ if(allStudents.length) renderAll(); }
+
+function sumByType(type){ return records.filter(r=>r.type===type).length; }
+function groupRecords(key){
+  const m={};
+  records.forEach(r=>{
+    const k=r.dateInfo[key] || 'غير محدد';
+    m[k]=(m[k]||0)+1;
+  });
+  return Object.entries(m).sort(([a],[b])=>a.localeCompare(b));
+}
+function riskLabel(s){
+  if(s.unexcused>=5 || s.total>=10) return {text:'مرتفع',cls:'high'};
+  if(s.unexcused>=2 || s.total>=5) return {text:'متوسط',cls:'mid'};
+  return {text:'منخفض',cls:'low'};
+}
+
+function renderAll(){
+  updateBranding();
+  const total=records.length;
+  const excused=sumByType('بعذر');
+  const unexcused=sumByType('بدون عذر');
+  const unknown=sumByType('غير محدد');
+  const schoolTotal=parseInt(document.getElementById('totalStudents').value)||0;
+  const absentStudents=allStudents.length;
+  const absentPct=schoolTotal>0 ? ((absentStudents/schoolTotal)*100).toFixed(1)+'%' : '—';
+  const top=allStudents[0]||{name:'-',total:0};
+  const avg=absentStudents ? (total/absentStudents).toFixed(1) : 0;
+  const monthly=groupRecords('month');
+  const weekly=groupRecords('week');
+  const topMonth=monthly.length ? monthly.slice().sort((a,b)=>b[1]-a[1])[0] : ['-',0];
+
+  document.getElementById('statsGrid').innerHTML=[
+    {l:'إجمالي سجلات الغياب',v:total,n:'جميع الحالات',c:''},
+    {l:'الغياب بعذر',v:excused,n:'حالات مبررة',c:'green'},
+    {l:'الغياب بدون عذر',v:unexcused,n:'تحتاج متابعة',c:'red'},
+    {l:'طلاب لديهم غياب',v:absentStudents,n:'عدد الطلاب',c:'gold'},
+    {l:'نسبة الطلاب المتغيبين',v:absentPct,n:schoolTotal?'من إجمالي المدرسة':'أدخل عدد الطلاب',c:'accent'},
+    {l:'متوسط الغياب للطالب',v:avg,n:'سجل لكل طالب متغيب',c:''},
+  ].map(s=>`<div class="stat-card ${s.c}"><div class="s-label">${s.l}</div><div class="s-val">${s.v}</div><div class="s-note">${s.n}</div></div>`).join('');
+
+  
+const dayMap={};
+records.forEach(r=>{
+  if(r.dateInfo.date){
+    const day=r.dateInfo.date.toLocaleDateString('ar-SA',{weekday:'long'});
+    dayMap[day]=(dayMap[day]||0)+1;
+  }
+});
+const sortedDays=Object.entries(dayMap).sort((a,b)=>b[1]-a[1]);
+const mostDay=sortedDays[0]||['غير محدد',0];
+const leastDay=sortedDays[sortedDays.length-1]||['غير محدد',0];
+
+document.getElementById('daysAnalysis').innerHTML=`
+<p>
+أكثر الأيام تسجيلًا للغياب:
+<strong>${mostDay[0]}</strong>
+بعدد
+<strong>${mostDay[1]}</strong>
+حالة.
+</p>
+
+<p>
+أقل الأيام تسجيلًا للغياب:
+<strong>${leastDay[0]}</strong>
+بعدد
+<strong>${leastDay[1]}</strong>
+حالة.
+</p>
+
+<p>
+يمكن الاستفادة من هذا التحليل في متابعة الأنماط المتكررة للغياب وتحسين خطط المواظبة.
+</p>
+`;
+
+document.getElementById('summaryReport').innerHTML=`
+    <h3>تقرير مختصر عن الغياب والمواظبة</h3>
+    <p>بلغ إجمالي سجلات الغياب <strong>${total}</strong> سجلًا، منها <strong>${excused}</strong> بعذر، و<strong>${unexcused}</strong> بدون عذر${unknown?`، و<strong>${unknown}</strong> غير محدد`:''}.</p>
+    <p>عدد الطلاب الذين لديهم غياب هو <strong>${absentStudents}</strong> طالبًا${schoolTotal?`، بنسبة <strong>${absentPct}</strong> من إجمالي طلاب المدرسة`:''}.</p>
+    <p>أكثر طالب تكرارًا في الغياب: <strong>${top.name}</strong> بعدد <strong>${top.total}</strong> سجل، وأكثر فترة شهرية ظهورًا: <strong>${topMonth[0]}</strong> بعدد <strong>${topMonth[1]}</strong> سجل.</p>
+    <div class="alert-note">توصية: متابعة الطلاب ذوي مؤشر الخطورة المتوسط والمرتفع، خصوصًا من لديهم غياب بدون عذر أو تكرار عالٍ خلال فترة قصيرة.</div>
+  `;
+
+  const medals=['⚠️','⚠️','⚠️'], rc=['rank1','rank2','rank3'];
+  document.getElementById('topStudents').innerHTML=allStudents.slice(0,3).map((s,i)=>`
+    <div class="top-card ${rc[i]}">
+      <span class="medal">${medals[i]}</span>
+      <div class="tc-name">${s.name}</div>
+      <div class="tc-score">${s.total}</div>
+      <div class="tc-label">${s.excused} بعذر — ${s.unexcused} بدون عذر</div>
+    </div>`).join('');
+
+  renderCharts({total,excused,unexcused,unknown,monthly,weekly,schoolTotal,absentStudents});
+  renderTable();
+  setupDefaultPeriods();
+}
+
+function destroyCharts(){Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}});charts={};}
+
+function renderCharts(d){
+  destroyCharts();
+
+  const font={family:'Tajawal',size:11};
+  const top10=allStudents.slice(0,10).reverse();
+
+  charts.type=new Chart(document.getElementById('chartType'),{
+    type:'doughnut',
+    data:{labels:['بعذر','بدون عذر'].concat(d.unknown?['غير محدد']:[]),
+      datasets:[{
+data:[d.excused,d.unexcused].concat(d.unknown?[d.unknown]:[]),
+backgroundColor:['#2e7d52','#c62828','#607d8b'],
+hoverBackgroundColor:['#388e3c','#d32f2f','#78909c'],
+borderWidth:2,
+borderColor:'#fff'
+}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
+  });
+
+  const notAbsent=Math.max((d.schoolTotal||0)-d.absentStudents,0);
+  charts.participation=new Chart(document.getElementById('chartParticipation'),{
+    type:'doughnut',
+    data:{labels:['لديهم غياب','لا يظهرون في الكشف'],datasets:[{
+data:d.schoolTotal?[d.absentStudents,notAbsent]:[d.absentStudents],
+backgroundColor:['#1d5c6e','#d9e3e8'],
+hoverBackgroundColor:['#23697d','#c8d4da'],
+borderWidth:2,
+borderColor:'#fff'
+}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}
+  });
+
+  charts.monthly=new Chart(document.getElementById('chartMonthly'),{
+    type:'bar',
+    data:{labels:d.monthly.map(x=>x[0]),datasets:[{
+label:'عدد سجلات الغياب',
+data:d.monthly.map(x=>x[1]),
+backgroundColor:'#1d5c6e',
+borderRadius:6
+}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font}},y:{beginAtZero:true,ticks:{precision:0,font}}}}
+  });
+
+  charts.top=new Chart(document.getElementById('chartTop'),{
+    type:'bar',
+    data:{labels:top10.map(s=>s.name),datasets:[{
+label:'عدد الغيابات',
+data:top10.map(s=>s.total),
+backgroundColor:'#c8973a',
+borderRadius:6
+}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0,font}},y:{ticks:{font}}}}
+  });
+
+  charts.weekly=new Chart(document.getElementById('chartWeekly'),{
+    type:'line',
+    data:{labels:d.weekly.map(x=>x[0]),datasets:[{
+label:'عدد سجلات الغياب',
+data:d.weekly.map(x=>x[1]),
+borderColor:'#b94444',
+backgroundColor:'rgba(185,68,68,.15)',
+pointBackgroundColor:'#b94444',
+pointRadius:4,
+borderWidth:3,
+tension:.3,
+fill:true
+}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font,maxRotation:45,minRotation:0}},y:{beginAtZero:true,ticks:{precision:0,font}}}}
+  });
+}
+
+function sortBy(key){
+  if(key==='name') allStudents.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+  else allStudents.sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name,'ar'));
+  currentSort=key;
+  renderTable();
+}
+
+function renderTable(){
+  const q=(document.getElementById('searchInput')?.value||'').trim();
+  const filtered=q?allStudents.filter(s=>s.name.includes(q)):allStudents;
+  document.getElementById('tableBody').innerHTML=filtered.map(s=>{
+    const rank=allStudents.indexOf(s)+1;
+    const badge=rank===1?'⚠️':rank===2?'⚠️':rank===3?'⚠️':`<span class="rank-badge">${rank}</span>`;
+    const risk=riskLabel(s);
+    return `<tr>
+      <td>${badge}</td>
+      <td class="nc">${s.name}</td>
+      <td><span class="count-pill">${s.excused}</span></td>
+      <td><span class="count-pill">${s.unexcused}</span></td>
+      <td style="font-weight:900">${s.total}</td>
+      <td>${s.lastDateText}</td>
+      <td><span class="risk ${risk.cls}">${risk.text}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tableFooter').textContent=q?`نتائج البحث: ${filtered.length} من ${allStudents.length} طالب`:`إجمالي الطلاب المتغيبين: ${allStudents.length}`;
+  renderPrintTables();
+}
+
+function renderPrintTables(){
+  const container=document.getElementById('printTables');
+  if(!container)return;
+  const school=document.getElementById('schoolName').value||'';
+  const year=document.getElementById('schoolYear').value||'';
+  const PER_PAGE=22;
+  const pages=Math.ceil(allStudents.length/PER_PAGE);
+  let html='';
+  for(let p=0;p<pages;p++){
+    const slice=allStudents.slice(p*PER_PAGE,(p+1)*PER_PAGE);
+    html+=`<div class="print-table-page">
+      <div class="print-section-header"><span class="psh-school">${school}</span><span class="psh-year">${year}</span></div>
+      <div class="sec-title">📄 كشف الطلاب التفصيلي — الصفحة ${p+1} من ${pages}</div>
+      <table class="print-detail-table">
+        <thead><tr>
+          <th style="width:42px;text-align:center">#</th>
+          <th style="text-align:right">اسم الطالب</th>
+          <th style="width:75px;text-align:center">بعذر</th>
+          <th style="width:75px;text-align:center">بدون عذر</th>
+          <th style="width:75px;text-align:center">الإجمالي</th>
+          <th style="width:90px;text-align:center">آخر غياب</th>
+          <th style="width:75px;text-align:center">المؤشر</th>
+        </tr></thead>
+        <tbody>${slice.map(s=>{
+          const rank=allStudents.indexOf(s)+1;
+          const risk=riskLabel(s);
+          return `<tr>
+            <td style="text-align:center">${rank}</td>
+            <td style="text-align:right">${s.name}</td>
+            <td style="text-align:center">${s.excused}</td>
+            <td style="text-align:center">${s.unexcused}</td>
+            <td style="text-align:center;font-weight:900">${s.total}</td>
+            <td style="text-align:center">${s.lastDateText}</td>
+            <td style="text-align:center">${risk.text}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+      <div class="print-table-footer">إجمالي الطلاب المتغيبين: ${allStudents.length} — عرض ${p*PER_PAGE+1} إلى ${Math.min((p+1)*PER_PAGE,allStudents.length)}</div>
+    </div>`;
+  }
+  container.innerHTML=html;
+}
+
+
+let currentTrend='monthly';
+
+function toggleTrend(type){
+  currentTrend=type;
+
+  const monthlyCard=document.getElementById('monthlyCard');
+  const weeklyCard=document.getElementById('weeklyCard');
+
+  if(type==='monthly'){
+    monthlyCard.style.display='block';
+    weeklyCard.style.display='none';
+  }else{
+    monthlyCard.style.display='none';
+    weeklyCard.style.display='block';
+  }
+
+  setTimeout(()=>{
+    Object.values(charts).forEach(c=>{
+      try{c.resize()}catch(e){}
+    });
+  },200);
+}
+
+
+
+
+function toDateInputValue(d){
+  if(!d || isNaN(d.getTime())) return '';
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function setupDefaultPeriods(){
+  const validDates = records
+    .map(r=>r.dateInfo.date)
+    .filter(d=>d && !isNaN(d.getTime()))
+    .sort((a,b)=>a-b);
+
+  if(validDates.length < 2) return;
+
+  const min=validDates[0];
+  const max=validDates[validDates.length-1];
+  const mid=new Date((min.getTime()+max.getTime())/2);
+
+  document.getElementById('p1Start').value=toDateInputValue(min);
+  document.getElementById('p1End').value=toDateInputValue(mid);
+  document.getElementById('p2Start').value=toDateInputValue(new Date(mid.getTime()+86400000));
+  document.getElementById('p2End').value=toDateInputValue(max);
+}
+
+function countPeriod(start, end){
+  const s=new Date(start + 'T00:00:00');
+  const e=new Date(end + 'T23:59:59');
+
+  let total=0, excused=0, unexcused=0, unknown=0;
+  const students=new Set();
+
+  records.forEach(r=>{
+    const d=r.dateInfo.date;
+    if(!d || d<s || d>e) return;
+
+    total++;
+    students.add(r.name);
+
+    if(r.type==='بعذر') excused++;
+    else if(r.type==='بدون عذر') unexcused++;
+    else unknown++;
+  });
+
+  return {total, excused, unexcused, unknown, students:students.size};
+}
+
+function compareCustomPeriods(){
+  const p1s=document.getElementById('p1Start').value;
+  const p1e=document.getElementById('p1End').value;
+  const p2s=document.getElementById('p2Start').value;
+  const p2e=document.getElementById('p2End').value;
+
+  if(!p1s || !p1e || !p2s || !p2e){
+    alert('فضلاً أدخل تواريخ الفترتين كاملة');
+    return;
+  }
+
+  if(new Date(p1s)>new Date(p1e) || new Date(p2s)>new Date(p2e)){
+    alert('تاريخ البداية يجب أن يكون قبل تاريخ النهاية');
+    return;
+  }
+
+  const a=countPeriod(p1s,p1e);
+  const b=countPeriod(p2s,p2e);
+  const diff=b.total-a.total;
+  const pct=a.total ? ((diff/a.total)*100).toFixed(1) : '—';
+
+  let trend='استقرار';
+  if(diff>0) trend='ارتفاع';
+  if(diff<0) trend='انخفاض';
+
+  const box=document.getElementById('periodCompareResult');
+  box.style.display='block';
+  box.innerHTML=`
+    <strong>نتيجة المقارنة:</strong><br>
+    الفترة الأولى: <strong>${a.total}</strong> سجل غياب، ${a.excused} بعذر، ${a.unexcused} بدون عذر، وعدد الطلاب ${a.students}.<br>
+    الفترة الثانية: <strong>${b.total}</strong> سجل غياب، ${b.excused} بعذر، ${b.unexcused} بدون عذر، وعدد الطلاب ${b.students}.<br>
+    الاتجاه: <strong>${trend}</strong> بمقدار <strong>${Math.abs(diff)}</strong> سجل ${pct !== '—' ? `(${pct}%)` : ''}.
+  `;
+
+  renderPeriodComparisonChart(a,b);
+}
+
+function renderPeriodComparisonChart(a,b){
+  if(charts.periodCompare){
+    try{charts.periodCompare.destroy()}catch(e){}
+  }
+
+  const canvasId='chartWeekly';
+  toggleTrend('weekly');
+
+  const ctx=document.getElementById(canvasId);
+  charts.periodCompare=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['الفترة الأولى','الفترة الثانية'],
+      datasets:[
+        {label:'بعذر', data:[a.excused,b.excused], backgroundColor:'#2e7d52', borderRadius:6},
+        {label:'بدون عذر', data:[a.unexcused,b.unexcused], backgroundColor:'#b94444', borderRadius:6},
+        {label:'غير محدد', data:[a.unknown,b.unknown], backgroundColor:'#607d8b', borderRadius:6}
+      ]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{display:true, labels:{font:{family:'Tajawal',size:11}}}},
+      scales:{x:{stacked:true}, y:{stacked:true, beginAtZero:true, ticks:{precision:0}}}
+    }
+  });
+}
+
+function resetApp(){
+  allStudents=[];records=[];destroyCharts();
+  document.getElementById('results').classList.add('hidden');
+  document.getElementById('dropZone').classList.remove('hidden');
+  document.getElementById('screenFooter').style.display='none';
+  document.getElementById('fileInput').value='';
+  const s=document.getElementById('searchInput'); if(s) s.value='';
+  document.getElementById('btn-print').disabled=true;
+}
+</script>
+</body>
+</html>
