@@ -4,32 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>محلل المخالفات السلوكية</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
-function updateCoverInfo(){
-  const d=new Date();
-  const dateStr=d.toLocaleDateString('ar-SA');
-
-  const cd=document.getElementById('coverDate');
-  if(cd) cd.textContent=dateStr;
-}
-
-updateCoverInfo();
-updateCoverFields();
-
-</script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js">
-function updateCoverInfo(){
-  const d=new Date();
-  const dateStr=d.toLocaleDateString('ar-SA');
-
-  const cd=document.getElementById('coverDate');
-  if(cd) cd.textContent=dateStr;
-}
-
-updateCoverInfo();
-updateCoverFields();
-
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&display=swap');
 :root{--dark:#1a3a4a;--red:#b94444;--gold:#c8973a;--bg:#f0f4f6;--surface:#fff;--border:#d4dde4;--muted:#6b808c;}
@@ -62,10 +38,7 @@ tr:nth-child(even){background:#f8fafc}
 .low{background:#e8f5ee;color:#2e7d52}
 .hidden{display:none}
 
-@media print{
-.upload,.top{
-display:none !important;
-}
+
 body{
 background:white;
 }
@@ -126,12 +99,7 @@ display:block !important;
   margin-top:25px;
   line-height:1.8;
 }
-@media print{
-  .cover-page{
-    page-break-after:always;
-    min-height:auto;
-  }
-}
+
 
 
 .settings-bar{
@@ -159,18 +127,183 @@ display:block !important;
   min-width:220px;
   font-family:'Tajawal',sans-serif;
 }
-@media print{
-  .settings-bar{display:none!important;}
+
+
+
+
+
+
+/* ===== PRINT LAYOUT FIX ===== */
+@page{
+  size:A4 portrait;
+  margin:12mm 10mm;
 }
 
-
 @media print{
-  .cover-page{page-break-after:always!important;}
-  .report{page-break-inside:avoid!important;}
-  .chart-card{page-break-inside:avoid!important;}
-  table{font-size:12px;}
-  th,td{padding:8px!important;}
-  .credit,.report-credit{font-size:10px!important;}
+
+  *{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+
+  html,body{
+    background:white !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  body{
+    zoom:95%;
+    font-size:11px !important;
+  }
+
+  .top,
+  .upload,
+  .settings-bar{
+    display:none !important;
+  }
+
+  .main{
+    max-width:100% !important;
+    width:100% !important;
+    padding:0 !important;
+    margin:0 !important;
+  }
+
+  .cover-page{
+    page-break-after:always !important;
+    break-after:page !important;
+    min-height:245mm !important;
+    border:none !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    padding:18mm 10mm !important;
+    margin:0 !important;
+  }
+
+  .cover-logo{
+    font-size:44px !important;
+  }
+
+  .cover-title{
+    font-size:30px !important;
+  }
+
+  .cover-sub{
+    font-size:15px !important;
+    margin-bottom:18mm !important;
+  }
+
+  .cover-info{
+    width:100% !important;
+    max-width:150mm !important;
+    font-size:13px !important;
+    padding:12mm !important;
+  }
+
+  .stats{
+    grid-template-columns:repeat(3,1fr) !important;
+    gap:8px !important;
+    margin-top:0 !important;
+  }
+
+  .card{
+    padding:10px !important;
+    border-radius:8px !important;
+  }
+
+  .card h3{
+    font-size:10px !important;
+  }
+
+  .num{
+    font-size:22px !important;
+  }
+
+  .report{
+    padding:10px 12px !important;
+    margin-top:10px !important;
+    line-height:1.7 !important;
+    border-radius:8px !important;
+  }
+
+  .charts{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:8px !important;
+    margin-top:10px !important;
+  }
+
+  .chart-card{
+    padding:8px !important;
+    border-radius:8px !important;
+    margin-top:0 !important;
+    page-break-inside:avoid !important;
+    break-inside:avoid !important;
+  }
+
+  .chart-card h3{
+    font-size:11px !important;
+    margin:0 0 4px !important;
+  }
+
+  .chart-wrap{
+    height:185px !important;
+    width:100% !important;
+    overflow:visible !important;
+  }
+
+  canvas{
+    max-width:100% !important;
+    width:100% !important;
+  }
+
+  .card,
+  .report,
+  .chart-card,
+  table{
+    box-shadow:none !important;
+    page-break-inside:avoid !important;
+    break-inside:avoid !important;
+  }
+
+  table{
+    width:100% !important;
+    font-size:10px !important;
+    margin-top:10px !important;
+    border-radius:0 !important;
+    table-layout:fixed !important;
+  }
+
+  th,td{
+    padding:6px !important;
+    line-height:1.35 !important;
+    word-break:normal !important;
+  }
+
+  th:nth-child(1), td:nth-child(1){width:30px !important;}
+  th:nth-child(2), td:nth-child(2){width:28% !important;}
+  th:nth-child(3), td:nth-child(3){width:17% !important;}
+  th:nth-child(4), td:nth-child(4){width:10% !important;}
+  th:nth-child(5), td:nth-child(5){width:10% !important;}
+  th:nth-child(6), td:nth-child(6){width:15% !important;}
+  th:nth-child(7), td:nth-child(7){width:14% !important;}
+
+  tr{
+    page-break-inside:avoid !important;
+    break-inside:avoid !important;
+  }
+
+  .risk{
+    padding:2px 5px !important;
+    font-size:9px !important;
+  }
+
+  .credit,
+  .report-credit{
+    font-size:9px !important;
+    color:#78909c !important;
+  }
 }
 
 </style>
