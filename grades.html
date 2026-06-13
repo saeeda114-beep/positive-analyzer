@@ -104,16 +104,17 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);font-
 /* ── Print Dialog ── */
 .print-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;align-items:center;justify-content:center;}
 .print-overlay.open{display:flex;}
-.print-box{background:#fff;border-radius:14px;padding:24px;width:520px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.25);}
+.print-box{background:#fff;border-radius:14px;padding:18px;width:680px;max-width:95vw;max-height:86vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.25);}
 .print-box h3{font-size:16px;font-weight:800;color:var(--dk);margin-bottom:16px;border-bottom:2px solid var(--tl);padding-bottom:10px;}
-.print-sections{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;}
-.ps-item{display:flex;align-items:center;gap:10px;background:#f7fafb;border:1.5px solid var(--br);border-radius:8px;padding:10px 14px;cursor:pointer;transition:all .15s;user-select:none;}
+.print-sections{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px;}
+@media (max-width:700px){.print-box{width:95vw;max-height:90vh;padding:16px}.print-sections{grid-template-columns:1fr}.print-orient{flex-direction:column}}
+.ps-item{display:flex;align-items:center;gap:8px;background:#f7fafb;border:1.5px solid var(--br);border-radius:8px;padding:8px 10px;cursor:pointer;transition:all .15s;user-select:none;}
 .ps-item:hover{border-color:var(--tl);background:#edf6f4;}
 .ps-item.sel{border-color:var(--tl);background:#e0f0f6;}
 .ps-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--tl);cursor:pointer;flex-shrink:0;}
-.ps-item .ps-icon{font-size:18px;}
-.ps-item .ps-label{font-size:13px;font-weight:600;color:var(--dk);}
-.ps-item .ps-sub{font-size:11px;color:var(--mu);}
+.ps-item .ps-icon{font-size:16px;}
+.ps-item .ps-label{font-size:12px;font-weight:600;color:var(--dk);}
+.ps-item .ps-sub{font-size:10px;color:var(--mu);}
 .print-orient{display:flex;gap:8px;margin-bottom:16px;}
 .orient-btn{flex:1;padding:8px;border:1.5px solid var(--br);border-radius:8px;background:#f7fafb;font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;}
 .orient-btn.sel{border-color:var(--tl);background:#e0f0f6;font-weight:700;}
@@ -131,51 +132,323 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);font-
 /* ── Cover Page ── */
 .cover-page{display:none;}
 
-/* ── Print base ── */
+/* ── Print base - محسّن للهوامش والرسوم ── */
 @media print {
-  @page { size: A4 portrait; margin: 14mm 12mm; }
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  body { background: white; font-size: 11px; }
-  .topbar, .sbar, .up-panels, .tabs, .sf2, .print-overlay { display: none !important; }
-  .main { padding: 0; max-width: 100%; }
+  @page {
+    size: A4 portrait;
+    margin: 8mm 7mm 9mm 7mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html, body {
+    background: #fff !important;
+    font-size: 10.5px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .topbar,
+  .sbar,
+  .up-panels,
+  .tabs,
+  .sf2,
+  .print-overlay {
+    display: none !important;
+  }
+
+  .main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  #rptYS,
+  #rptES,
+  #rptBoth,
+  .section-cover {
+    display: none !important;
+  }
+
+  #rptYS[data-print="show"],
+  #rptES[data-print="show"],
+  #rptBoth[data-print="show"] {
+    display: block !important;
+  }
+
+  #rptYS[data-print="hide"],
+  #rptES[data-print="hide"],
+  #rptBoth[data-print="hide"],
+  .cover-page[data-print="hide"],
+  .section-cover[data-print="hide"] {
+    display: none !important;
+  }
+
+  .cover-page[data-print="show"],
+  .section-cover[data-print="show"] {
+    display: flex !important;
+  }
+
+  .section-cover {
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    height: 270mm !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    background: #fff !important;
+    border: 2px solid #1a3a4a !important;
+    box-sizing: border-box !important;
+    padding: 14mm !important;
+  }
+  .section-cover .sc-inner { width: 100%; }
+  .section-cover .sc-school { font-size: 18pt; font-weight: 800; color: #1a3a4a; margin-bottom: 8mm; }
+  .section-cover .sc-grade { font-size: 13pt; color: #6b808c; margin-bottom: 14mm; }
+  .section-cover .sc-title-box { display: inline-block; border: 4px solid #1d5c6e; border-radius: 5mm; padding: 8mm 20mm; }
+  .section-cover .sc-title { font-size: 26pt; font-weight: 900; color: #1d5c6e; }
+  .section-cover .sc-sub { margin-top: 9mm; font-size: 12pt; color: #6b808c; }
+
+  .rpt {
+    border: none !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    page-break-after: always;
+  }
+
+  .rpt-hdr {
+    padding: 7px 11px !important;
+    margin: 0 0 5mm 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .rpt-hdr h2 {
+    font-size: 13px !important;
+  }
+
+  .rpt-hdr .meta {
+    font-size: 10px !important;
+  }
+
+  .rpt-body {
+    padding: 0 !important;
+  }
+
+  .tc {
+    display: none !important;
+  }
+
+  .tc.print-include {
+    display: block !important;
+    page-break-before: always;
+    break-before: page;
+  }
+
+  .tc.print-include:first-of-type {
+    page-break-before: auto;
+    break-before: auto;
+  }
+
+  .sec {
+    margin: 6mm 0 3mm !important;
+    font-size: 13px !important;
+  }
+
+  .sc-grid,
+  .top-grid,
+  .ch-grid,
+  .ch-card,
+  .tc-card,
+  .sc,
+  table,
+  tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .sc-grid {
+    gap: 5px !important;
+    margin-bottom: 5mm !important;
+  }
+
+  .sc {
+    padding: 8px 10px !important;
+  }
+
+  .sc-v {
+    font-size: 18px !important;
+  }
+
+  .top-grid {
+    gap: 6px !important;
+  }
+
+  .tc-card {
+    padding: 8px !important;
+  }
+
+  .ch-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 7mm !important;
+    align-items: stretch !important;
+    margin-top: 4mm !important;
+  }
+
+  .ch-card {
+    background: #fff !important;
+    border: 1px solid #d4dde4 !important;
+    padding: 5mm !important;
+    min-height: 78mm !important;
+    overflow: visible !important;
+  }
+
+  .ch-card h4 {
+    font-size: 12px !important;
+    margin-bottom: 4mm !important;
+  }
+
+  .ch-wrap {
+    height: 58mm !important;
+    min-height: 58mm !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .ch-h160 {
+    height: 52mm !important;
+    min-height: 52mm !important;
+  }
+
+  .ch-full .ch-wrap,
+  .ch-full .ch-h160 {
+    height: 62mm !important;
+    min-height: 62mm !important;
+  }
+
+  canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+    image-rendering: auto !important;
+  }
+
+  .stbl,
+  .dtbl {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  .stbl th,
+  .stbl td,
+  .dtbl th,
+  .dtbl td {
+    padding: 3.5px 5px !important;
+    font-size: 8.5px !important;
+    line-height: 1.35 !important;
+  }
+
+  .dtbl {
+    min-width: 100% !important;
+    table-layout: auto !important;
+  }
+
+  .dtbl-wrap {
+    overflow: visible !important;
+    border-radius: 0 !important;
+  }
+
+  .gp {
+    padding: 1px 5px !important;
+    font-size: 8px !important;
+  }
+
+  .wtag {
+    font-size: 9px !important;
+    padding: 2px 6px !important;
+  }
+
   .cover-page {
-    display: flex !important; flex-direction: column;
-    align-items: center; justify-content: space-between;
+    display: none !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
     text-align: center;
-    padding: 8mm 12mm 6mm; page-break-after: always;
-    border: 2px solid #1a3a4a; box-sizing: border-box;
-    /* يملأ الصفحة بغض النظر عن الاتجاه */
-    height: calc(100vh - 4mm);
-    max-height: calc(100vh - 4mm);
+    height: 270mm;
+    max-height: 270mm;
+    padding: 12mm 14mm;
+    border: 2px solid #1a3a4a;
+    box-sizing: border-box;
+    page-break-after: always;
     overflow: hidden;
   }
-  .cover-top { width: 100%; }
-  .cover-title-box { border: 3px solid #1d5c6e; border-radius: 4mm; padding: 5mm 12mm; display: inline-block; margin: 6mm 0; -webkit-print-color-adjust:exact;print-color-adjust:exact; }
-  .cover-title { font-size: 20pt; font-weight: 900; color: #1d5c6e; -webkit-print-color-adjust:exact;print-color-adjust:exact; }
-  .cover-school { font-size: 15pt; font-weight: 800; color: #1a3a4a; margin-bottom: 3mm; }
-  .cover-grade  { font-size: 13pt; color: #6b808c; margin-bottom: 8mm; }
-  .cover-stats  { display: flex; justify-content: center; gap: 6mm; flex-wrap: wrap; margin: 4mm 0; }
-  .cover-stat   { text-align: center; }
-  .cover-stat .cv { font-size: 17pt; font-weight: 900; color: #1a3a4a; display: block; }
-  .cover-stat .cl { font-size: 9pt; color: #6b808c; }
-  .cover-footer { font-size: 9pt; color: #6b808c; border-top: 1px solid #d4dde4; padding-top: 3mm; width: 100%; }
-  .tc { display: none; }
-  .tc.print-include { display: block; page-break-before: always; }
-  #rptYS, #rptES, #rptBoth { display: none; }
-  .rpt { margin-bottom: 0; border: none; }
-  .rpt-hdr { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .sc::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .gp { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .stbl thead th, .dtbl thead th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .stbl tbody tr:nth-child(even), .dtbl tbody tr:nth-child(even) { background: #f7fafb !important; }
-  .tc-card.r1,.tc-card.r2,.tc-card.r3,.tc-card.rw { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .sc-grid,.top-grid { break-inside: avoid; }
-  .tc-card,.sc { break-inside: avoid; }
-  .stbl tbody tr,.dtbl tbody tr { break-inside: avoid; }
-  .ch-wrap { height: 150px; }
-  .ch-h160 { height: 120px; }
-}
-</style>
+
+  .cover-top {
+    width: 100%;
+  }
+
+  .cover-title-box {
+    border: 3px solid #1d5c6e;
+    border-radius: 4mm;
+    padding: 6mm 14mm;
+    display: inline-block;
+    margin: 8mm 0;
+  }
+
+  .cover-title {
+    font-size: 22pt;
+    font-weight: 900;
+    color: #1d5c6e;
+  }
+
+  .cover-school {
+    font-size: 18pt;
+    font-weight: 800;
+    color: #1a3a4a;
+    margin-bottom: 3mm;
+  }
+
+  .cover-grade {
+    font-size: 13pt;
+    color: #6b808c;
+    margin-bottom: 8mm;
+  }
+
+  .cover-stats {
+    display: flex;
+    justify-content: center;
+    gap: 6mm;
+    flex-wrap: wrap;
+    margin: 4mm 0;
+  }
+
+  .cover-stat {
+    text-align: center;
+  }
+
+  .cover-stat .cv {
+    font-size: 17pt;
+    font-weight: 900;
+    color: #1a3a4a;
+    display: block;
+  }
+
+  .cover-stat .cl {
+    font-size: 9pt;
+    color: #6b808c;
+  }
+
+  .cover-footer {
+    font-size: 10pt;
+    color: #6b808c;
+    border-top: 1px solid #d4dde4;
+    padding-top: 3mm;
+    width: 100%;
+  }
+}</style>
 </head>
 <body>
 
@@ -245,8 +518,37 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);font-
     </div>
   </div>
 
+  <div class="section-cover" id="sectionCoverYS">
+    <div class="sc-inner">
+      <div class="sc-school"></div>
+      <div class="sc-grade"></div>
+      <div class="sc-title-box"><div class="sc-title">أعمال السنة</div></div>
+      <div class="sc-sub">تقرير تحليلي وإحصائي</div>
+    </div>
+  </div>
+
   <div id="rptYS" class="hidden"></div>
+
+  <div class="section-cover" id="sectionCoverES">
+    <div class="sc-inner">
+      <div class="sc-school"></div>
+      <div class="sc-grade"></div>
+      <div class="sc-title-box"><div class="sc-title">نهاية الفصل</div></div>
+      <div class="sc-sub">تقرير تحليلي وإحصائي</div>
+    </div>
+  </div>
+
   <div id="rptES" class="hidden"></div>
+
+  <div class="section-cover" id="sectionCoverBoth">
+    <div class="sc-inner">
+      <div class="sc-school"></div>
+      <div class="sc-grade"></div>
+      <div class="sc-title-box"><div class="sc-title">المقارنة الشاملة</div></div>
+      <div class="sc-sub">مقارنة أعمال السنة ونهاية الفصل</div>
+    </div>
+  </div>
+
   <div id="rptBoth" class="hidden"></div>
 </div>
 
@@ -274,6 +576,13 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);font-
 </div>
 
 <script>
+/* تحسين وضوح الرسوم البيانية على الشاشة والطباعة */
+if (window.Chart) {
+  Chart.defaults.devicePixelRatio = Math.max(2, window.devicePixelRatio || 1);
+  Chart.defaults.animation = false;
+  Chart.defaults.responsive = true;
+}
+
 /* ════ PRINT DIALOG ════ */
 let printOrient = 'portrait';
 
@@ -359,8 +668,9 @@ function doPrint(){
 
   // إعادة ضبط كل شيء
   document.querySelectorAll('.tc').forEach(el=>el.classList.remove('print-include'));
-  ['rptYS','rptES','rptBoth'].forEach(id=>document.getElementById(id).setAttribute('data-print','hide'));
+  ['rptYS','rptES','rptBoth','sectionCoverYS','sectionCoverES','sectionCoverBoth'].forEach(id=>document.getElementById(id).setAttribute('data-print','hide'));
   document.getElementById('coverPage').setAttribute('data-print', hasCover?'show':'hide');
+  buildSectionCovers();
 
   // بناء الغلاف
   if(hasCover) buildCover(selected);
@@ -369,12 +679,14 @@ function doPrint(){
     if(val==='cover-page') return;
     if(val==='both-rpt'){
       document.querySelectorAll('#rptBoth .tc').forEach(tc=>tc.classList.add('print-include'));
+      document.getElementById('sectionCoverBoth').setAttribute('data-print','show');
       document.getElementById('rptBoth').setAttribute('data-print','show');
     } else {
       const parts=val.split('-'), id=parts.pop(), t=parts.join('-');
       const el=document.getElementById(t+'-'+id);
       if(el){
         el.classList.add('print-include');
+        document.getElementById(t==='ys'?'sectionCoverYS':'sectionCoverES').setAttribute('data-print','show');
         document.getElementById(t==='ys'?'rptYS':'rptES').setAttribute('data-print','show');
       }
     }
@@ -392,17 +704,20 @@ function doPrint(){
   // إذا الكشف فقط → landscape
 
   const detOnly = selected.filter(v=>v!=='cover-page').every(v=>v.endsWith('-det'));
-  const finalOrient = detOnly ? 'landscape' : 'portrait';
+  const finalOrient = hasDet ? 'landscape' : printOrient;
 
   styleEl.textContent=`
     @media print {
-      @page { size: A4 ${finalOrient}; margin: ${finalOrient==='landscape'?'6mm 5mm':'12mm 10mm'}; }
-      [data-print="hide"] { display: none !important; }
-      [data-print="show"] { display: block !important; }
-      .cover-page {
-        height: ${finalOrient==='landscape'?'190mm':'265mm'};
-        max-height: ${finalOrient==='landscape'?'190mm':'265mm'};
+      @page { size: A4 ${finalOrient}; margin: ${finalOrient==='landscape'?'6mm 4mm 7mm 4mm':'8mm 7mm 9mm 7mm'}; }
+      #rptYS[data-print="hide"], #rptES[data-print="hide"], #rptBoth[data-print="hide"], .cover-page[data-print="hide"], .section-cover[data-print="hide"] { display: none !important; }
+      #rptYS[data-print="show"], #rptES[data-print="show"], #rptBoth[data-print="show"] { display: block !important; }
+      .cover-page[data-print="show"], .section-cover[data-print="show"] {
+        display: flex !important;
+        height: ${finalOrient==='landscape'?'190mm':'270mm'} !important;
+        max-height: ${finalOrient==='landscape'?'190mm':'270mm'} !important;
       }
+      .section-cover[data-print="show"] { align-items:center !important; justify-content:center !important; text-align:center !important; page-break-after:always !important; break-after:page !important; }
+      .section-cover .sc-title { font-size: ${finalOrient==='landscape'?'24pt':'26pt'} !important; }
       ${hasDet ? `.tc.print-include.det-section .dtbl{font-size:${finalOrient==='landscape'?'8px':'7px'};}
       .tc.print-include.det-section .dtbl th,
       .tc.print-include.det-section .dtbl td{padding:${finalOrient==='landscape'?'3px 4px':'2px 3px'};white-space:nowrap;}
@@ -413,12 +728,28 @@ function doPrint(){
 
   closePrintDialog();
   setTimeout(()=>{
+    refreshChartsForPrint();
+    setTimeout(()=>refreshChartsForPrint(), 80);
     window.print();
     setTimeout(()=>{
       document.querySelectorAll('.tc').forEach(el=>el.classList.remove('print-include'));
-      ['rptYS','rptES','rptBoth','coverPage'].forEach(id=>document.getElementById(id).removeAttribute('data-print'));
+      ['rptYS','rptES','rptBoth','coverPage','sectionCoverYS','sectionCoverES','sectionCoverBoth'].forEach(id=>document.getElementById(id).removeAttribute('data-print'));
     },800);
   },200);
+}
+
+
+function buildSectionCovers(){
+  const metaSchool = schoolName || 'اسم المدرسة';
+  const metaGrade  = gradeName  || '';
+  ['sectionCoverYS','sectionCoverES','sectionCoverBoth'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    const school = el.querySelector('.sc-school');
+    const grade  = el.querySelector('.sc-grade');
+    if(school) school.textContent = metaSchool;
+    if(grade)  grade.textContent  = metaGrade;
+  });
 }
 
 function buildCover(selected){
@@ -876,6 +1207,41 @@ function buildBoth(){
   },80);
 }
 
+/* ════ PRINT CHART QUALITY ════ */
+function refreshChartsForPrint(){
+  const allCharts = [
+    ...Object.values(CH.ys || {}),
+    ...Object.values(CH.es || {}),
+    ...Object.values(CH.both || {})
+  ];
+  allCharts.forEach(c=>{
+    try{
+      c.options.animation = false;
+      c.options.devicePixelRatio = 3;
+      c.resize();
+      c.update('none');
+    }catch(e){}
+  });
+}
+
+window.addEventListener('beforeprint', refreshChartsForPrint);
+window.addEventListener('afterprint', ()=>{
+  setTimeout(()=>{
+    const allCharts = [
+      ...Object.values(CH.ys || {}),
+      ...Object.values(CH.es || {}),
+      ...Object.values(CH.both || {})
+    ];
+    allCharts.forEach(c=>{
+      try{
+        c.options.devicePixelRatio = Math.max(2, window.devicePixelRatio || 1);
+        c.resize();
+        c.update('none');
+      }catch(e){}
+    });
+  }, 300);
+});
+
 /* ════ UTILS ════ */
 function showTab(t,id,btn){
   const el=document.getElementById(t==='ys'?'rptYS':'rptES');
@@ -900,6 +1266,7 @@ function resetAll(){
   document.getElementById('rptES').classList.add('hidden');
   document.getElementById('rptBoth').classList.add('hidden');
   document.getElementById('btnPrint').disabled=true;
+  ['coverPage','sectionCoverYS','sectionCoverES','sectionCoverBoth'].forEach(id=>document.getElementById(id)?.removeAttribute('data-print'));
   document.getElementById('iSchool').value='';
   document.getElementById('iGrade').value='';
 }
