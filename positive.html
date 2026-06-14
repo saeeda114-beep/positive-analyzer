@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>تقرير الإيجابيات</title>
+<title>تقرير السلوك المتميز</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -261,7 +261,7 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
   .d-pct  { font-size: 10px; }
   .d-label { font-size: 10px; }
 
-  /* ── صفحة الإيجابيات ── */
+  /* ── صفحة السلوك المتميز── */
   .behaviors-page { page-break-after: always; }
   .behav-table-wrap td  { padding: 7px 10px; font-size: 11px; }
   .behav-table-wrap thead th { padding: 8px 10px; font-size: 11px; }
@@ -448,7 +448,7 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
 
 <!-- ══ TOOLBAR ══ -->
 <div class="screen-toolbar no-print">
-  <span class="brand">📋 أداة تحليل السلوك الإيجابي — التوجيه الطلابي</span>
+  <span class="brand">📋 أداة تحليل السلوك المتميز — التوجيه الطلابي</span>
   <div class="toolbar-btns">
     <button class="abtn abtn-ghost" onclick="resetApp()">📂 ملف جديد</button>
     <button class="abtn abtn-gold" id="btn-print" onclick="window.print()" disabled>🖨️ طباعة التقرير</button>
@@ -475,7 +475,7 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
     ondragleave="this.classList.remove('drag')"
     ondrop="handleDrop(event)">
     <div style="font-size:54px">📊</div>
-    <h2>ارفع ملف الإيجابيات هنا</h2>
+    <h2>ارفع ملف السلوك المتميز هنا</h2>
     <p>اضغط للاختيار أو اسحب الملف مباشرة</p>
     <p style="font-size:12px;color:var(--muted);margin-top:8px">يدعم Excel ‏(.xlsx / .xls) — المرتب وغير المرتب</p>
     <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this.files[0])">
@@ -492,7 +492,7 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
       <div class="cover-body">
         <div class="cover-school" id="cover-school">متوسطة الحارث بن هشام</div>
         <div class="cover-year" id="cover-year">العام الدراسي: 1446 / 1447هـ</div>
-        <div class="cover-title">تقرير الإيجابيات</div>
+        <div class="cover-title">تقرير السلوك المتميز</div>
         <div class="cover-date" id="cover-date"></div>
       </div>
       <!-- تذييل الغلاف -->
@@ -533,7 +533,7 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
           <div class="chart-wrap"><canvas id="chartDist"></canvas></div>
         </div>
         <div class="chart-card">
-          <h3>نسبة المشاركة في الإيجابيات</h3>
+          <h3>نسبة المشاركة في السلوك المتميز</h3>
           <div class="chart-wrap"><canvas id="chartParticipation"></canvas></div>
         </div>
         <div class="chart-card chart-full">
@@ -547,7 +547,7 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
     </div>
 
     <!-- ────────────────────────────
-         صفحة 4: الإيجابيات الأكثر
+         صفحة 4: السلوك المتميز الأكثر
     ──────────────────────────────── -->
     <div class="behaviors-page">
       <div class="print-section-header">
@@ -555,7 +555,7 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
         <span class="psh-year" id="ph-year-4"></span>
       </div>
 
-      <div class="sec-title">⭐ الإيجابيات الأكثر تسجيلاً (تنازلي)</div>
+      <div class="sec-title">⭐ السلوك المتميز الأكثر تسجيلاً (تنازلي)</div>
       <div id="behaviorsSection"></div>
     </div>
 
@@ -598,7 +598,7 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
 
   <!-- SCREEN FOOTER -->
   <footer class="page-footer" id="screenFooter" style="display:none">
-    <span id="footer-school">متوسطة الحارث بن هشام</span> — تقرير السلوك الإيجابي —
+    <span id="footer-school">متوسطة الحارث بن هشام</span> — تقرير السلوك المتميز —
     <span id="footer-sub">1446 / 1447هـ</span><br>
     <span style="font-size:11px">تصميم الأستاذ <strong style="color:var(--dark)">سعيد أحمد المالكي</strong> — التوجيه الطلابي</span>
   </footer>
