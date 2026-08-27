@@ -49,8 +49,17 @@ body{
     border-color:#1d5c6e;
 }
 .tool-icon{
-    font-size:55px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     margin-bottom:15px;
+}
+.tool-icon svg{
+    width:52px;
+    height:52px;
+    stroke:#0f3d4c;
+    stroke-width:1.4;
+    fill:none;
 }
 .tool-card h3{
     margin:0 0 10px;
@@ -65,6 +74,9 @@ body{
 .tool-card.new{
     border-color:#1d5c6e;
     background:linear-gradient(145deg,#ffffff,#f0f8fb);
+}
+.tool-card.new .tool-icon svg{
+    stroke:#1d5c6e;
 }
 .tool-card.new .badge{
     display:inline-block;
@@ -92,34 +104,52 @@ body{
 <section class="tools-grid">
 
     <a class="tool-card" href="positive.html">
-        <div class="tool-icon">⭐</div>
+        <div class="tool-icon">
+            <svg viewBox="0 0 24 24"><path stroke-linejoin="round" stroke-linecap="round" d="M12 3.5l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17.3l-5.4 3.1 1-6.1-4.4-4.3 6.1-.9L12 3.5z"/></svg>
+        </div>
         <h3>محلل السلوك المتميز</h3>
         <p>تحليل السلوك المتميز وإنشاء التقارير والرسوم البيانية.</p>
     </a>
 
     <a class="tool-card" href="attendance.html">
-        <div class="tool-icon">📋</div>
+        <div class="tool-icon">
+            <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M3.5 10h17"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 15l2.3 2.3L16 12.5"/></svg>
+        </div>
         <h3>محلل الغياب</h3>
         <p>تحليل الغياب والمواظبة والمقارنات الزمنية والتقارير.</p>
     </a>
 
     <a class="tool-card" href="violations.html">
-        <div class="tool-icon">⚠️</div>
+        <div class="tool-icon">
+            <svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M12 3.7L21 20H3L12 3.7z"/><path stroke-linecap="round" d="M12 9.8v4.6"/><circle cx="12" cy="16.9" r="0.55" fill="#0f3d4c" stroke="none"/></svg>
+        </div>
         <h3>محلل المخالفات</h3>
         <p>تحليل المخالفات السلوكية وتصنيف درجات الخطورة والتقارير.</p>
     </a>
 
     <a class="tool-card" href="grades.html">
-        <div class="tool-icon">🎓</div>
+        <div class="tool-icon">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 21V11M10.5 21V6M17 21v-7.5M3 21h18"/></svg>
+        </div>
         <h3>تحليل النتائج</h3>
         <p>تحليل أعمال السنة ونهاية الفصل — العشرة الأوائل والضعف الدراسي ومقارنة المواد.</p>
     </a>
 
-    <a class="tool-card new" href="committees.html">
-        <div class="badge">جديد</div>
-        <div class="tool-icon">🗂️</div>
+    <a class="tool-card" href="committees.html">
+        <div class="tool-icon">
+            <svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M3.5 7.2a2 2 0 0 1 2-2h3.6l1.8 1.8h7.6a2 2 0 0 1 2 2v9.3a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.2z"/></svg>
+        </div>
         <h3>اللجان والتكليفات</h3>
         <p>تشكيل اللجان والفرق المدرسية، قرارات التكليف، ومحاضر الاجتماعات والمتابعة.</p>
+    </a>
+
+    <a class="tool-card new" href="behavior-attendance-forms.html">
+        <div class="badge">جديد</div>
+        <div class="tool-icon">
+            <svg viewBox="0 0 24 24"><rect x="5.5" y="4" width="13" height="17" rx="2"/><path d="M9 3.3h6a1 1 0 0 1 1 1V6h-8V4.3a1 1 0 0 1 1-1z"/><path stroke-linecap="round" d="M8.7 11h6.6M8.7 14h6.6M8.7 17h4"/></svg>
+        </div>
+        <h3>نماذج السلوك والمواظبة</h3>
+        <p>تعبئة وطباعة نماذج المخالفات السلوكية وإجراءات الغياب والاستئذان وفق القواعد المعتمدة، مع حفظ السجلات محليًا على الجهاز.</p>
     </a>
 
 </section>
