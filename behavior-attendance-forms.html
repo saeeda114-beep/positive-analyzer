@@ -59,16 +59,18 @@
   .top-sub{font-size:14px;opacity:.92;max-width:720px;}
   .top-meta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;}
   .top-meta input{
-    background:rgba(255,255,255,.14);
-    border:1px solid rgba(255,255,255,.35);
-    color:#fff;
+    background:#ffffff;
+    border:1px solid rgba(255,255,255,.9);
+    color:var(--green-900);
     border-radius:8px;
-    padding:8px 12px;
+    padding:9px 12px;
     font-family:inherit;
-    font-size:13px;
-    min-width:180px;
+    font-size:13.5px;
+    font-weight:700;
+    min-width:200px;
   }
-  .top-meta input::placeholder{color:#e7f5ee;}
+  .top-meta input::placeholder{color:#7c8f87;font-weight:500;}
+  .top-meta input:focus{outline:2px solid #fff;outline-offset:1px;}
 
   /* ===== Shell / tabs ===== */
   .shell{max-width:1100px;margin:-38px auto 0;padding:0 18px;position:relative;z-index:2;}
@@ -158,7 +160,31 @@
   .notes-box{background:var(--amber-bg);border:1px solid #f0dcb0;border-radius:8px;padding:10px 14px;margin-top:10px;font-size:12.5px;color:#6b4c10;}
   .notes-box b{color:var(--amber);}
 
-  .signrow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px;}
+  .counselor-box{background:#eef5fc;border:1.5px solid #2e6cad;border-radius:8px;padding:12px 14px;margin-top:10px;}
+  .counselor-box h4{margin:0 0 4px;font-size:13px;color:#1d4e89;}
+  .counselor-box .sub{font-size:11.5px;color:#4a6b8c;margin-bottom:10px;}
+  .counselor-box .grid3{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:10px;}
+  @media(max-width:760px){.counselor-box .grid3{grid-template-columns:1fr;}}
+  .counselor-box label{font-size:11.5px;color:#1d4e89;}
+  .counselor-box input, .counselor-box textarea{background:#fff;border-color:#bcd3ec;}
+  .counselor-box textarea{min-height:40px;}
+
+  .signrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:6px;}
+
+  /* ===== Reports & stats ===== */
+  .stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:6px;}
+  .stat-card{text-align:center;padding:16px 10px;border:1px solid var(--line);border-radius:10px;background:var(--green-50);}
+  .stat-card .num{font-size:26px;font-weight:900;color:var(--green-800);}
+  .stat-card .lbl{font-size:12px;color:var(--muted);margin-top:4px;}
+  .stat-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;}
+  .stat-bar-row .lbl{width:190px;flex-shrink:0;color:var(--ink);}
+  .stat-bar-row .bar-track{flex:1;background:#eef3f0;border-radius:6px;height:15px;overflow:hidden;}
+  .stat-bar-row .bar-fill{height:100%;background:var(--green-600);border-radius:6px;}
+  .stat-bar-row.warn .bar-fill{background:var(--red);}
+  .stat-bar-row .val{width:30px;text-align:left;font-weight:800;flex-shrink:0;}
+  .rep-report-block h3{font-size:15px;color:var(--green-900);margin:18px 0 8px;border-bottom:2px solid var(--green-100);padding-bottom:6px;}
+  .rep-report-block h3:first-child{margin-top:0;}
+  .print-meta{font-size:12px;color:var(--muted);margin-bottom:10px;}
   @media(max-width:760px){.signrow{grid-template-columns:1fr 1fr;}}
   @media(max-width:480px){.signrow{grid-template-columns:1fr;}}
 
@@ -229,18 +255,82 @@
 
   footer.foot{max-width:1100px;margin:26px auto 0;padding:0 18px;color:var(--muted);font-size:12px;text-align:center;}
 
+  /* ===== Print header (screen: hidden / print: visible) ===== */
+  .print-header{display:none;}
+
   /* ===== Print ===== */
+  @page{
+    size: A4;
+    margin: 14mm 12mm 16mm;
+  }
   @media print{
-    body{background:#fff;padding:0;}
+    *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;color-adjust:exact !important;}
+    html,body{background:#fff !important;}
+    body{padding:0;font-size:12px;line-height:1.55;color:#111;}
     header.top, .tabbar, .btnrow, .searchbar, .log-actions, .no-print{display:none !important;}
     .shell{margin:0;padding:0;max-width:100%;}
-    .card{box-shadow:none;border:1px solid #999;break-inside:avoid;}
+
+    .print-header{
+      display:block !important;
+      margin-bottom:14px;padding-bottom:10px;
+      border-bottom:2px solid var(--green-800);
+    }
+    .print-header .ph-title{font-size:17px;font-weight:900;color:var(--green-900);margin-bottom:5px;}
+    .print-header .ph-meta{font-size:11px;color:#333;}
+
+    .card{
+      box-shadow:none;border:1px solid #bbb;border-radius:6px;
+      padding:12px 14px;margin-bottom:10px;break-inside:avoid;
+      background:#fff !important;
+    }
     .panel{display:block !important;}
     .panel:not(.print-target){display:none !important;}
+
+    h2{font-size:13.5px;margin-bottom:10px;}
+    h2 .num{width:19px;height:19px;font-size:11px;}
+
+    /* show only the chosen degree / occurrence as plain labels, not button rows */
+    .degree-row{display:block !important;}
+    .degree-row .degree-btn{display:none;}
+    .degree-row .degree-btn.active{
+      display:block;border:0;background:none !important;box-shadow:none;
+      color:var(--green-900) !important;padding:0;text-align:right;font-size:13.5px;
+    }
+    .degree-row .degree-btn.active small{color:#555 !important;}
+
+    .occurrence{gap:0;}
+    .occurrence .hint{display:inline;}
+    .occ-btn{display:none;}
+    .occ-btn.active{
+      display:inline;border:0;background:none !important;box-shadow:none;
+      color:var(--amber) !important;padding:0;font-weight:800;
+    }
+
+    .cat, .action-box, .notes-box, .counselor-box, .stat-card, .rep-report-block h3{break-inside:avoid;}
+    .cat{border-color:#ccc;}
+    .cat-head{background:#e9f3ec !important;}
+    table{break-inside:auto;width:100%;}
+    thead{display:table-header-group;}
+    tr{break-inside:avoid;}
+    table.log th, table.log td, table.att td{border-color:#bbb;}
+
+    input, select, textarea{
+      border:1px solid #ccc !important;background:#fff !important;color:#111 !important;
+      padding:4px 6px;
+    }
+    textarea{min-height:auto;}
+    a[href]{color:inherit;text-decoration:none;}
+
+    .rep-report-block h3{margin-top:14px;}
   }
 </style>
 </head>
 <body>
+
+<div class="print-header" id="printHeader">
+  <div class="ph-title" id="phTitle"></div>
+  <div class="ph-meta" id="phMeta"></div>
+</div>
 
 <header class="top">
   <div class="top-inner">
@@ -250,6 +340,7 @@
     <div class="top-meta">
       <input type="text" id="metaSchool" placeholder="اسم المدرسة">
       <input type="text" id="metaArea" placeholder="المنطقة / المحافظة">
+      <input type="text" id="metaViceDean" placeholder="اسم وكيل المدرسة لشؤون الطلاب">
       <input type="text" id="metaCounselor" placeholder="اسم الموجه الطلابي">
     </div>
   </div>
@@ -259,6 +350,7 @@
   <div class="tabbar no-print">
     <button class="active" data-tab="behavior">المخالفات السلوكية</button>
     <button data-tab="attendance">الغياب والاستئذان</button>
+    <button data-tab="reports">التقارير والإحصائيات</button>
   </div>
 
   <!-- ============ BEHAVIOR PANEL ============ -->
@@ -297,12 +389,12 @@
       <h2><span class="num">3</span> توثيق واعتماد</h2>
       <div class="grid g2">
         <div class="field"><label>ملاحظات إضافية</label><textarea id="bNotes" placeholder="أي تفاصيل عن الموقف..."></textarea></div>
-        <div class="field"><label>اسم الموظف المتخذ للإجراء ووظيفته</label><input type="text" id="bStaffName" placeholder="مثال: أ. سعيد المالكي - موجه طلابي"></div>
+        <div class="field"><label>اسم وكيل شؤون الطلاب المتخذ للإجراء</label><input type="text" id="bStaffName" placeholder="مثال: أ. سعيد المالكي - وكيل شؤون الطلاب"></div>
       </div>
       <div class="signrow">
         <div class="field"><label>توقيع الطالب</label><input type="text" id="bSignStudent" placeholder="اسم/توقيع"></div>
         <div class="field"><label>توقيع ولي الأمر</label><input type="text" id="bSignParent" placeholder="اسم/توقيع"></div>
-        <div class="field"><label>توقيع الموظف</label><input type="text" id="bSignStaff" placeholder="اسم/توقيع"></div>
+        <div class="field"><label>توقيع وكيل شؤون الطلاب</label><input type="text" id="bSignStaff" placeholder="اسم/توقيع"></div>
         <div class="field"><label>تاريخ الاعتماد</label><input type="date" id="bSignDate"></div>
       </div>
       <div class="btnrow no-print">
@@ -365,11 +457,12 @@
       <h2><span class="num">4</span> توثيق واعتماد</h2>
       <div class="grid g2">
         <div class="field"><label>ملاحظات</label><textarea id="aNotes" placeholder="ملاحظات إضافية..."></textarea></div>
-        <div class="field"><label>اسم الموظف المتابع ووظيفته</label><input type="text" id="aStaffName" placeholder="مثال: أ. سعيد المالكي - موجه طلابي"></div>
+        <div class="field"><label>اسم وكيل شؤون الطلاب المتابع للحالة</label><input type="text" id="aStaffName" placeholder="مثال: أ. سعيد المالكي - وكيل شؤون الطلاب"></div>
       </div>
       <div class="signrow">
         <div class="field"><label>توقيع الطالب</label><input type="text" id="aSignStudent"></div>
         <div class="field"><label>توقيع ولي الأمر</label><input type="text" id="aSignParent"></div>
+        <div class="field"><label>توقيع وكيل شؤون الطلاب</label><input type="text" id="aSignViceDean"></div>
         <div class="field"><label>مدير/ة المدرسة</label><input type="text" id="aSignPrincipal"></div>
         <div class="field"><label>تاريخ الاعتماد</label><input type="date" id="aSignDate"></div>
       </div>
@@ -388,6 +481,69 @@
       <div id="attendanceLogHost"></div>
     </div>
   </div>
+
+  <!-- ============ REPORTS PANEL ============ -->
+  <div class="panel" id="panel-reports">
+
+    <div class="card no-print">
+      <div class="absence-toggle">
+        <button class="active excused" id="repBtnStudent" onclick="setReportMode('student')">تقرير طالب</button>
+        <button class="excused" id="repBtnSummary" onclick="setReportMode('summary')">تقرير شامل</button>
+        <button class="excused" id="repBtnStats" onclick="setReportMode('stats')">إحصائيات</button>
+      </div>
+    </div>
+
+    <!-- ---- Student report ---- -->
+    <div id="rep-student" class="rep-section">
+      <div class="card no-print">
+        <h2><span class="num">1</span> تقرير طالب مفصّل</h2>
+        <div class="grid g2">
+          <div class="field">
+            <label>اسم الطالب</label>
+            <input type="text" id="repStudentName" list="studentNamesList" placeholder="اكتب اسم الطالب أو اختره من القائمة" oninput="renderStudentReport()">
+            <datalist id="studentNamesList"></datalist>
+          </div>
+        </div>
+        <div class="btnrow no-print">
+          <button class="btn btn-ghost" onclick="printReport()">🖨️ طباعة تقرير الطالب</button>
+        </div>
+      </div>
+      <div class="card" id="studentReportHost"></div>
+    </div>
+
+    <!-- ---- Comprehensive report ---- -->
+    <div id="rep-summary" class="rep-section" style="display:none">
+      <div class="card no-print">
+        <h2><span class="num">1</span> مرشحات التقرير الشامل</h2>
+        <div class="grid g3">
+          <div class="field"><label>من تاريخ</label><input type="date" id="repFrom"></div>
+          <div class="field"><label>إلى تاريخ</label><input type="date" id="repTo"></div>
+          <div class="field">
+            <label>المرحلة الدراسية</label>
+            <select id="repStage">
+              <option value="">جميع المراحل</option>
+              <option value="primary">المرحلة الابتدائية</option>
+              <option value="secondary">المرحلة المتوسطة والثانوية</option>
+            </select>
+          </div>
+        </div>
+        <div class="btnrow no-print">
+          <button class="btn btn-primary" onclick="renderSummaryReport()">تحديث التقرير</button>
+          <button class="btn btn-ghost" onclick="printReport()">🖨️ طباعة التقرير الشامل</button>
+        </div>
+      </div>
+      <div class="card" id="summaryReportHost"></div>
+    </div>
+
+    <!-- ---- Statistics ---- -->
+    <div id="rep-stats" class="rep-section" style="display:none">
+      <div class="card no-print btnrow" style="justify-content:flex-end;">
+        <button class="btn btn-ghost" onclick="printReport()">🖨️ طباعة الإحصائيات</button>
+      </div>
+      <div class="card" id="statsHost"></div>
+    </div>
+
+  </div>
 </div>
 
 <footer class="foot">
@@ -402,6 +558,9 @@
    ===================================================================== */
 
 const DEGREE_POINTS = {1:"درجة واحدة",2:"درجتان",3:"ثلاث درجات",4:"عشر درجات",5:"خمس عشرة درجة"};
+const DEGREE_POINTS_NUM = {1:1,2:2,3:3,4:10,5:15};
+function degreeLabel(d){ return ["","الأولى","الثانية","الثالثة","الرابعة","الخامسة"][d]||"-"; }
+function stageLabel(s){ return s==="secondary" ? "المتوسطة والثانوية" : "الابتدائية"; }
 
 // ---- Common (all stages) blocks: Article 15 (Degree 4 vs environment/staff) & Article 16 (Degree 5 vs staff)
 const COMMON_D4 = {
@@ -696,6 +855,12 @@ document.querySelectorAll(".tabbar button").forEach(btn=>{
     btn.classList.add("active");
     document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
     $("panel-"+btn.dataset.tab).classList.add("active");
+    if(btn.dataset.tab === "reports"){
+      refreshStudentNamesList();
+      if(reportMode === "student") renderStudentReport();
+      else if(reportMode === "summary") renderSummaryReport();
+      else renderStats();
+    }
   });
 });
 
@@ -713,6 +878,21 @@ function renderDegreeButtons(){
   $("degreePointsHint").textContent = "قيمة الحسم المقترحة لهذه الدرجة: " + DEGREE_POINTS[bState.degree] + " من درجات السلوك الإيجابي (المادة 5).";
 }
 $("bStage").addEventListener("change", (e)=>{ bState.stage = e.target.value; bState.occ={}; bState.checks={}; renderCategories(); });
+
+function buildCounselorBox(key){
+  const box = document.createElement("div");
+  box.className = "counselor-box";
+  box.dataset.key = key;
+  box.innerHTML = `
+    <h4>📌 توثيق إجراءات الموجّه الطلابي</h4>
+    <div class="sub">يُنفَّذ الإجراء الرئيسي أعلاه من قبل وكيل شؤون الطلاب. هذا المربع مستقل، يُعبّئه الموجّه الطلابي بعد تحويل الحالة إليه.</div>
+    <div class="grid3">
+      <div class="field"><label>تاريخ التحويل إلى الموجّه</label><input type="date" class="cns-date"></div>
+      <div class="field"><label>توقيع الموجّه الطلابي</label><input type="text" class="cns-sign" placeholder="اسم/توقيع"></div>
+      <div class="field"><label>الإجراء / الدعم الذي قدّمه الموجّه</label><textarea class="cns-action" placeholder="ملخص دراسة الحالة والخدمات التربوية المقدمة..."></textarea></div>
+    </div>`;
+  return box;
+}
 
 function renderCategories(){
   const host = $("categoriesHost");
@@ -742,6 +922,9 @@ function renderCategories(){
     });
     body.appendChild(vwrap);
 
+    let activeItems = [];
+    let counselorKey = cat.key;
+
     if(cat.steps){
       // occurrence selector
       const occWrap = document.createElement("div");
@@ -763,15 +946,21 @@ function renderCategories(){
 
       const activeIdx = bState.occ[cat.key]||0;
       const step = cat.steps[activeIdx];
+      activeItems = step.items;
       const abox = document.createElement("div");
       abox.className = "action-box";
-      abox.innerHTML = `<h4>${step.title} — الإجراء التربوي العلاجي لتعديل السلوك</h4><ul>${step.items.map(it=>`<li>${it}</li>`).join("")}</ul>`;
+      abox.innerHTML = `<h4>${step.title} — الإجراء التربوي العلاجي لتعديل السلوك (ينفَّذه وكيل شؤون الطلاب)</h4><ul>${step.items.map(it=>`<li>${it}</li>`).join("")}</ul>`;
       body.appendChild(abox);
     } else if(cat.single){
+      activeItems = cat.single;
       const abox = document.createElement("div");
       abox.className = "action-box";
-      abox.innerHTML = `<h4>الإجراء التربوي العلاجي</h4><ul>${cat.single.map(it=>`<li>${it}</li>`).join("")}</ul>`;
+      abox.innerHTML = `<h4>الإجراء التربوي العلاجي (ينفَّذه وكيل شؤون الطلاب)</h4><ul>${cat.single.map(it=>`<li>${it}</li>`).join("")}</ul>`;
       body.appendChild(abox);
+    }
+
+    if(activeItems.some(it => it.includes("الموجه الطلابي"))){
+      body.appendChild(buildCounselorBox(counselorKey));
     }
 
     if(cat.notes && cat.notes.length){
@@ -813,6 +1002,15 @@ function saveBehaviorRecord(){
   const student = $("bStudent").value.trim();
   if(!student){ toast("يرجى إدخال اسم الطالب أولًا"); $("bStudent").focus(); return; }
   const violations = collectSelectedViolations();
+  const counselorLogs = [];
+  document.querySelectorAll('#categoriesHost .counselor-box').forEach(box=>{
+    counselorLogs.push({
+      key: box.dataset.key,
+      date: box.querySelector('.cns-date').value,
+      sign: box.querySelector('.cns-sign').value,
+      action: box.querySelector('.cns-action').value
+    });
+  });
   const record = {
     id: uid(),
     caseNo: $("bCaseNo").value,
@@ -820,19 +1018,21 @@ function saveBehaviorRecord(){
     student, cls: $("bClass").value,
     stage: bState.stage, degree: bState.degree,
     violations,
+    counselorLogs,
     notes: $("bNotes").value,
     staffName: $("bStaffName").value,
     signStudent: $("bSignStudent").value,
     signParent: $("bSignParent").value,
     signStaff: $("bSignStaff").value,
     signDate: $("bSignDate").value,
-    school: $("metaSchool").value, area: $("metaArea").value, counselor: $("metaCounselor").value
+    school: $("metaSchool").value, area: $("metaArea").value, viceDean: $("metaViceDean").value, counselor: $("metaCounselor").value
   };
   const list = getBehaviorRecords();
   list.unshift(record);
   setBehaviorRecords(list);
   toast("تم حفظ السجل محليًا ✓");
   renderBehaviorLog();
+  refreshStudentNamesList();
 }
 
 function resetBehaviorForm(){
@@ -846,7 +1046,17 @@ function resetBehaviorForm(){
   toast("نموذج جديد جاهز");
 }
 
+function preparePrintHeader(title){
+  $("phTitle").textContent = title;
+  const school = $("metaSchool").value || "—";
+  const area = $("metaArea").value || "—";
+  const vice = $("metaViceDean").value || "—";
+  const counselor = $("metaCounselor").value || "—";
+  $("phMeta").textContent = `المدرسة: ${school}   |   المنطقة: ${area}   |   وكيل شؤون الطلاب: ${vice}   |   الموجّه الطلابي: ${counselor}   |   تاريخ الطباعة: ${todayISO()}`;
+}
+
 function printBehavior(){
+  preparePrintHeader("نموذج مخالفة سلوكية");
   document.querySelectorAll(".panel").forEach(p=>p.classList.remove("print-target"));
   $("panel-behavior").classList.add("print-target");
   window.print();
@@ -889,6 +1099,13 @@ function loadBehaviorRecord(id){
     document.querySelectorAll('#categoriesHost .vio span').forEach(span=>{
       if(r.violations.includes(span.textContent)) span.previousElementSibling.checked = true;
     });
+    (r.counselorLogs||[]).forEach(log=>{
+      const box = document.querySelector(`#categoriesHost .counselor-box[data-key="${log.key}"]`);
+      if(!box) return;
+      box.querySelector('.cns-date').value = log.date||"";
+      box.querySelector('.cns-sign').value = log.sign||"";
+      box.querySelector('.cns-action').value = log.action||"";
+    });
   }, 30);
   toast("تم تحميل السجل للتعديل");
   window.scrollTo({top:0, behavior:"smooth"});
@@ -924,6 +1141,19 @@ function setAbsenceMode(mode){
   renderAttendanceTable();
 }
 
+function counselorBoxHTML(key){
+  return `
+    <div class="counselor-box" data-key="${key}">
+      <h4>📌 توثيق إجراءات الموجّه الطلابي</h4>
+      <div class="sub">يُنفَّذ الإجراء أعلاه من قبل وكيل شؤون الطلاب. هذا المربع مستقل، يُعبّئه الموجّه الطلابي بعد تحويل الحالة إليه.</div>
+      <div class="grid3">
+        <div class="field"><label>تاريخ التحويل إلى الموجّه</label><input type="date" class="cns-date"></div>
+        <div class="field"><label>توقيع الموجّه الطلابي</label><input type="text" class="cns-sign" placeholder="اسم/توقيع"></div>
+        <div class="field"><label>الإجراء / الدعم الذي قدّمه الموجّه</label><textarea class="cns-action" placeholder="ملخص دراسة الحالة والخدمات التربوية المقدمة..."></textarea></div>
+      </div>
+    </div>`;
+}
+
 function renderAttendanceTable(){
   const host = $("attTableHost");
   const table = aState.mode === "excused" ? EXCUSED_TABLE : UNEXCUSED_TABLE;
@@ -939,6 +1169,7 @@ function renderAttendanceTable(){
           <label><input type="checkbox" id="att_done_${aState.mode}_${idx}"> تم التنفيذ</label>
           <label>بتاريخ: <input type="date" id="att_date_${aState.mode}_${idx}"></label>
         </div>
+        ${row.actions.some(a=>a.includes("الموجه الطلابي")) ? counselorBoxHTML("att_"+aState.mode+"_"+idx) : ""}
       </td>
     </tr>`;
   });
@@ -969,30 +1200,43 @@ function setAttendanceRecords(list){ localStorage.setItem("moe_absence_records_v
 function saveAttendanceRecord(){
   const student = $("aStudent").value.trim();
   if(!student){ toast("يرجى إدخال اسم الطالب أولًا"); $("aStudent").focus(); return; }
+  const counselorLogs = [];
+  document.querySelectorAll('#attTableHost .counselor-box').forEach(box=>{
+    counselorLogs.push({
+      key: box.dataset.key,
+      date: box.querySelector('.cns-date').value,
+      sign: box.querySelector('.cns-sign').value,
+      action: box.querySelector('.cns-action').value
+    });
+  });
   const record = {
     id: uid(), mode: aState.mode,
     student, cls: $("aClass").value, stage: $("aStage").value,
     daysTotal: $("aDaysTotal").value, reason: $("aReasonChosen").value,
+    counselorLogs,
     notes: $("aNotes").value, staffName: $("aStaffName").value,
     signStudent: $("aSignStudent").value, signParent: $("aSignParent").value,
+    signViceDean: $("aSignViceDean").value,
     signPrincipal: $("aSignPrincipal").value, signDate: $("aSignDate").value,
     date: todayISO(),
-    school: $("metaSchool").value, area: $("metaArea").value, counselor: $("metaCounselor").value
+    school: $("metaSchool").value, area: $("metaArea").value, viceDean: $("metaViceDean").value, counselor: $("metaCounselor").value
   };
   const list = getAttendanceRecords();
   list.unshift(record);
   setAttendanceRecords(list);
   toast("تم حفظ السجل محليًا ✓");
   renderAttendanceLog();
+  refreshStudentNamesList();
 }
 function resetAttendanceForm(){
   $("aStudent").value=""; $("aClass").value=""; $("aDaysTotal").value="";
   $("aReasonChosen").value=""; $("aNotes").value=""; $("aStaffName").value="";
-  $("aSignStudent").value=""; $("aSignParent").value=""; $("aSignPrincipal").value=""; $("aSignDate").value="";
+  $("aSignStudent").value=""; $("aSignParent").value=""; $("aSignViceDean").value=""; $("aSignPrincipal").value=""; $("aSignDate").value="";
   renderAttendanceTable();
   toast("نموذج جديد جاهز");
 }
 function printAttendance(){
+  preparePrintHeader(aState.mode==="excused" ? "نموذج إجراءات الغياب بعذر" : "نموذج إجراءات الغياب بدون عذر");
   document.querySelectorAll(".panel").forEach(p=>p.classList.remove("print-target"));
   $("panel-attendance").classList.add("print-target");
   window.print();
@@ -1027,8 +1271,17 @@ function loadAttendanceRecord(id){
   $("aDaysTotal").value=r.daysTotal; $("aReasonChosen").value=r.reason;
   $("aNotes").value=r.notes; $("aStaffName").value=r.staffName;
   $("aSignStudent").value=r.signStudent; $("aSignParent").value=r.signParent;
-  $("aSignPrincipal").value=r.signPrincipal; $("aSignDate").value=r.signDate;
+  $("aSignViceDean").value=r.signViceDean||""; $("aSignPrincipal").value=r.signPrincipal; $("aSignDate").value=r.signDate;
   setAbsenceMode(r.mode);
+  setTimeout(()=>{
+    (r.counselorLogs||[]).forEach(log=>{
+      const box = document.querySelector(`#attTableHost .counselor-box[data-key="${log.key}"]`);
+      if(!box) return;
+      box.querySelector('.cns-date').value = log.date||"";
+      box.querySelector('.cns-sign').value = log.sign||"";
+      box.querySelector('.cns-action').value = log.action||"";
+    });
+  }, 30);
   toast("تم تحميل السجل للتعديل");
   window.scrollTo({top:0, behavior:"smooth"});
 }
@@ -1039,8 +1292,231 @@ function deleteAttendanceRecord(id){
   toast("تم الحذف");
 }
 
+/* =====================================================================
+   REPORTS & STATISTICS
+   ===================================================================== */
+let reportMode = "student";
+
+function setReportMode(mode){
+  reportMode = mode;
+  ["student","summary","stats"].forEach(m=>{
+    $("rep-"+m).style.display = (m===mode) ? "" : "none";
+    $("repBtn"+m.charAt(0).toUpperCase()+m.slice(1)).classList.toggle("active", m===mode);
+  });
+  if(mode==="student") renderStudentReport();
+  else if(mode==="summary") renderSummaryReport();
+  else renderStats();
+}
+
+function refreshStudentNamesList(){
+  const names = new Set();
+  getBehaviorRecords().forEach(r=>{ if(r.student) names.add(r.student.trim()); });
+  getAttendanceRecords().forEach(r=>{ if(r.student) names.add(r.student.trim()); });
+  $("studentNamesList").innerHTML = Array.from(names).sort((a,b)=>a.localeCompare(b,'ar'))
+    .map(n=>`<option value="${n}">`).join("");
+}
+
+function reportHeaderHTML(title){
+  const school = $("metaSchool").value || "—";
+  const area = $("metaArea").value || "—";
+  const vice = $("metaViceDean").value || "—";
+  const counselor = $("metaCounselor").value || "—";
+  return `<div class="print-meta no-print">
+    <b>${title}</b> — تاريخ الإصدار: ${todayISO()}<br>
+    المدرسة: ${school} | المنطقة: ${area} | وكيل شؤون الطلاب: ${vice} | الموجّه الطلابي: ${counselor}
+  </div>`;
+}
+
+function renderStudentReport(){
+  const host = $("studentReportHost");
+  const name = ($("repStudentName").value||"").trim();
+  if(!name){ host.innerHTML = `<div class="empty">اكتب اسم الطالب أعلاه لعرض تقريره المفصّل.</div>`; return; }
+
+  const bRecs = getBehaviorRecords().filter(r => (r.student||"").trim() === name);
+  const aRecs = getAttendanceRecords().filter(r => (r.student||"").trim() === name);
+
+  if(!bRecs.length && !aRecs.length){
+    host.innerHTML = reportHeaderHTML("تقرير طالب") + `<div class="empty">لا توجد أي سجلات محفوظة لهذا الاسم.</div>`;
+    return;
+  }
+
+  let totalPoints = 0; bRecs.forEach(r => totalPoints += DEGREE_POINTS_NUM[r.degree]||0);
+  let totalAbsDays = 0; aRecs.forEach(r => totalAbsDays += parseInt(r.daysTotal||0,10)||0);
+  const excusedCount = aRecs.filter(r=>r.mode==="excused").length;
+  const unexcusedCount = aRecs.filter(r=>r.mode==="unexcused").length;
+  const cls = bRecs[0]?.cls || aRecs[0]?.cls || "—";
+
+  let html = reportHeaderHTML("تقرير طالب مفصّل");
+  html += `<div class="rep-report-block">`;
+  html += `<h3>بيانات الطالب: ${name} — الصف: ${cls}</h3>`;
+  html += `<div class="stat-cards">
+    <div class="stat-card"><div class="num">${bRecs.length}</div><div class="lbl">مخالفات سلوكية مسجّلة</div></div>
+    <div class="stat-card"><div class="num">${totalPoints}</div><div class="lbl">إجمالي الدرجات المحسومة</div></div>
+    <div class="stat-card"><div class="num">${aRecs.length}</div><div class="lbl">سجلات غياب/استئذان</div></div>
+    <div class="stat-card"><div class="num">${totalAbsDays}</div><div class="lbl">إجمالي أيام الغياب (آخر تسجيل)</div></div>
+  </div>`;
+
+  html += `<h3>المخالفات السلوكية</h3>`;
+  if(bRecs.length){
+    html += `<table class="log"><thead><tr><th>التاريخ</th><th>الدرجة</th><th>المخالفات</th><th>الحسم</th><th>وكيل شؤون الطلاب</th><th>ملاحظات</th></tr></thead><tbody>`;
+    bRecs.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(r=>{
+      html += `<tr>
+        <td>${r.date||""}</td>
+        <td>${degreeLabel(r.degree)}</td>
+        <td>${(r.violations||[]).join("، ")||"—"}</td>
+        <td>${DEGREE_POINTS_NUM[r.degree]||0}</td>
+        <td>${r.staffName||"—"}</td>
+        <td>${r.notes||""}</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+  } else {
+    html += `<div class="empty">لا توجد مخالفات سلوكية مسجّلة لهذا الطالب.</div>`;
+  }
+
+  html += `<h3>سجلات الغياب والاستئذان (بعذر: ${excusedCount} — بدون عذر: ${unexcusedCount})</h3>`;
+  if(aRecs.length){
+    html += `<table class="log"><thead><tr><th>التاريخ</th><th>النوع</th><th>أيام الغياب</th><th>السبب/الإثبات</th><th>ملاحظات</th></tr></thead><tbody>`;
+    aRecs.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(r=>{
+      html += `<tr>
+        <td>${r.date||""}</td>
+        <td>${r.mode==="excused"?"بعذر":"بدون عذر"}</td>
+        <td>${r.daysTotal||"-"}</td>
+        <td>${r.reason||"—"}</td>
+        <td>${r.notes||""}</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+  } else {
+    html += `<div class="empty">لا توجد سجلات غياب مسجّلة لهذا الطالب.</div>`;
+  }
+  html += `</div>`;
+  host.innerHTML = html;
+}
+
+function renderSummaryReport(){
+  const host = $("summaryReportHost");
+  const from = $("repFrom").value, to = $("repTo").value, stage = $("repStage").value;
+
+  const inRange = (d) => (!from || (d && d>=from)) && (!to || (d && d<=to));
+
+  let bRecs = getBehaviorRecords().filter(r => inRange(r.date) && (!stage || r.stage===stage));
+  let aRecs = getAttendanceRecords().filter(r => inRange(r.date) && (!stage || r.stage===stage));
+
+  bRecs = bRecs.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  aRecs = aRecs.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+
+  let totalPoints = 0; bRecs.forEach(r => totalPoints += DEGREE_POINTS_NUM[r.degree]||0);
+  const studentsSet = new Set([...bRecs.map(r=>r.student), ...aRecs.map(r=>r.student)]);
+
+  let html = reportHeaderHTML("تقرير شامل");
+  html += `<div class="rep-report-block">`;
+  html += `<div class="stat-cards">
+    <div class="stat-card"><div class="num">${bRecs.length}</div><div class="lbl">إجمالي المخالفات السلوكية</div></div>
+    <div class="stat-card"><div class="num">${aRecs.length}</div><div class="lbl">إجمالي سجلات الغياب</div></div>
+    <div class="stat-card"><div class="num">${totalPoints}</div><div class="lbl">إجمالي الدرجات المحسومة</div></div>
+    <div class="stat-card"><div class="num">${studentsSet.size}</div><div class="lbl">عدد الطلاب المعنيين</div></div>
+  </div>`;
+
+  html += `<h3>المخالفات السلوكية</h3>`;
+  if(bRecs.length){
+    html += `<table class="log"><thead><tr><th>التاريخ</th><th>الطالب</th><th>الصف</th><th>المرحلة</th><th>الدرجة</th><th>المخالفات</th></tr></thead><tbody>`;
+    bRecs.forEach(r=>{
+      html += `<tr><td>${r.date||""}</td><td>${r.student}</td><td>${r.cls||""}</td><td>${stageLabel(r.stage)}</td><td>${degreeLabel(r.degree)}</td><td>${(r.violations||[]).join("، ")||"—"}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+  } else {
+    html += `<div class="empty">لا توجد مخالفات ضمن نطاق البحث المحدد.</div>`;
+  }
+
+  html += `<h3>سجلات الغياب والاستئذان</h3>`;
+  if(aRecs.length){
+    html += `<table class="log"><thead><tr><th>التاريخ</th><th>الطالب</th><th>الصف</th><th>المرحلة</th><th>النوع</th><th>أيام الغياب</th></tr></thead><tbody>`;
+    aRecs.forEach(r=>{
+      html += `<tr><td>${r.date||""}</td><td>${r.student}</td><td>${r.cls||""}</td><td>${stageLabel(r.stage)}</td><td>${r.mode==="excused"?"بعذر":"بدون عذر"}</td><td>${r.daysTotal||"-"}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+  } else {
+    html += `<div class="empty">لا توجد سجلات غياب ضمن نطاق البحث المحدد.</div>`;
+  }
+  html += `</div>`;
+  host.innerHTML = html;
+}
+
+function statBarsHTML(pairs, warnKeys){
+  warnKeys = warnKeys || [];
+  const max = Math.max(1, ...pairs.map(p=>p[1]));
+  return pairs.map(([label,count])=>{
+    const pct = Math.round((count/max)*100);
+    const warn = warnKeys.includes(label) ? " warn" : "";
+    return `<div class="stat-bar-row${warn}">
+      <div class="lbl">${label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="val">${count}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderStats(){
+  const host = $("statsHost");
+  const bRecs = getBehaviorRecords();
+  const aRecs = getAttendanceRecords();
+  const studentsSet = new Set([...bRecs.map(r=>r.student), ...aRecs.map(r=>r.student)]);
+  let totalPoints = 0; bRecs.forEach(r => totalPoints += DEGREE_POINTS_NUM[r.degree]||0);
+
+  // by degree
+  const byDegree = [1,2,3,4,5].map(d => [`الدرجة ${degreeLabel(d)}`, bRecs.filter(r=>r.degree===d).length]);
+  // by stage
+  const byStage = [["المرحلة الابتدائية", bRecs.filter(r=>r.stage==="primary").length],
+                   ["المتوسطة والثانوية", bRecs.filter(r=>r.stage==="secondary").length]];
+  // top violations
+  const freq = {};
+  bRecs.forEach(r => (r.violations||[]).forEach(v => freq[v] = (freq[v]||0)+1));
+  const topViolations = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  // attendance
+  const excusedCount = aRecs.filter(r=>r.mode==="excused").length;
+  const unexcusedCount = aRecs.filter(r=>r.mode==="unexcused").length;
+  let totalDays = 0; aRecs.forEach(r=> totalDays += parseInt(r.daysTotal||0,10)||0);
+  const avgDays = aRecs.length ? Math.round((totalDays/aRecs.length)*10)/10 : 0;
+
+  let html = reportHeaderHTML("إحصائيات عامة");
+  html += `<div class="rep-report-block">`;
+  html += `<div class="stat-cards">
+    <div class="stat-card"><div class="num">${bRecs.length}</div><div class="lbl">إجمالي المخالفات السلوكية</div></div>
+    <div class="stat-card"><div class="num">${aRecs.length}</div><div class="lbl">إجمالي سجلات الغياب</div></div>
+    <div class="stat-card"><div class="num">${studentsSet.size}</div><div class="lbl">عدد الطلاب المعنيين</div></div>
+    <div class="stat-card"><div class="num">${totalPoints}</div><div class="lbl">إجمالي الدرجات المحسومة</div></div>
+  </div>`;
+
+  html += `<h3>المخالفات حسب الدرجة</h3>`;
+  html += bRecs.length ? statBarsHTML(byDegree, ["الدرجة الرابعة","الدرجة الخامسة"]) : `<div class="empty">لا توجد بيانات كافية بعد.</div>`;
+
+  html += `<h3>المخالفات حسب المرحلة الدراسية</h3>`;
+  html += bRecs.length ? statBarsHTML(byStage) : `<div class="empty">لا توجد بيانات كافية بعد.</div>`;
+
+  html += `<h3>الأكثر تكرارًا من المخالفات</h3>`;
+  html += topViolations.length ? statBarsHTML(topViolations.map(([l,c])=>[l.length>60?l.slice(0,60)+"…":l, c])) : `<div class="empty">لا توجد بيانات كافية بعد.</div>`;
+
+  html += `<h3>الغياب والاستئذان</h3>`;
+  html += `<div class="stat-cards">
+    <div class="stat-card"><div class="num">${excusedCount}</div><div class="lbl">سجلات بعذر مقبول</div></div>
+    <div class="stat-card"><div class="num">${unexcusedCount}</div><div class="lbl">سجلات بدون عذر</div></div>
+    <div class="stat-card"><div class="num">${avgDays}</div><div class="lbl">متوسط أيام الغياب لكل سجل</div></div>
+  </div>`;
+  html += `</div>`;
+  host.innerHTML = html;
+}
+
+function printReport(){
+  const titles = {student:"تقرير طالب مفصّل", summary:"تقرير شامل", stats:"إحصائيات عامة"};
+  preparePrintHeader(titles[reportMode] || "تقرير");
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("print-target"));
+  $("panel-reports").classList.add("print-target");
+  window.print();
+}
+
 /* ---------- restore meta ---------- */
-["metaSchool","metaArea","metaCounselor"].forEach(id=>{
+["metaSchool","metaArea","metaViceDean","metaCounselor"].forEach(id=>{
   const saved = localStorage.getItem("moe_meta_"+id);
   if(saved) $(id).value = saved;
   $(id).addEventListener("input", ()=> localStorage.setItem("moe_meta_"+id, $(id).value));
@@ -1053,6 +1529,7 @@ renderBehaviorLog();
 renderReasonGrid();
 setAbsenceMode("excused");
 renderAttendanceLog();
+refreshStudentNamesList();
 if(!$("aSignDate").value) $("aSignDate").value = "";
 </script>
 </body>
