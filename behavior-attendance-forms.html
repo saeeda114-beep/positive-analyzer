@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نماذج السلوك والمواظبة | قواعد السلوك والمواظبة - الإصدار الخامس 1447هـ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-900:#0b3d2e;
+    --green-800:#0f5c3f;
+    --green-700:#13704b;
+    --green-600:#178a5a;
+    --green-500:#1ea36c;
+    --green-100:#e6f5ee;
+    --green-50:#f3faf6;
+    --ink:#182420;
+    --muted:#5d6b65;
+    --line:#d7e6de;
+    --paper:#ffffff;
+    --amber:#b9770e;
+    --amber-bg:#fdf3e2;
+    --red:#a3312a;
+    --red-bg:#fbeceb;
+    --radius:12px;
+    --shadow:0 1px 2px rgba(15,60,40,.06), 0 6px 20px rgba(15,60,40,.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Tajawal', 'Segoe UI', Tahoma, Arial, sans-serif;
+    background:linear-gradient(180deg,var(--green-50) 0,#eef6f1 340px, #f6f8f7 340px);
+    color:var(--ink);
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  a{color:inherit;}
+
+  /* ===== Header ===== */
+  header.top{
+    background:linear-gradient(135deg,var(--green-800),var(--green-600) 65%, var(--green-500));
+    color:#fff;
+    padding:22px 18px 60px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle,#ffffff33 1.5px, transparent 1.6px);
+    background-size:16px 16px;
+    opacity:.35;
+    pointer-events:none;
+  }
+  .top-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;}
+  .top-eyebrow{font-size:13px;opacity:.85;letter-spacing:.3px;margin-bottom:6px;font-weight:500;}
+  .top-title{font-size:26px;font-weight:900;margin:0 0 6px;}
+  .top-sub{font-size:14px;opacity:.92;max-width:720px;}
+  .top-meta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;}
+  .top-meta input{
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.35);
+    color:#fff;
+    border-radius:8px;
+    padding:8px 12px;
+    font-family:inherit;
+    font-size:13px;
+    min-width:180px;
+  }
+  .top-meta input::placeholder{color:#e7f5ee;}
+
+  /* ===== Shell / tabs ===== */
+  .shell{max-width:1100px;margin:-38px auto 0;padding:0 18px;position:relative;z-index:2;}
+  .tabbar{
+    display:flex;gap:8px;background:var(--paper);border:1px solid var(--line);
+    border-radius:14px;padding:6px;box-shadow:var(--shadow);
+  }
+  .tabbar button{
+    flex:1;border:0;background:transparent;padding:14px 10px;border-radius:10px;
+    font-family:inherit;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;
+    transition:.15s;
+  }
+  .tabbar button.active{background:var(--green-700);color:#fff;box-shadow:0 3px 10px rgba(19,112,75,.35);}
+  .tabbar button:not(.active):hover{background:var(--green-50);color:var(--green-800);}
+
+  .panel{display:none;margin-top:18px;}
+  .panel.active{display:block;animation:fade .2s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+  .card{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;box-shadow:var(--shadow);margin-bottom:16px;
+  }
+  .card h2{margin:0 0 14px;font-size:17px;color:var(--green-900);display:flex;align-items:center;gap:8px;}
+  .card h2 .num{
+    width:26px;height:26px;border-radius:50%;background:var(--green-700);color:#fff;
+    display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;
+  }
+
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .grid.g3{grid-template-columns:repeat(3,1fr);}
+  .grid.g2{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:760px){.grid,.grid.g3,.grid.g2{grid-template-columns:1fr 1fr;}}
+  @media(max-width:480px){.grid,.grid.g3,.grid.g2{grid-template-columns:1fr;}}
+
+  label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px;font-weight:700;}
+  input[type=text], input[type=date], input[type=number], select, textarea{
+    width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;
+    font-family:inherit;font-size:14px;background:#fbfdfc;color:var(--ink);
+  }
+  textarea{min-height:56px;resize:vertical;}
+  input:focus, select:focus, textarea:focus{outline:2px solid var(--green-500);outline-offset:1px;background:#fff;}
+
+  .field{margin-bottom:0;}
+
+  /* degree selector */
+  .degree-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .degree-btn{
+    border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px 6px;
+    flex:1 1 100px;text-align:center;cursor:pointer;font-weight:700;font-size:13.5px;color:var(--ink);
+    transition:.15s;
+  }
+  .degree-btn small{display:block;font-weight:500;color:var(--muted);font-size:11px;margin-top:2px;}
+  .degree-btn:hover{border-color:var(--green-500);}
+  .degree-btn.active{background:var(--green-700);border-color:var(--green-700);color:#fff;}
+  .degree-btn.active small{color:#dff3e8;}
+
+  /* category block */
+  .cat{border:1px solid var(--line);border-radius:10px;margin-bottom:14px;overflow:hidden;}
+  .cat-head{
+    background:var(--green-100);padding:10px 14px;font-weight:800;color:var(--green-900);
+    display:flex;justify-content:space-between;align-items:center;font-size:14px;gap:8px;flex-wrap:wrap;
+  }
+  .cat-head .art{font-weight:500;font-size:12px;color:var(--green-800);opacity:.8;}
+  .cat-body{padding:14px;}
+  .violations{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-bottom:12px;}
+  @media(max-width:700px){.violations{grid-template-columns:1fr;}}
+  .vio{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;padding:4px 2px;border-radius:6px;}
+  .vio:hover{background:var(--green-50);}
+  .vio input{margin-top:4px;flex-shrink:0;}
+
+  .occurrence{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 6px;}
+  .occ-btn{
+    border:1px solid var(--line);background:#fff;padding:6px 12px;border-radius:20px;font-size:12.5px;
+    cursor:pointer;font-family:inherit;color:var(--muted);font-weight:700;
+  }
+  .occ-btn.active{background:var(--amber);border-color:var(--amber);color:#fff;}
+
+  .action-box{background:var(--green-50);border:1px dashed var(--green-500);border-radius:8px;padding:12px 14px;margin-top:8px;}
+  .action-box h4{margin:0 0 8px;font-size:13.5px;color:var(--green-800);}
+  .action-box ul{margin:0;padding-inline-start:20px;font-size:13px;}
+  .action-box li{margin-bottom:5px;}
+  .points-chip{
+    display:inline-block;background:var(--red-bg);color:var(--red);border:1px solid #eccfcd;
+    font-size:12px;font-weight:800;padding:2px 10px;border-radius:20px;margin-inline-start:8px;
+  }
+  .notes-box{background:var(--amber-bg);border:1px solid #f0dcb0;border-radius:8px;padding:10px 14px;margin-top:10px;font-size:12.5px;color:#6b4c10;}
+  .notes-box b{color:var(--amber);}
+
+  .signrow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px;}
+  @media(max-width:760px){.signrow{grid-template-columns:1fr 1fr;}}
+  @media(max-width:480px){.signrow{grid-template-columns:1fr;}}
+
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+  .btn{
+    border:0;border-radius:9px;padding:11px 20px;font-family:inherit;font-weight:800;font-size:14px;cursor:pointer;
+    transition:.15s;
+  }
+  .btn-primary{background:var(--green-700);color:#fff;}
+  .btn-primary:hover{background:var(--green-800);}
+  .btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--green-600);color:var(--green-800);}
+  .btn-danger{background:var(--red-bg);color:var(--red);border:1px solid #eccfcd;}
+  .btn-danger:hover{background:#f6dcd9;}
+
+  table.log{width:100%;border-collapse:collapse;font-size:13px;}
+  table.log th, table.log td{border:1px solid var(--line);padding:8px 10px;text-align:right;}
+  table.log th{background:var(--green-100);color:var(--green-900);font-size:12.5px;}
+  table.log tbody tr:hover{background:var(--green-50);}
+  .log-actions{display:flex;gap:6px;}
+  .icon-btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 9px;cursor:pointer;font-size:12px;}
+  .icon-btn:hover{border-color:var(--green-600);}
+  .empty{color:var(--muted);font-size:13.5px;text-align:center;padding:26px 10px;}
+
+  .searchbar{display:flex;gap:8px;margin-bottom:12px;}
+  .searchbar input{flex:1;}
+
+  .absence-toggle{display:flex;gap:8px;margin-bottom:16px;}
+  .absence-toggle button{
+    flex:1;padding:11px;border-radius:9px;border:1.5px solid var(--line);background:#fff;
+    font-family:inherit;font-weight:800;font-size:14px;cursor:pointer;color:var(--muted);
+  }
+  .absence-toggle button.active.excused{background:var(--green-700);border-color:var(--green-700);color:#fff;}
+  .absence-toggle button.active.unexcused{background:var(--red);border-color:var(--red);color:#fff;}
+
+  table.att{width:100%;border-collapse:collapse;margin-top:6px;font-size:13.5px;}
+  table.att th{background:var(--green-700);color:#fff;padding:10px;font-size:13px;}
+  table.att td{border:1px solid var(--line);padding:10px;vertical-align:top;}
+  table.att td.days{
+    text-align:center;font-weight:900;font-size:16px;color:var(--green-800);background:var(--green-50);
+    width:70px;
+  }
+  table.att.unexcused th{background:var(--red);}
+  table.att.unexcused td.days{color:var(--red);}
+  table.att ul{margin:0 0 8px;padding-inline-start:18px;}
+  table.att li{margin-bottom:4px;}
+  .row-check{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted);margin-top:8px;flex-wrap:wrap;}
+  .row-check input[type=date]{width:auto;padding:4px 6px;font-size:12px;}
+
+  .reason-picker{margin-bottom:14px;}
+  .reason-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+  @media(max-width:700px){.reason-grid{grid-template-columns:1fr;}}
+  .reason-item{
+    border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;cursor:pointer;
+    display:flex;justify-content:space-between;gap:6px;
+  }
+  .reason-item:hover{border-color:var(--green-500);background:var(--green-50);}
+  .reason-item b{color:var(--green-800);font-weight:800;}
+  .reason-item span{color:var(--muted);font-size:11.5px;white-space:nowrap;}
+
+  .hint{font-size:12px;color:var(--muted);margin-top:4px;}
+  .toast{
+    position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--green-800);color:#fff;padding:12px 22px;border-radius:30px;font-size:13.5px;font-weight:700;
+    box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:.25s;z-index:99;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  footer.foot{max-width:1100px;margin:26px auto 0;padding:0 18px;color:var(--muted);font-size:12px;text-align:center;}
+
+  /* ===== Print ===== */
+  @media print{
+    body{background:#fff;padding:0;}
+    header.top, .tabbar, .btnrow, .searchbar, .log-actions, .no-print{display:none !important;}
+    .shell{margin:0;padding:0;max-width:100%;}
+    .card{box-shadow:none;border:1px solid #999;break-inside:avoid;}
+    .panel{display:block !important;}
+    .panel:not(.print-target){display:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="top-eyebrow">وزارة التعليم — الإدارة العامة للتوجيه والإرشاد</div>
+    <h1 class="top-title">نماذج السلوك والمواظبة</h1>
+    <p class="top-sub">أداة رقمية لتعبئة وطباعة نماذج المخالفات السلوكية وإجراءات الغياب والاستئذان، وفق «قواعد السلوك والمواظبة لطلبة التعليم العام» — الإصدار الخامس 1447هـ. تُحفظ السجلات محليًا على هذا الجهاز فقط.</p>
+    <div class="top-meta">
+      <input type="text" id="metaSchool" placeholder="اسم المدرسة">
+      <input type="text" id="metaArea" placeholder="المنطقة / المحافظة">
+      <input type="text" id="metaCounselor" placeholder="اسم الموجه الطلابي">
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <div class="tabbar no-print">
+    <button class="active" data-tab="behavior">المخالفات السلوكية</button>
+    <button data-tab="attendance">الغياب والاستئذان</button>
+  </div>
+
+  <!-- ============ BEHAVIOR PANEL ============ -->
+  <div class="panel active" id="panel-behavior">
+
+    <div class="card">
+      <h2><span class="num">1</span> بيانات الطالب والمخالفة</h2>
+      <div class="grid">
+        <div class="field"><label>اسم الطالب</label><input type="text" id="bStudent" placeholder="الاسم الرباعي"></div>
+        <div class="field"><label>الصف</label><input type="text" id="bClass" placeholder="مثال: ثالث متوسط / 2"></div>
+        <div class="field"><label>رقم المخالفة</label><input type="text" id="bCaseNo" placeholder="تلقائي"></div>
+        <div class="field"><label>تاريخ المخالفة</label><input type="date" id="bDate"></div>
+      </div>
+      <div class="grid g2" style="margin-top:12px;">
+        <div class="field">
+          <label>المرحلة الدراسية</label>
+          <select id="bStage">
+            <option value="primary">المرحلة الابتدائية</option>
+            <option value="secondary">المرحلة المتوسطة والثانوية</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>الدرجة</label>
+          <div class="degree-row" id="degreeRow"></div>
+        </div>
+      </div>
+      <div class="hint" id="degreePointsHint"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">2</span> المشكلة السلوكية والإجراء التربوي</h2>
+      <div id="categoriesHost"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span> توثيق واعتماد</h2>
+      <div class="grid g2">
+        <div class="field"><label>ملاحظات إضافية</label><textarea id="bNotes" placeholder="أي تفاصيل عن الموقف..."></textarea></div>
+        <div class="field"><label>اسم الموظف المتخذ للإجراء ووظيفته</label><input type="text" id="bStaffName" placeholder="مثال: أ. سعيد المالكي - موجه طلابي"></div>
+      </div>
+      <div class="signrow">
+        <div class="field"><label>توقيع الطالب</label><input type="text" id="bSignStudent" placeholder="اسم/توقيع"></div>
+        <div class="field"><label>توقيع ولي الأمر</label><input type="text" id="bSignParent" placeholder="اسم/توقيع"></div>
+        <div class="field"><label>توقيع الموظف</label><input type="text" id="bSignStaff" placeholder="اسم/توقيع"></div>
+        <div class="field"><label>تاريخ الاعتماد</label><input type="date" id="bSignDate"></div>
+      </div>
+      <div class="btnrow no-print">
+        <button class="btn btn-primary" onclick="saveBehaviorRecord()">💾 حفظ السجل محليًا</button>
+        <button class="btn btn-ghost" onclick="printBehavior()">🖨️ طباعة النموذج</button>
+        <button class="btn btn-ghost" onclick="resetBehaviorForm()">➕ نموذج جديد</button>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><span class="num">4</span> السجلات المحفوظة (المخالفات السلوكية)</h2>
+      <div class="searchbar">
+        <input type="text" id="bSearch" placeholder="ابحث باسم الطالب أو الصف..." oninput="renderBehaviorLog()">
+      </div>
+      <div id="behaviorLogHost"></div>
+    </div>
+  </div>
+
+  <!-- ============ ATTENDANCE PANEL ============ -->
+  <div class="panel" id="panel-attendance">
+
+    <div class="card no-print">
+      <div class="absence-toggle">
+        <button class="active excused" id="btnExcused" onclick="setAbsenceMode('excused')">غياب بعذر مقبول</button>
+        <button class="unexcused" id="btnUnexcused" onclick="setAbsenceMode('unexcused')">غياب بدون عذر</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">1</span> بيانات الطالب</h2>
+      <div class="grid">
+        <div class="field"><label>اسم الطالب</label><input type="text" id="aStudent" placeholder="الاسم الرباعي"></div>
+        <div class="field"><label>الصف</label><input type="text" id="aClass" placeholder="مثال: أول ثانوي / 1"></div>
+        <div class="field">
+          <label>المرحلة الدراسية</label>
+          <select id="aStage">
+            <option value="primary">المرحلة الابتدائية</option>
+            <option value="secondary">المرحلة المتوسطة والثانوية</option>
+          </select>
+        </div>
+        <div class="field"><label>إجمالي أيام الغياب حتى الآن</label><input type="number" min="0" id="aDaysTotal" oninput="highlightAttendanceThreshold()" placeholder="مثال: 5"></div>
+      </div>
+    </div>
+
+    <div class="card" id="reasonCard">
+      <h2><span class="num">2</span> سبب الغياب والإثبات المطلوب <span style="font-size:12px;color:var(--muted);font-weight:500">(المادة 32 من القواعد)</span></h2>
+      <div class="reason-grid" id="reasonGrid"></div>
+      <div class="field" style="margin-top:10px;">
+        <label>سبب الغياب المختار / الإثبات المرفق</label>
+        <input type="text" id="aReasonChosen" placeholder="اختر من القائمة أعلاه أو اكتب يدويًا">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span> إجراءات التعامل مع تكرار الغياب <span id="attTitleSuffix" style="font-size:12px;color:var(--muted);font-weight:500"></span></h2>
+      <div id="attTableHost"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">4</span> توثيق واعتماد</h2>
+      <div class="grid g2">
+        <div class="field"><label>ملاحظات</label><textarea id="aNotes" placeholder="ملاحظات إضافية..."></textarea></div>
+        <div class="field"><label>اسم الموظف المتابع ووظيفته</label><input type="text" id="aStaffName" placeholder="مثال: أ. سعيد المالكي - موجه طلابي"></div>
+      </div>
+      <div class="signrow">
+        <div class="field"><label>توقيع الطالب</label><input type="text" id="aSignStudent"></div>
+        <div class="field"><label>توقيع ولي الأمر</label><input type="text" id="aSignParent"></div>
+        <div class="field"><label>مدير/ة المدرسة</label><input type="text" id="aSignPrincipal"></div>
+        <div class="field"><label>تاريخ الاعتماد</label><input type="date" id="aSignDate"></div>
+      </div>
+      <div class="btnrow no-print">
+        <button class="btn btn-primary" onclick="saveAttendanceRecord()">💾 حفظ السجل محليًا</button>
+        <button class="btn btn-ghost" onclick="printAttendance()">🖨️ طباعة النموذج</button>
+        <button class="btn btn-ghost" onclick="resetAttendanceForm()">➕ نموذج جديد</button>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><span class="num">5</span> السجلات المحفوظة (الغياب والاستئذان)</h2>
+      <div class="searchbar">
+        <input type="text" id="aSearch" placeholder="ابحث باسم الطالب أو الصف..." oninput="renderAttendanceLog()">
+      </div>
+      <div id="attendanceLogHost"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  البيانات تُحفظ في متصفح هذا الجهاز فقط (localStorage) ولا تُرسل لأي خادم خارجي. يُنصح بعمل نسخة احتياطية دورية من ملفات النظام الرسمية (نظام نور).
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   DATA — مستخرج من: قواعد السلوك والمواظبة لطلبة التعليم العام (الإصدار الخامس 1447هـ)
+   ===================================================================== */
+
+const DEGREE_POINTS = {1:"درجة واحدة",2:"درجتان",3:"ثلاث درجات",4:"عشر درجات",5:"خمس عشرة درجة"};
+
+// ---- Common (all stages) blocks: Article 15 (Degree 4 vs environment/staff) & Article 16 (Degree 5 vs staff)
+const COMMON_D4 = {
+  key:"common4", label:"مخالفات مشتركة (جميع المراحل) تجاه البيئة التعليمية والإدارية", article:"المادة (15)",
+  violations:[
+    "تهديد المعلمين أو الإداريين، أو من في حكمهم من منسوبي المدرسة.",
+    "التلفظ بألفاظ غير لائقة تجاه المعلمين أو الإداريين، أو من في حكمهم من منسوبي المدرسة.",
+    "السخرية من المعلمين أو الإداريين، أو من في حكمهم من منسوبي المدرسة، قولًا أو فعلًا.",
+    "التوقيع عن أحد منسوبي المدرسة على المكاتبات المتبادلة بين المدرسة وأولياء الأمور.",
+    "تصوير المعلمين أو الإداريين، أو من في حكمهم من منسوبي المدرسة، أو التسجيل الصوتي لهم (ما لم يؤخذ إذن خطي بالموافقة الصريحة على ذلك)."
+  ],
+  steps:[
+    {title:"الإجراء الأول", items:[
+      "إحالة الطالب من قِبل إدارة المدرسة إلى لجنة التوجيه الطلابي لدراسة مشكلته السلوكية بعد حدوثها مباشرة.",
+      "دعوة ولي أمر الطالب وتوضيح الإجراءات المترتبة على هذا السلوك في حال تكراره.",
+      "مناقشته في خطة تعديل السلوك، ووضع برنامج وقائي مشترك مع الأسرة.",
+      "أخذ تعهد خطي على الطالب بعدم تكرار السلوك غير المرغوب فيه، وإنذاره بالنقل إلى مدرسة أخرى في حالة تكرار المشكلة، وتوقيع ولي الأمر بالعلم.",
+      "حسم عشر درجات من درجات السلوك الإيجابي، مع تمكينه من فرص التعويض وإشعار ولي الأمر بذلك.",
+      "مصادرة ما بحوزة الطالب من مواد وإتلافها (فيما لم يرد فيه نص نظامي) من قبل لجنة التوجيه الطلابي، وإعداد محضر بذلك.",
+      "الاعتذار لمن أساء إليهم.",
+      "نقل الطالب إلى فصل آخر وفقًا لقرار لجنة التوجيه الطلابي في المدرسة.",
+      "تحويل الطالب إلى الموجه الطلابي لدراسة حالته."
+    ]},
+    {title:"الإجراء الثاني", items:[
+      "تنفيذ جميع ما ورد في الإجراء الأول - باستثناء نقل الطالب من الفصل.",
+      "ترفع إدارة المدرسة رسميًا وبصفة عاجلة لإدارة التعليم محضر اجتماع لجنة التوجيه في المدرسة بخصوص القضية.",
+      "يصدر مدير التعليم قرارًا بنقل الطالب إلى مدرسة أخرى (الصفين الثاني والثالث الثانوي يُتعامل معهم وفق نظام المسارات)، مع استمراره بالدراسة حتى النقل، ومع الأخذ برأي ولي الأمر في المدرسة التي سينقل إليها (وفي حال عدم موافقة ولي الأمر يُنقل الطالب إلى أقرب مدرسة لمقر سكنه).",
+      "تمكين الطالب من فرص التعويض لتعديل سلوكه وتعويض الدرجات المحسومة في المدرسة المنقول إليها، وإشعار ولي أمره بذلك.",
+      "متابعة الحالة من الموجه الطلابي في المدرسة المنقول إليها الطالب لتقديم الخدمات التربوية."
+    ]}
+  ],
+  notes:["تبليغ الجهات الأمنية المختصة فور وقوع المشكلة، بعد إشعار ولي الأمر، وتوثيق الإجراءات المتخذة."]
+};
+
+const COMMON_D5 = {
+  key:"common5", label:"مخالفات مشتركة (جميع المراحل) تجاه الهيئة التعليمية والإدارية", article:"المادة (16)",
+  violations:[
+    "إلحاق الضرر بممتلكات المعلمين أو الإداريين، أو من في حكمهم من منسوبي المدرسة، أو سرقتها.",
+    "الإشارة بحركات مخلة بالأدب تجاه المعلمين أو الإداريين، أو من في حكمهم من منسوبي المدرسة.",
+    "الاعتداء بالضرب على المعلمين أو الإداريين، أو من في حكمهم من منسوبي المدرسة.",
+    "ابتزاز المعلمين، أو الإداريين، أو من في حكمهم من منسوبي المدرسة.",
+    "الجرائم المعلوماتية تجاه المعلمين، أو الإداريين، أو من في حكمهم من منسوبي المدرسة."
+  ],
+  single:[
+    "تُدوّن إدارة المدرسة محضرًا لإثبات الواقعة.",
+    "دعوة ولي أمر الطالب، وتبليغه بمشكلة الطالب والإجراءات المترتبة على ذلك.",
+    "حسم خمس عشرة درجة من درجات السلوك الإيجابي للطالب، مع تمكينه من فرص التعويض لتعديل سلوكه وتعويض الدرجات المحسومة في المدرسة المنقول إليها، وإشعار ولي أمره بذلك.",
+    "اجتماع لجنة التوجيه الطلابي في المدرسة بعد وقوع القضية مباشرة لدراسة ظروفها وملابساتها.",
+    "إصلاح ما أتلفه الطالب أو إحضار بديل عنه، وإشعار ولي الأمر بذلك.",
+    "تقديم الاعتذار لمن أُسيء إليهم.",
+    "رفع محضر اجتماع لجنة التوجيه في المدرسة رسميًا وبصفة عاجلة إلى إدارة التعليم بخصوص القضية.",
+    "إصدار قرار من مدير التعليم بنقل الطالب إلى مدرسة أخرى (الصفين الثاني والثالث الثانوي يُتعامل معهم وفق نظام المسارات)، مع استمراره بالدراسة حتى النقل، وأخذ رأي ولي الأمر في المدرسة التي سينقل إليها.",
+    "متابعة الحالة من الموجه الطلابي في المدرسة المنقول إليها الطالب، وتقديم الخدمات التربوية."
+  ],
+  notes:["تبليغ الجهات الأمنية المختصة فور وقوع المشكلة، بعد إشعار ولي الأمر، وتوثيق الإجراءات المتخذة."]
+};
+
+const DATA = {
+primary:{
+ 1:[{key:"p1", label:"الدرجة الأولى — المرحلة الابتدائية", article:"المادة (6)",
+    violations:[
+      "عدم التقيد بالزي المدرسي.",
+      "التأخر الصباحي.",
+      "عدم حضور الاصطفاف الصباحي (في حال كان الطالب متواجدًا داخل المدرسة).",
+      "التأخر عن الاصطفاف الصباحي (في حال كان الطالب متواجدًا داخل المدرسة) أو العبث أثناءه.",
+      "التأخر في الدخول إلى الحصص.",
+      "تناول الأطعمة أو المشروبات أثناء الدرس بدون استئذان.",
+      "النوم داخل الفصل.",
+      "تكرار خروج ودخول الطلبة من البوابة قبل وقت الحضور والانصراف.",
+      "التجمهر أمام بوابة المدرسة."
+    ],
+    steps:[
+      {title:"الإجراء الأول", items:["التنبيه الشفهي الأول من المعلم أو إدارة المدرسة للطالب عن السلوك والأضرار المترتبة عليه، وكونه سلوكًا غير مرغوب به، بأسلوب تربوي حكيم."]},
+      {title:"الإجراء الثاني", items:["التنبيه الشفهي الثاني من المعلم أو إدارة المدرسة عند مباشرة الموقف بأسلوب تربوي حكيم.","ملاحظة الطالب وحصر السلوكيات السلبية والإيجابية ومسببات حدوثها، والبدء بالحد من مسببات السلوك السلبي، وتعزيز السلوك الإيجابي."]},
+      {title:"الإجراء الثالث", items:["تدوين المشكلة السلوكية من المعلم المباشر للموقف في سجل المشكلات السلوكية وتوقيع الطالب عليها.","إشعار ولي أمر الطالب هاتفيًا بمشكلة الطالب السلوكية.","حسم درجة من درجات السلوك الإيجابي للطالب من قِبل إدارة المدرسة، مع تمكينه من فرص التعويض وإشعار ولي الأمر بذلك.","بعد تنفيذ الإجراء: تحويل الطالب إلى الموجه الطلابي لدراسة حالته."]},
+      {title:"الإجراء الرابع", items:["دعوة ولي أمر الطالب وإخطاره بسلوك الطالب غير المرغوب فيه، والاتفاق على خطة لتعديل السلوك بين الأسرة والمدرسة يقوم بها الموجه الطلابي.","حسم درجة من درجات السلوك الإيجابي مع تمكينه من فرص التعويض وإشعار ولي الأمر بذلك.","تحويل الطالب إلى لجنة التوجيه الطلابي لبحث أسباب عدم استجابته لإجراءات تعديل السلوك، وإيجاد الحلول المناسبة وفق تقرير دراسة الحالة من الموجه الطلابي.","متابعة حالة الطالب من قبل الموجه الطلابي لتقديم الخدمات التربوية."]}
+    ], notes:[]}],
+ 2:[{key:"p2", label:"الدرجة الثانية — المرحلة الابتدائية", article:"المادة (7)",
+    violations:[
+      "عدم حضور الحصة الدراسية أو الهروب منها.",
+      "الدخول أو الخروج من الفصل دون استئذان.",
+      "دخول فصل آخر دون استئذان.",
+      "إثارة الفوضى داخل الفصل أو المدرسة أو في وسائل النقل المدرسي.",
+      "الشجار أو الاشتراك في مضاربة جماعية.",
+      "الإشارة بحركات مخلة بالأدب تجاه الطلبة.",
+      "التلفظ بكلمات نابية على الطلبة، أو تهديدهم، أو السخرية منهم.",
+      "إلحاق الضرر المتعمد بممتلكات الطلبة.",
+      "العبث بتجهيزات المدرسة أو مبانيها (كأجهزة الحاسوب، أدوات ومعدات الأمن والسلامة المدرسية، الكهرباء، المعامل، حافلة المدرسة، والكتابة على الجدار وغيره).",
+      "امتهان الكتب الدراسية."
+    ],
+    steps:[
+      {title:"الإجراء الأول", items:["تحويل الطالب إلى إدارة المدرسة لاتخاذ: إشعار ولي الأمر هاتفيًا بمشكلة الطالب السلوكية والإجراءات المتخذة.","حسم درجتين من درجات السلوك الإيجابي، مع تمكينه من فرص التعويض وإشعار ولي الأمر بذلك.","الاعتذار إلى من أساء إليهم.","إصلاح ما أتلفه الطالب أو إحضار بديل عنه.","إحالة الطالب للموجه الطلابي لدراسة حالته."]},
+      {title:"الإجراء الثاني", items:["جميع ما ذكر في الإجراء الأول مع تغيير إجراءات خطة تعديل السلوك.","دعوة ولي أمر الطالب، ومناقشته في خطة تعديل السلوك، ووضع برنامج وقائي مشترك مع الأسرة، وأخذ تعهد خطي على الطالب بعدم تكرار السلوك غير المرغوب فيه، وتوقيع ولي الأمر بالعلم.","متابعة حالة الطالب من قبل الموجه الطلابي لتقديم الخدمات التربوية."]},
+      {title:"الإجراء الثالث", items:["تنفيذ جميع ما ذكر في الإجراء الثاني.","تحويل الطالب إلى لجنة التوجيه الطلابي في المدرسة لبحث أسباب عدم استجابة الطالب لإجراءات تعديل السلوك، وإيجاد الحلول المناسبة وفق تقرير دراسة الحالة من الموجه الطلابي.","نقل الطالب إلى فصل آخر وفقًا لقرار لجنة التوجيه الطلابي في المدرسة."]}
+    ], notes:["استدعاء الهلال الأحمر لنقل الطالب المصاب إلى أقرب مركز صحي (إذا تطلب الأمر ذلك).","تبليغ الجهات الأمنية المختصة فور وقوع المشكلة، بعد إشعار ولي الأمر، وتوثيق الإجراءات المتخذة."]}],
+ 3:[{key:"p3", label:"الدرجة الثالثة — المرحلة الابتدائية", article:"المادة (8)",
+    violations:[
+      "إلحاق الضرر المتعمد بتجهيزات المدرسة أو مبانيها (كأجهزة الحاسوب، أدوات ومعدات الأمن والسلامة المدرسية، الكهرباء، المعامل، حافلة المدرسة).",
+      "سرقة شيء من ممتلكات الطلبة أو المدرسة.",
+      "التعرض لأحد الطلبة بالضرب.",
+      "التصوير أو التسجيل الصوتي للطلبة.",
+      "الهروب من المدرسة.",
+      "التوقيع عن ولي الأمر من غير علمه على المكاتبات المتبادلة بين المدرسة وولي الأمر.",
+      "إحضار أو استخدام المواد أو الألعاب الخطرة إلى المدرسة، مثل (الألعاب النارية، البخاخات الغازية الملونة، المواد الكيميائية)."
+    ],
+    steps:[
+      {title:"الإجراء الأول", items:["تحويل الطالب إلى إدارة المدرسة لاتخاذ: دعوة ولي أمر الطالب، ومناقشته في خطة تعديل السلوك، ووضع برنامج وقائي مشترك مع الأسرة، وأخذ تعهد خطي على الطالب بعدم تكرار السلوك غير المرغوب فيه، وتوقيع ولي الأمر بالعلم.","حسم ثلاث درجات من درجات السلوك الإيجابي، مع تمكينه من فرص التعويض وإشعار ولي الأمر بذلك.","الاعتذار إلى من أساء إليهم.","إصلاح ما أتلفه الطالب أو إحضار بديل عنه.","مصادرة ما بحوزة الطالب من مواد ممنوعة وإتلافها من قبل لجنة التوجيه الطلابي (فيما لم يرد فيه نص نظامي) وإعداد محضر بذلك.","إحالة الطالب إلى الموجه الطلابي لدراسة حالته."]},
+      {title:"الإجراء الثاني", items:["جميع ما ذكر في الإجراء الأول مع تغيير إجراءات خطة تعديل السلوك.","نقل الطالب إلى فصل آخر وفقًا لقرار لجنة التوجيه الطلابي.","متابعة حالة الطالب من قبل الموجه الطلابي لتقديم الخدمات التربوية."]},
+      {title:"الإجراء الثالث", items:["جميع ما ذكر في الإجراء الثاني، مع تغيير إجراءات خطة تعديل السلوك.","ترفع إدارة المدرسة رسميًا وبصفة عاجلة لإدارة التعليم محضر اجتماع لجنة التوجيه في المدرسة بخصوص القضية.","يصدر مدير التعليم قرارًا بنقل الطالب إلى مدرسة أخرى، مع استمراره بالدراسة حتى النقل، ومع الأخذ برأي ولي الأمر في المدرسة التي سينقل إليها (وفي حال عدم موافقته يُنقل إلى أقرب مدرسة لمقر سكنه).","إحالة الحالة للموجه الطلابي في المدرسة المنقول إليها لتقديم برنامج تربوي يشتمل على جلسات في تعديل السلوك.","يُكتب تعهد خطي من الطالب وبحضور ولي الأمر بالالتزام بالانضباط والسلوك الحسن بعد استكمال البرنامج التربوي.","متابعة الحالة من الموجه الطلابي في المدرسة المنقول إليها."]}
+    ], notes:["استدعاء الهلال الأحمر لنقل الطالب المصاب إلى أقرب مركز صحي (إذا تطلب الأمر ذلك).","تبليغ الجهات الأمنية المختصة فور وقوع المشكلة، بعد إشعار ولي الأمر، وتوثيق الإجراءات المتخذة."]}],
+ 4:[{key:"p4", label:"الدرجة الرابعة — المرحلة الابتدائية", article:"المادة (9)",
+    violations:[
+      "الإساءة أو الاستهزاء بشيء من شعائر الإسلام.",
+      "الإساءة للدولة أو رموزها.",
+      "التحرش الجنسي.",
+      "إشعال النار داخل المدرسة.",
+      "حيازة السجائر بأنواعها.",
+      "التدخين بأنواعه داخل المدرسة.",
+      "حيازة آلة حادة (مثل السكاكين).",
+      "الجرائم المعلوماتية بكافة أنواعها.",
+      "المظاهر أو الصور أو الشعارات التي تدل على الشذوذ الجنسي أو الترويج لها.",
+      "التنمر بجميع أنواعه وأشكاله.",
+      "حيازة أو عرض المواد الإعلامية الممنوعة المقروءة، أو المسموعة، أو المرئية."
+    ],
+    steps:[
+      {title:"الإجراء الأول", items:["تحويل الطالب إلى إدارة المدرسة لاتخاذ: دعوة ولي أمر الطالب، وتوضيح الإجراءات المترتبة على هذا السلوك، ومناقشته في خطة تعديل السلوك، ووضع برنامج وقائي مشترك مع الأسرة.","أخذ تعهد خطي على الطالب بعدم تكرار السلوك غير المرغوب فيه، وتوقيع ولي الأمر بالعلم.","حسم عشر درجات من درجات السلوك الإيجابي، مع تمكينه من فرص التعويض وإشعار ولي الأمر بذلك.","الاعتذار إلى من أساء إليهم.","تحويل الطالب إلى الموجه الطلابي لدراسة حالته."]},
+      {title:"الإجراء الثاني", items:["ترفع إدارة المدرسة رسميًا وبصفة عاجلة لإدارة التعليم محضر اجتماع لجنة التوجيه بخصوص القضية.","يصدر مدير التعليم قرارًا بنقل الطالب إلى مدرسة أخرى، مع استمراره بالدراسة حتى النقل، مع الأخذ برأي ولي الأمر (وفي حال عدم موافقته يُنقل إلى أقرب مدرسة لمقر سكنه).","إحالة الحالة للموجه الطلابي في المدرسة المنقول إليها لتقديم برنامج تربوي يشتمل على جلسات في تعديل السلوك.","يُكتب تعهد خطي من الطالب بحضور ولي الأمر بالالتزام بالانضباط والسلوك الحسن بعد استكمال البرنامج التربوي.","متابعة الحالة من الموجه الطلابي في المدرسة المنقول إليها."]}
+    ], notes:["استدعاء الهلال الأحمر لنقل الطالب المصاب إلى أقرب مركز صحي (إذا تطلب الأمر ذلك).","تبليغ الجهات الأمنية المختصة فور وقوع المشكلة، بعد إشعار ولي الأمر، وتوثيق الإجراءات المتخذة.","في حال تصنيف المشكلة ضمن حالات الإيذاء أو الإهمال الواردة في النظام، وبعد استنفاذ جميع الإجراءات: يتم التواصل مباشرة مع مركز بلاغات الإيذاء (1919) لإكمال اللازم."]}, COMMON_D4],
+ 5:[COMMON_D5]
+},
+secondary:{
+ 1:[{key:"s1", label:"الدرجة الأولى — المتوسطة والثانوية", article:"المادة (10)",
+    violations:[
+      "التأخر الصباحي.",
+      "عدم حضور الاصطفاف الصباحي (في حال كان الطالب متواجدًا داخل المدرسة).",
+      "التأخر عن الاصطفاف الصباحي (في حال كان الطالب متواجدًا داخل المدرسة) أو العبث أثناءه.",
+      "التأخر عن الدخول إلى الحصص.",
+      "إعاقة سير الحصص الدراسية، مثل: الحديث الجانبي، المقاطعة المستمرة غير الهادفة لشرح المعلم، تناول الأطعمة أو المشروبات أثناء الدرس.",
+      "النوم داخل الفصل.",
+      "تكرار خروج ودخول الطلبة من البوابة قبل وقت الحضور والانصراف.",
+      "التجمهر أمام بوابة المدرسة."
+    ],
+    steps:[
+      {title:"الإجراء الأول", items:["التنبيه الشفهي الأول من المعلم أو إدارة المدرسة للطالب عن السلوك وأضراره المترتبة، وكونه يُعد سلوكًا غير مرغوب فيه، بأسلوب تربوي حكيم."]},
+      {title:"الإجراء الثاني", items:["التنبيه الشفهي الثاني من المعلم، أو إدارة المدرسة، عند مباشرة الموقف.","ملاحظة الطالب وحصر السلوكيات السلبية والإيجابية ومسببات حدوثها، والبدء بالحد من مسببات السلوك السلبي، وتعزيز السلوك الإيجابي."]},
+      {title:"الإجراء الثالث", items:["تدوين المشكلة السلوكية من المعلم المباشر للموقف، وتوقيع الطالب عليها.","إشعار ولي أمر الطالب هاتفيًا بمشكلة الطالب السلوكية، والتنسيق معه لتعديل السلوك المخالف.","حسم درجة من درجات السلوك الإيجابي من قِبل إدارة المدرسة، مع تمكينه من فرص التعويض وإشعار ولي الأمر بذلك.","تحويل الطالب إلى الموجه الطلابي لدراسة حالته."]},
+      {title:"الإجراء الرابع", items:["دعوة ولي أمر الطالب وإخطاره بسلوك الطالب غير المرغوب فيه، والاتفاق على خطة لتعديل السلوك بين الأسرة والمدرسة يقوم بها الموجه الطلابي.","حسم درجة من درجات السلوك الإيجابي، مع تمكينه من فرص التعويض وإشعار ولي الأمر بذلك.","تحويل الطالب إلى لجنة التوجيه الطلابي لبحث أسباب عدم استجابته لإجراءات تعديل السلوك، وإيجاد الحلول المناسبة وفق تقرير دراسة الحالة من الموجه الطلابي.","يتابع الموجه الطلابي حالته لتقديم الخدمات التربوية."]}
+    ], notes:[]}],
+ 2:[{key:"s2", label:"الدرجة الثانية — المتوسطة والثانوية", article:"المادة (11)",
+    violations:[
+      "عدم حضور الحصة الدراسية أو الهروب منها.",
+      "الدخول أو الخروج من الفصل دون استئذان.",
+      "دخول فصل آخر دون استئذان.",
+      "إثارة الفوضى داخل الفصل أو المدرسة أو في وسائل النقل المدرسي."
+    ],
+    steps:[
+      {title:"الإجراء الأول", items:["تحويل الطالب إلى إدارة المدرسة لاتخاذ: إشعار ولي الأمر هاتفيًا بمشكلة الطالب السلوكية والإجراءات المتخذة.","حسم درجتين من درجات السلوك الإيجابي، مع تمكينه من فرص التعويض ولتعويض الدرجات المحسومة، وإشعار ولي الأمر بذلك.","أخذ تعهد خطي على الطالب بعدم تكرار المخالفة.","تحويل الطالب إلى الموجه الطلابي لدراسة حالته."]},
+      {title:"الإجراء الثاني", items:["جميع ما ذكر في الإجراء الأول.","دعوة ولي أمر الطالب حضوريًا، ومناقشته في خطة تعديل السلوك، ووضع برنامج وقائي مشترك مع الأسرة، وتوقيع ولي الأمر بالعلم.","متابعة حالة الطالب من قبل الموجه الطلابي لتقديم الخدمات التربوية."]},
+      {title:"الإجراء الثالث", items:["تنفيذ جميع ما ذكر في الإجراء الثاني.","نقل الطالب إلى فصل آخر وفقًا لقرار لجنة التوجيه الطلابي في المدرسة.","تحويل الطالب المخالف إلى لجنة التوجيه الطلابي لوضع الحلول المناسبة لمخالفته، وفقًا لتقرير دراسة الحالة من الموجه الطلابي."]}
+    ], notes:[]}],
+ 3:[{key:"s3", label:"الدرجة الثالثة — المتوسطة والثانوية", article:"المادة (12)",
+    violations:[
+      "عدم التقيد بالزي المدرسي.",
+      "الشجار أو الاشتراك في مضاربة جماعية.",
+      "الإشارة بحركات مخلة بالأدب تجاه الطلبة.",
+      "التلفظ بكلمات نابية على الطلبة، أو تهديدهم، أو السخرية منهم.",
+      "إلحاق الضرر المتعمد بممتلكات الطلبة.",
+      "العبث بتجهيزات المدرسة أو مبانيها (كأجهزة الحاسوب، أدوات ومعدات الأمن والسلامة المدرسية، الكهرباء، المعامل، حافلة المدرسة، والكتابة على الجدار وغيره).",
+      "إحضار المواد أو الألعاب الخطرة إلى المدرسة دون استخدامها، مثل (الألعاب النارية، البخاخات الغازية الملونة، المواد الكيميائية).",
+      "حيازة السجائر بأنواعها.",
+      "حيازة المواد الإعلامية الممنوعة المقروءة، أو المسموعة، أو المرئية.",
+      "التوقيع عن ولي الأمر من غير علمه على المكاتبات المتبادلة بين المدرسة وولي الأمر.",
+      "امتهان الكتب الدراسية."
+    ],
+    steps:[
+      {title:"الإجراء الأول", items:["تحويل الطالب إلى إدارة المدرسة لاتخاذ: دعوة ولي أمر الطالب، وتوضيح الإجراءات المترتبة على هذا السلوك في حال تكراره، ومناقشته في خطة تعديل السلوك، ووضع برنامج وقائي مشترك مع الأسرة، وأخذ تعهد خطي على الطالب بعدم تكرار السلوك غير المرغوب فيه، وتوقيع ولي الأمر بالعلم.","حسم ثلاث درجات من درجات السلوك الإيجابي، مع تمكينه من فرص التعويض وإشعار ولي الأمر بذلك.","الاعتذار إلى من أساء إليهم.","مصادرة ما بحوزة الطالب من مواد ممنوعة وإتلافها من قبل لجنة التوجيه الطلابي (فيما لم يرد فيه نص نظامي) وإعداد محضر بذلك.","إصلاح ما أتلفه الطالب، أو إحضار بديل عنه."]},
+      {title:"الإجراء الثاني", items:["تحويل الطالب إلى إدارة المدرسة لاتخاذ: تنفيذ جميع ما ورد في الإجراء الأول.","دعوة ولي أمر الطالب، وإنذار الطالب كتابيًا بالنقل إلى مدرسة أخرى في حال تكرار المخالفة، وتوقيع ولي الأمر بالعلم بذلك.","تحويل الحالة إلى لجنة التوجيه الطلابي لوضع الحلول المناسبة لمخالفته وفقًا لتقرير دراسة الحالة من الموجه الطلابي.","نقل الطالب المخالف سلوكيًا إلى فصل آخر وفقًا لقرار لجنة التوجيه الطلابي."]},
+      {title:"الإجراء الثالث", items:["تنفيذ جميع ما ورد في الإجراء الأول.","ترفع إدارة المدرسة رسميًا وبصفة عاجلة لإدارة التعليم محضر اجتماع لجنة التوجيه بخصوص القضية.","يصدر مدير التعليم قرارًا بنقل الطالب إلى مدرسة أخرى (الصفين الثاني والثالث الثانوي يُتعامل معهم وفق نظام المسارات)، مع استمراره بالدراسة حتى النقل، ومع الأخذ برأي ولي الأمر (وفي حال عدم موافقته يُنقل إلى أقرب مدرسة لمقر سكنه).","متابعة الحالة من الموجه الطلابي في المدرسة المنقول إليها."]}
+    ], notes:["استدعاء الهلال الأحمر لنقل الطالب المصاب إلى أقرب مركز صحي (إذا تطلب الأمر ذلك).","تبليغ الجهات الأمنية المختصة فور وقوع المشكلة، بعد إشعار ولي الأمر، وتوثيق الإجراءات المتخذة."]}],
+ 4:[{key:"s4", label:"الدرجة الرابعة — المتوسطة والثانوية", article:"المادة (13)",
+    violations:[
+      "تعمد إصابة أحد الطلبة عن طريق الضرب باليد أو استخدام أدوات غير حادة تحدث إصابة (جرحًا، أو نزفًا، أو كسرًا).",
+      "سرقة شيء من ممتلكات الطلبة أو المدرسة.",
+      "التصوير أو التسجيل الصوتي للطلبة.",
+      "إلحاق الضرر المتعمد بتجهيزات المدرسة أو مبانيها (كأجهزة الحاسوب، أدوات ومعدات الأمن والسلامة المدرسية، الكهرباء، المعامل، حافلة المدرسة).",
+      "التدخين بأنواعه داخل المدرسة.",
+      "الهروب من المدرسة.",
+      "إحضار أو استخدام المواد أو الألعاب الخطرة إلى المدرسة، مثل (الألعاب النارية، البخاخات الغازية الملونة، المواد الكيميائية).",
+      "عرض أو توزيع المواد الإعلامية الممنوعة المقروءة أو المسموعة أو المرئية."
+    ],
+    steps:[
+      {title:"الإجراء الأول", items:["إحالة الطالب من قِبل إدارة المدرسة إلى لجنة التوجيه الطلابي لدراسة مشكلته السلوكية بعد حدوثها مباشرة لاتخاذ: دعوة ولي أمر الطالب وتوضيح الإجراءات المترتبة على هذا السلوك في حال تكراره.","مناقشة خطة تعديل السلوك، ووضع برنامج وقائي مشترك مع الأسرة، وأخذ تعهد خطي على الطالب بعدم تكرار السلوك غير المرغوب فيه، وإنذاره بالنقل إلى مدرسة أخرى في حالة تكرار المشكلة، وتوقيع ولي الأمر بالعلم.","حسم عشر درجات من درجات السلوك الإيجابي، مع تمكينه من فرص التعويض، وإشعار ولي الأمر بذلك.","تقديم الاعتذار لمن أسيء إليهم.","مصادرة ما بحوزة الطالب من مواد ممنوعة وإتلافها (فيما لم يرد فيه نص نظامي)، وإعداد محضر بذلك من قبل لجنة التوجيه الطلابي.","نقل الطالب من فصل إلى آخر وفقًا لقرار لجنة التوجيه الطلابي.","متابعة الحالة من الموجه الطلابي، وتقديم الخدمات التربوية."]},
+      {title:"الإجراء الثاني", items:["تنفيذ جميع ما ورد في الإجراء الأول، باستثناء نقل الطالب من الفصل.","رفع محضر اجتماع لجنة التوجيه في المدرسة إلى إدارة التعليم رسميًا وبصفة عاجلة.","إصدار قرار من مدير التعليم بنقل الطالب إلى مدرسة أخرى (الصفين الثاني والثالث الثانوي وفق نظام المسارات)، مع استمراره بالدراسة حتى النقل، وأخذ رأي ولي الأمر (وفي حال عدم موافقته يُنقل إلى أقرب مدرسة لمقر سكنه).","تمكين الطالب من فرص التعويض لتعديل سلوكه وتعويض الدرجات المحسومة في المدرسة المنقول إليها، وإشعار ولي أمره بذلك.","متابعة الحالة من الموجه الطلابي في المدرسة المنقول إليها، وتقديم الخدمات التربوية."]}
+    ], notes:["استدعاء الهلال الأحمر لنقل الطالب المصاب إلى أقرب مركز صحي (إذا تطلب الأمر ذلك).","تبليغ الجهات الأمنية المختصة فور وقوع المشكلة، بعد إشعار ولي الأمر، وتوثيق الإجراءات المتخذة.","في حال تصنيف المشكلة ضمن حالات الإيذاء والإهمال الواردة في النظام: يتم التواصل مباشرة مع مركز بلاغات الإيذاء (1919) لإكمال اللازم."]}, COMMON_D4],
+ 5:[{key:"s5", label:"الدرجة الخامسة — المتوسطة والثانوية", article:"المادة (14)",
+    violations:[
+      "الإساءة أو الاستهزاء بشيء من شعائر الإسلام.",
+      "الإساءة للدولة أو رموزها.",
+      "بث أو ترويج أفكار ومعتقدات متطرفة، أو تكفيرية، أو إلحادية، أو مسيئة لنظم المجتمع السياسية والاجتماعية.",
+      "الإساءة إلى الأديان السماوية، أو إثارة كل ما يسبب الفتن القبلية، أو الطائفية، أو المذهبية.",
+      "التزوير أو الاستخدام أو الاستفادة من الوثائق، أو الأختام الرسمية بطريقة غير مشروعة نظامًا.",
+      "التحرش الجنسي.",
+      "المظاهر أو الصور أو الشعارات التي تدل على الشذوذ الجنسي أو الترويج لها.",
+      "إشعال النار داخل المدرسة.",
+      "حيازة أو استخدام أو تهديد الطلبة بالأسلحة النارية أو ما في حكمها (مثل: السكاكين والأدوات الحادة والرصاص).",
+      "حيازة، أو تعاطي، أو ترويج المخدرات، أو المسكرات.",
+      "ابتزاز الطلبة.",
+      "التنمر بجميع أنواعه وأشكاله."
+    ],
+    single:[
+      "تُدوّن إدارة المدرسة محضر لإثبات الواقعة.",
+      "دعوة ولي أمر الطالب، وتبليغه بمشكلة الطالب والإجراءات المترتبة على ذلك.",
+      "حسم خمس عشرة درجة من درجات السلوك الإيجابي، مع تمكينه من فرص التعويض لتعديل سلوكه وتعويض الدرجات المحسومة في المدرسة المنقول إليها، وإشعار ولي أمره بذلك.",
+      "اجتماع لجنة التوجيه الطلابي في المدرسة بعد وقوع القضية مباشرة لدراسة ظروفها وملابساتها.",
+      "متابعة الحالة من الموجه الطلابي وتقديم الخدمات التربوية.",
+      "رفع محضر اجتماع لجنة التوجيه الطلابي في المدرسة بخصوص القضية إلى إدارة التعليم رسميًا وبصفة عاجلة.",
+      "إصدار قرار من مدير التعليم بنقل الطالب إلى مدرسة أخرى (الصفين الثاني والثالث الثانوي وفق نظام المسارات)، مع استمراره بالدراسة حتى النقل، وأخذ رأي ولي الأمر (وفي حال عدم موافقته يُنقل إلى أقرب مدرسة لمقر سكنه).","متابعة الحالة من الموجه الطلابي في المدرسة المنقول إليها، وتقديم الخدمات التربوية."
+    ],
+    notes:["استدعاء الهلال الأحمر لنقل الطالب المصاب إلى أقرب مركز صحي (إذا تطلب الأمر ذلك).","تبليغ الجهات الأمنية المختصة فور وقوع المشكلة، بعد إشعار ولي الأمر، وتوثيق الإجراءات المتخذة.","في حال تصنيف المشكلة ضمن حالات الإيذاء والإهمال الواردة في النظام: يتم التواصل مباشرة مع مركز بلاغات الإيذاء (1919) لإكمال اللازم."]
+   }, COMMON_D5]
+}
+};
+
+// ---- Attendance data: Article 32 (reasons), Article 33 (excused-days table), Article 34 (unexcused-days table)
+const REASONS = [
+  {t:"الإجازة المرضية.", e:"تقرير إجازة من منصة صحتي"},
+  {t:"مراجعة المستشفيات والمراكز الصحية.", e:"إشعار مراجعة من منصة صحتي"},
+  {t:"حدوث الكوارث (مثل: حريق وغيره).", e:"مشهد من الدفاع المدني"},
+  {t:"وفاة أحد الأقارب إلى الدرجة الثالثة.", e:"شهادة الوفاة"},
+  {t:"مرافقة صحية لأحد الأقارب من الدرجة الأولى.", e:"إشعار مرافقة"},
+  {t:"مرافقة صحية لأحد الأقارب إلى الدرجة الثالثة.", e:"إشعار مرافقة (تقدير المدرسة)"},
+  {t:"مراجعة الجهات الرسمية.", e:"إشعار مراجعة"},
+  {t:"مرافقة الأقارب من الدرجة الأولى للجهات الرسمية.", e:"إشعار مراجعة"},
+  {t:"المشاركة في المسابقات المحلية والدولية.", e:"مشهد المشاركة"},
+  {t:"ظروف صحية أخرى (مزمنة/نفسية) — بتقدير المدرسة.", e:"تقرير طبي"},
+  {t:"ما تقرره الأنظمة واللوائح المتعلقة بحماية الطفل.", e:"حسب الحالة"}
+];
+
+const EXCUSED_TABLE = [
+  {days:3, actions:[
+    "تحويل الطالب للموجه الطلابي لتقديم الدعم والخدمات التربوية المناسبة له (خطة التعلم في أيام الغياب)، ودراسة الحالة إذا احتاج الأمر.",
+    "استدعاء ولي الأمر، وعقد اجتماع حضوري معه يتضمن: إبلاغه بالإجراءات المترتبة على غياب ابنه، وتقييم الخدمات التربوية والخطة العلاجية المقدمة وتحديثها بما يلزم."
+  ]},
+  {days:5, actions:[
+    "في حال عدم التزام ولي الأمر بالخطة التربوية (خطة التعلم في أيام الغياب): يُحال الطالب إلى لجنة التوجيه الطلابي.",
+    "تنظيم جلسة توعوية مع ولي الأمر للتأكيد على أهمية اتباع الخطط التربوية والعلاجية."
+  ]},
+  {days:10, actions:[
+    "في حال الاشتباه بتعرض الطالب للإهمال: تخاطب المدرسة الجهات ذات الاختصاص حيال تطبيق ما ورد في نظام حماية الطفل ونظام الحماية من الإيذاء ولائحتيهما التنفيذية، وإشعار إدارة التعليم بذلك.",
+    "تتخذ المدرسة الإجراءات النظامية المطلوبة بالتنسيق والمتابعة مع الجهات ذات الاختصاص حيال ما تم من إجراءات للحالات المحالة إليها."
+  ]}
+];
+
+const UNEXCUSED_TABLE = [
+  {days:3, actions:[
+    "تحويل الطالب للموجه الطلابي لدراسة الحالة وتقديم الخدمات التربوية المناسبة له.",
+    "عند استمرار الغياب: يُستدعى ولي الأمر، ويُعقد اجتماع حضوري معه يتضمن إبلاغه بالإجراءات المترتبة على غياب ابنه، وتقييم الخدمات التربوية والخطة العلاجية المقدمة وتحديثها.",
+    "أخذ التعهد الخطي من الطالب وولي الأمر بالالتزام بالخطة المقدمة.",
+    "استمرار تقديم الخدمات التربوية للطالب ومتابعة حالته."
+  ], note:"استدعاء ولي الأمر لمناقشة أسباب الغياب."},
+  {days:5, actions:[
+    "إحالة الطالب للجنة التوجيه الطلابي، وعقد اجتماعها لمراجعة الخطة التربوية والعلاجية المقدمة للطالب وتحديثها بما يلزم.",
+    "استمرار تقديم الخدمات التربوية للطالب ومتابعة حالته.",
+    "تنبيه ولي الأمر بالإجراءات المترتبة على استمرار غياب ابنه."
+  ], note:"في حال كانت أيام الغياب متصلة (3 أيام أو أكثر): تخاطب المدرسة الجهات ذات الاختصاص حيال تطبيق ما ورد في نظام حماية الطفل ونظام الحماية من الإيذاء ولائحتيهما التنفيذية."},
+  {days:10, actions:[
+    "مخاطبة الجهات ذات الاختصاص من قبل المدرسة حيال تطبيق ما ورد في نظام حماية الطفل ونظام الحماية من الإيذاء ولائحتيهما التنفيذية، مع إشعار إدارة التعليم بذلك.",
+    "متابعة الإجراءات والتنسيق من قبل المدرسة بعد اتخاذ الإجراءات النظامية المطلوبة، مع الجهات ذات الاختصاص، حيال ما تم من إجراءات للحالات المحالة إليها."
+  ]}
+];
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+let bState = {stage:"primary", degree:1, occ:{}, checks:{}};
+let aState = {mode:"excused"};
+
+/* ---------- helpers ---------- */
+function $(id){return document.getElementById(id);}
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+/* ---------- tabs ---------- */
+document.querySelectorAll(".tabbar button").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".tabbar button").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+    $("panel-"+btn.dataset.tab).classList.add("active");
+  });
+});
+
+/* ---------- behavior: degree buttons ---------- */
+function renderDegreeButtons(){
+  const host = $("degreeRow");
+  host.innerHTML = "";
+  for(let d=1; d<=5; d++){
+    const btn = document.createElement("div");
+    btn.className = "degree-btn" + (d===bState.degree ? " active":"");
+    btn.innerHTML = `الدرجة ${["","الأولى","الثانية","الثالثة","الرابعة","الخامسة"][d]}<small>${DEGREE_POINTS[d]}</small>`;
+    btn.onclick = ()=>{ bState.degree = d; bState.occ = {}; bState.checks = {}; renderDegreeButtons(); renderCategories(); };
+    host.appendChild(btn);
+  }
+  $("degreePointsHint").textContent = "قيمة الحسم المقترحة لهذه الدرجة: " + DEGREE_POINTS[bState.degree] + " من درجات السلوك الإيجابي (المادة 5).";
+}
+$("bStage").addEventListener("change", (e)=>{ bState.stage = e.target.value; bState.occ={}; bState.checks={}; renderCategories(); });
+
+function renderCategories(){
+  const host = $("categoriesHost");
+  host.innerHTML = "";
+  const cats = DATA[bState.stage][bState.degree] || [];
+  cats.forEach((cat, idx)=>{
+    const wrap = document.createElement("div");
+    wrap.className = "cat";
+
+    const head = document.createElement("div");
+    head.className = "cat-head";
+    head.innerHTML = `<span>${cat.label}</span><span class="art">${cat.article}</span>`;
+    wrap.appendChild(head);
+
+    const body = document.createElement("div");
+    body.className = "cat-body";
+
+    // violations
+    const vwrap = document.createElement("div");
+    vwrap.className = "violations";
+    cat.violations.forEach((v,i)=>{
+      const id = cat.key+"_v"+i;
+      const lbl = document.createElement("label");
+      lbl.className = "vio";
+      lbl.innerHTML = `<input type="checkbox" id="${id}" data-cat="${cat.key}"><span>${v}</span>`;
+      vwrap.appendChild(lbl);
+    });
+    body.appendChild(vwrap);
+
+    if(cat.steps){
+      // occurrence selector
+      const occWrap = document.createElement("div");
+      occWrap.className = "occurrence";
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "hint";
+      labelSpan.style.marginLeft = "6px";
+      labelSpan.textContent = "مرة الحدوث: ";
+      occWrap.appendChild(labelSpan);
+      cat.steps.forEach((st,i)=>{
+        const b = document.createElement("button");
+        b.type="button";
+        b.className = "occ-btn" + ((bState.occ[cat.key]||0)===i ? " active":"");
+        b.textContent = st.title.replace("الإجراء ","");
+        b.onclick = ()=>{ bState.occ[cat.key]=i; renderCategories(); };
+        occWrap.appendChild(b);
+      });
+      body.appendChild(occWrap);
+
+      const activeIdx = bState.occ[cat.key]||0;
+      const step = cat.steps[activeIdx];
+      const abox = document.createElement("div");
+      abox.className = "action-box";
+      abox.innerHTML = `<h4>${step.title} — الإجراء التربوي العلاجي لتعديل السلوك</h4><ul>${step.items.map(it=>`<li>${it}</li>`).join("")}</ul>`;
+      body.appendChild(abox);
+    } else if(cat.single){
+      const abox = document.createElement("div");
+      abox.className = "action-box";
+      abox.innerHTML = `<h4>الإجراء التربوي العلاجي</h4><ul>${cat.single.map(it=>`<li>${it}</li>`).join("")}</ul>`;
+      body.appendChild(abox);
+    }
+
+    if(cat.notes && cat.notes.length){
+      const nbox = document.createElement("div");
+      nbox.className = "notes-box";
+      nbox.innerHTML = `<b>في جميع الإجراءات:</b><br>` + cat.notes.map(n=>"• "+n).join("<br>");
+      body.appendChild(nbox);
+    }
+
+    wrap.appendChild(body);
+    host.appendChild(wrap);
+  });
+}
+
+function collectSelectedViolations(){
+  const out = [];
+  document.querySelectorAll('#categoriesHost input[type=checkbox]:checked').forEach(cb=>{
+    out.push(cb.nextElementSibling.textContent);
+  });
+  return out;
+}
+
+function ensureCaseNo(){
+  if(!$("bCaseNo").value){
+    const list = getBehaviorRecords();
+    $("bCaseNo").value = "B-" + (list.length+1).toString().padStart(4,"0");
+  }
+}
+ensureCaseNo();
+if(!$("bDate").value) $("bDate").value = todayISO();
+
+/* ---------- behavior storage ---------- */
+function getBehaviorRecords(){
+  try{ return JSON.parse(localStorage.getItem("moe_behavior_records_v1")||"[]"); }catch(e){ return []; }
+}
+function setBehaviorRecords(list){ localStorage.setItem("moe_behavior_records_v1", JSON.stringify(list)); }
+
+function saveBehaviorRecord(){
+  const student = $("bStudent").value.trim();
+  if(!student){ toast("يرجى إدخال اسم الطالب أولًا"); $("bStudent").focus(); return; }
+  const violations = collectSelectedViolations();
+  const record = {
+    id: uid(),
+    caseNo: $("bCaseNo").value,
+    date: $("bDate").value,
+    student, cls: $("bClass").value,
+    stage: bState.stage, degree: bState.degree,
+    violations,
+    notes: $("bNotes").value,
+    staffName: $("bStaffName").value,
+    signStudent: $("bSignStudent").value,
+    signParent: $("bSignParent").value,
+    signStaff: $("bSignStaff").value,
+    signDate: $("bSignDate").value,
+    school: $("metaSchool").value, area: $("metaArea").value, counselor: $("metaCounselor").value
+  };
+  const list = getBehaviorRecords();
+  list.unshift(record);
+  setBehaviorRecords(list);
+  toast("تم حفظ السجل محليًا ✓");
+  renderBehaviorLog();
+}
+
+function resetBehaviorForm(){
+  $("bStudent").value=""; $("bClass").value=""; $("bCaseNo").value="";
+  $("bDate").value = todayISO();
+  $("bNotes").value=""; $("bStaffName").value="";
+  $("bSignStudent").value=""; $("bSignParent").value=""; $("bSignStaff").value=""; $("bSignDate").value="";
+  bState = {stage:"primary", degree:1, occ:{}, checks:{}};
+  $("bStage").value = "primary";
+  renderDegreeButtons(); renderCategories(); ensureCaseNo();
+  toast("نموذج جديد جاهز");
+}
+
+function printBehavior(){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("print-target"));
+  $("panel-behavior").classList.add("print-target");
+  window.print();
+}
+
+function renderBehaviorLog(){
+  const host = $("behaviorLogHost");
+  const q = ($("bSearch").value||"").trim();
+  let list = getBehaviorRecords();
+  if(q) list = list.filter(r => (r.student+r.cls).includes(q));
+  if(!list.length){ host.innerHTML = `<div class="empty">لا توجد سجلات محفوظة بعد.</div>`; return; }
+  let html = `<table class="log"><thead><tr>
+    <th>رقم المخالفة</th><th>الطالب</th><th>الصف</th><th>الدرجة</th><th>التاريخ</th><th>إجراءات</th>
+  </tr></thead><tbody>`;
+  list.forEach(r=>{
+    html += `<tr>
+      <td>${r.caseNo||""}</td><td>${r.student}</td><td>${r.cls||""}</td>
+      <td>${["","الأولى","الثانية","الثالثة","الرابعة","الخامسة"][r.degree]}</td>
+      <td>${r.date||""}</td>
+      <td class="log-actions">
+        <button class="icon-btn" onclick="loadBehaviorRecord('${r.id}')">تحميل</button>
+        <button class="icon-btn" onclick="deleteBehaviorRecord('${r.id}')">حذف</button>
+      </td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  host.innerHTML = html;
+}
+function loadBehaviorRecord(id){
+  const r = getBehaviorRecords().find(x=>x.id===id);
+  if(!r) return;
+  $("bStudent").value=r.student; $("bClass").value=r.cls; $("bCaseNo").value=r.caseNo;
+  $("bDate").value=r.date; $("bNotes").value=r.notes; $("bStaffName").value=r.staffName;
+  $("bSignStudent").value=r.signStudent; $("bSignParent").value=r.signParent;
+  $("bSignStaff").value=r.signStaff; $("bSignDate").value=r.signDate;
+  bState.stage = r.stage; bState.degree = r.degree; bState.occ={};
+  $("bStage").value = r.stage;
+  renderDegreeButtons(); renderCategories();
+  setTimeout(()=>{
+    document.querySelectorAll('#categoriesHost .vio span').forEach(span=>{
+      if(r.violations.includes(span.textContent)) span.previousElementSibling.checked = true;
+    });
+  }, 30);
+  toast("تم تحميل السجل للتعديل");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function deleteBehaviorRecord(id){
+  if(!confirm("هل تريد حذف هذا السجل نهائيًا؟")) return;
+  setBehaviorRecords(getBehaviorRecords().filter(x=>x.id!==id));
+  renderBehaviorLog();
+  toast("تم الحذف");
+}
+
+/* =====================================================================
+   ATTENDANCE
+   ===================================================================== */
+function renderReasonGrid(){
+  const host = $("reasonGrid");
+  host.innerHTML = "";
+  REASONS.forEach(r=>{
+    const d = document.createElement("div");
+    d.className = "reason-item";
+    d.innerHTML = `<b>${r.t}</b><span>${r.e}</span>`;
+    d.onclick = ()=>{ $("aReasonChosen").value = r.t + " — الإثبات: " + r.e; };
+    host.appendChild(d);
+  });
+}
+
+function setAbsenceMode(mode){
+  aState.mode = mode;
+  $("btnExcused").classList.toggle("active", mode==="excused");
+  $("btnUnexcused").classList.toggle("active", mode==="unexcused");
+  $("reasonCard").style.display = mode==="excused" ? "" : "none";
+  $("attTitleSuffix").textContent = mode==="excused" ? "(المادة 33 — غياب بعذر مقبول متكرر)" : "(المادة 34 — غياب بدون عذر)";
+  renderAttendanceTable();
+}
+
+function renderAttendanceTable(){
+  const host = $("attTableHost");
+  const table = aState.mode === "excused" ? EXCUSED_TABLE : UNEXCUSED_TABLE;
+  const cls = aState.mode === "excused" ? "att" : "att unexcused";
+  let html = `<table class="${cls}"><thead><tr><th style="width:70px;">أيام الغياب</th><th>الإجراءات المتخذة</th></tr></thead><tbody>`;
+  table.forEach((row,idx)=>{
+    html += `<tr data-days="${row.days}">
+      <td class="days">${row.days}</td>
+      <td>
+        <ul>${row.actions.map(a=>`<li>${a}</li>`).join("")}</ul>
+        ${row.note ? `<div class="hint" style="color:var(--amber)"><b>ملاحظة:</b> ${row.note}</div>` : ""}
+        <div class="row-check no-print">
+          <label><input type="checkbox" id="att_done_${aState.mode}_${idx}"> تم التنفيذ</label>
+          <label>بتاريخ: <input type="date" id="att_date_${aState.mode}_${idx}"></label>
+        </div>
+      </td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  if(aState.mode === "excused"){
+    html += `<div class="hint" style="margin-top:8px;">ملاحظة عامة: استمرارية تقديم الخدمات التعليمية للطالب وعدم التسبب في انقطاعها (المادة 33).</div>`;
+  } else {
+    html += `<div class="hint" style="margin-top:8px;">ملاحظة عامة: التواصل مع ولي الأمر في نفس يوم الغياب عبر رسالة نصية أو مكالمة هاتفية للاستفسار عن سبب الغياب، واستمرارية تقديم الخدمات التعليمية (المادة 34).</div>`;
+  }
+  host.innerHTML = html;
+  highlightAttendanceThreshold();
+}
+
+function highlightAttendanceThreshold(){
+  const total = parseInt($("aDaysTotal").value || "0", 10);
+  document.querySelectorAll("#attTableHost tr[data-days]").forEach(tr=>{
+    const d = parseInt(tr.dataset.days,10);
+    tr.style.background = (total >= d) ? "var(--amber-bg)" : "";
+  });
+}
+
+/* ---------- attendance storage ---------- */
+function getAttendanceRecords(){
+  try{ return JSON.parse(localStorage.getItem("moe_absence_records_v1")||"[]"); }catch(e){ return []; }
+}
+function setAttendanceRecords(list){ localStorage.setItem("moe_absence_records_v1", JSON.stringify(list)); }
+
+function saveAttendanceRecord(){
+  const student = $("aStudent").value.trim();
+  if(!student){ toast("يرجى إدخال اسم الطالب أولًا"); $("aStudent").focus(); return; }
+  const record = {
+    id: uid(), mode: aState.mode,
+    student, cls: $("aClass").value, stage: $("aStage").value,
+    daysTotal: $("aDaysTotal").value, reason: $("aReasonChosen").value,
+    notes: $("aNotes").value, staffName: $("aStaffName").value,
+    signStudent: $("aSignStudent").value, signParent: $("aSignParent").value,
+    signPrincipal: $("aSignPrincipal").value, signDate: $("aSignDate").value,
+    date: todayISO(),
+    school: $("metaSchool").value, area: $("metaArea").value, counselor: $("metaCounselor").value
+  };
+  const list = getAttendanceRecords();
+  list.unshift(record);
+  setAttendanceRecords(list);
+  toast("تم حفظ السجل محليًا ✓");
+  renderAttendanceLog();
+}
+function resetAttendanceForm(){
+  $("aStudent").value=""; $("aClass").value=""; $("aDaysTotal").value="";
+  $("aReasonChosen").value=""; $("aNotes").value=""; $("aStaffName").value="";
+  $("aSignStudent").value=""; $("aSignParent").value=""; $("aSignPrincipal").value=""; $("aSignDate").value="";
+  renderAttendanceTable();
+  toast("نموذج جديد جاهز");
+}
+function printAttendance(){
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("print-target"));
+  $("panel-attendance").classList.add("print-target");
+  window.print();
+}
+function renderAttendanceLog(){
+  const host = $("attendanceLogHost");
+  const q = ($("aSearch").value||"").trim();
+  let list = getAttendanceRecords();
+  if(q) list = list.filter(r => (r.student+r.cls).includes(q));
+  if(!list.length){ host.innerHTML = `<div class="empty">لا توجد سجلات محفوظة بعد.</div>`; return; }
+  let html = `<table class="log"><thead><tr>
+    <th>الطالب</th><th>الصف</th><th>النوع</th><th>أيام الغياب</th><th>التاريخ</th><th>إجراءات</th>
+  </tr></thead><tbody>`;
+  list.forEach(r=>{
+    html += `<tr>
+      <td>${r.student}</td><td>${r.cls||""}</td>
+      <td>${r.mode==="excused"?"بعذر":"بدون عذر"}</td>
+      <td>${r.daysTotal||"-"}</td><td>${r.date||""}</td>
+      <td class="log-actions">
+        <button class="icon-btn" onclick="loadAttendanceRecord('${r.id}')">تحميل</button>
+        <button class="icon-btn" onclick="deleteAttendanceRecord('${r.id}')">حذف</button>
+      </td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  host.innerHTML = html;
+}
+function loadAttendanceRecord(id){
+  const r = getAttendanceRecords().find(x=>x.id===id);
+  if(!r) return;
+  $("aStudent").value=r.student; $("aClass").value=r.cls; $("aStage").value=r.stage;
+  $("aDaysTotal").value=r.daysTotal; $("aReasonChosen").value=r.reason;
+  $("aNotes").value=r.notes; $("aStaffName").value=r.staffName;
+  $("aSignStudent").value=r.signStudent; $("aSignParent").value=r.signParent;
+  $("aSignPrincipal").value=r.signPrincipal; $("aSignDate").value=r.signDate;
+  setAbsenceMode(r.mode);
+  toast("تم تحميل السجل للتعديل");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function deleteAttendanceRecord(id){
+  if(!confirm("هل تريد حذف هذا السجل نهائيًا؟")) return;
+  setAttendanceRecords(getAttendanceRecords().filter(x=>x.id!==id));
+  renderAttendanceLog();
+  toast("تم الحذف");
+}
+
+/* ---------- restore meta ---------- */
+["metaSchool","metaArea","metaCounselor"].forEach(id=>{
+  const saved = localStorage.getItem("moe_meta_"+id);
+  if(saved) $(id).value = saved;
+  $(id).addEventListener("input", ()=> localStorage.setItem("moe_meta_"+id, $(id).value));
+});
+
+/* ---------- init ---------- */
+renderDegreeButtons();
+renderCategories();
+renderBehaviorLog();
+renderReasonGrid();
+setAbsenceMode("excused");
+renderAttendanceLog();
+if(!$("aSignDate").value) $("aSignDate").value = "";
+</script>
+</body>
+</html>
