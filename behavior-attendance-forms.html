@@ -72,6 +72,83 @@
   .top-meta input::placeholder{color:#7c8f87;font-weight:500;}
   .top-meta input:focus{outline:2px solid #fff;outline-offset:1px;}
 
+  .quick-search-btn{
+    position:absolute;top:18px;left:18px;z-index:6;
+    width:38px;height:38px;border-radius:50%;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);
+    color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:.15s;
+  }
+  .quick-search-btn:hover{background:rgba(255,255,255,.3);transform:scale(1.05);}
+  .quick-search-btn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;}
+
+  .quick-search-box{
+    position:absolute;top:18px;left:64px;z-index:6;
+    display:none;gap:6px;align-items:center;
+    background:#fff;border-radius:10px;padding:6px;
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+  }
+  .quick-search-box.open{display:flex;}
+  .quick-search-box input{
+    border:1px solid var(--line);border-radius:6px;padding:8px 10px;
+    font-family:inherit;font-size:13.5px;min-width:210px;color:var(--ink);
+  }
+  .quick-search-box input:focus{outline:2px solid var(--green-500);}
+  .quick-search-box button{
+    background:var(--green-700);color:#fff;border:0;border-radius:6px;
+    padding:8px 16px;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer;flex-shrink:0;
+  }
+  .quick-search-box button:hover{background:var(--green-800);}
+  @media(max-width:640px){
+    .quick-search-box{left:10px;right:10px;top:64px;}
+    .quick-search-box input{min-width:0;flex:1;}
+  }
+
+  .help-btn{
+    position:absolute;top:18px;right:18px;z-index:6;
+    width:38px;height:38px;border-radius:50%;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);
+    color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:.15s;
+  }
+  .help-btn:hover{background:rgba(255,255,255,.3);transform:scale(1.05);}
+  .help-btn svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.6;}
+
+  .help-overlay{
+    display:none;position:fixed;inset:0;z-index:50;
+    background:rgba(11,61,46,.55);
+    align-items:flex-start;justify-content:center;
+    padding:5vh 16px;overflow-y:auto;
+  }
+  .help-overlay.open{display:flex;}
+  .help-modal{
+    background:#fff;border-radius:16px;max-width:680px;width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;
+    animation:helpIn .18s ease;
+  }
+  @keyframes helpIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .help-modal-head{
+    background:linear-gradient(135deg,var(--green-800),var(--green-600));color:#fff;
+    padding:16px 20px;display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;
+  }
+  .help-modal-head h2{margin:0;font-size:18px;}
+  .help-close{
+    background:rgba(255,255,255,.2);border:0;color:#fff;width:30px;height:30px;border-radius:50%;
+    cursor:pointer;font-size:15px;line-height:1;flex-shrink:0;
+  }
+  .help-close:hover{background:rgba(255,255,255,.35);}
+  .help-modal-body{padding:20px 22px 24px;max-height:75vh;overflow-y:auto;}
+  .help-modal-body h3{color:var(--green-900);font-size:15px;margin:18px 0 6px;}
+  .help-modal-body h3:first-child{margin-top:0;}
+  .help-modal-body p{margin:0 0 8px;font-size:13.5px;line-height:1.8;color:var(--ink);}
+  .help-modal-body ul{margin:0 0 8px;padding-inline-start:20px;font-size:13.5px;line-height:1.8;}
+  .help-modal-body li{margin-bottom:4px;}
+  @media(max-width:480px){
+    .help-btn{top:14px;right:14px;width:34px;height:34px;}
+    .help-modal-body{padding:16px;}
+  }
+
   /* ===== Shell / tabs ===== */
   .shell{max-width:1100px;margin:-38px auto 0;padding:0 18px;position:relative;z-index:2;}
   .tabbar{
@@ -185,6 +262,12 @@
   .rep-report-block h3{font-size:15px;color:var(--green-900);margin:18px 0 8px;border-bottom:2px solid var(--green-100);padding-bottom:6px;}
   .rep-report-block h3:first-child{margin-top:0;}
   .print-meta{font-size:12px;color:var(--muted);margin-bottom:10px;}
+  .roster-preview{max-height:220px;overflow:auto;margin-top:10px;border:1px solid var(--line);border-radius:8px;}
+  .roster-preview table{width:100%;}
+  input[type=file]{
+    border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-family:inherit;
+    font-size:13px;background:#fbfdfc;width:100%;
+  }
   @media(max-width:760px){.signrow{grid-template-columns:1fr 1fr;}}
   @media(max-width:480px){.signrow{grid-template-columns:1fr;}}
 
@@ -333,6 +416,16 @@
 </div>
 
 <header class="top">
+  <button class="quick-search-btn" id="quickSearchBtn" type="button" title="بحث عن طالب" aria-label="بحث عن طالب" onclick="toggleQuickSearch()">
+    <svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path stroke-linecap="round" d="M20 20l-4.3-4.3"/></svg>
+  </button>
+  <div class="quick-search-box" id="quickSearchBox">
+    <input type="text" id="quickSearchInput" list="studentNamesList" placeholder="اكتب اسم الطالب...">
+    <button type="button" onclick="goToStudentSearch()">بحث</button>
+  </div>
+  <button class="help-btn" id="helpBtn" type="button" title="كيف يعمل النظام؟" aria-label="كيف يعمل النظام؟" onclick="toggleHelpModal(true)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2"/><path stroke-linecap="round" d="M9.6 9.3a2.4 2.4 0 1 1 3.4 2.2c-.8.4-1.3 1-1.3 2v.4"/><circle cx="12" cy="16.7" r="0.55" fill="#fff" stroke="none"/></svg>
+  </button>
   <div class="top-inner">
     <div class="top-eyebrow">وزارة التعليم — الإدارة العامة للتوجيه والإرشاد</div>
     <h1 class="top-title">نماذج السلوك والمواظبة</h1>
@@ -346,11 +439,52 @@
   </div>
 </header>
 
+<div class="help-overlay no-print" id="helpOverlay" onclick="if(event.target===this) toggleHelpModal(false)">
+  <div class="help-modal">
+    <div class="help-modal-head">
+      <h2>كيف يعمل النظام؟</h2>
+      <button class="help-close" type="button" onclick="toggleHelpModal(false)" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="help-modal-body">
+      <p>هذه أداة رقمية لتوثيق وطباعة إجراءات السلوك والمواظبة داخل المدرسة، مبنية على «قواعد السلوك والمواظبة لطلبة التعليم العام» — الإصدار الخامس 1447هـ. <b>كل البيانات تُحفظ داخل متصفح هذا الجهاز فقط (localStorage)</b> ولا تُرسل أو تُخزَّن على أي خادم خارجي — لذلك افتح الأداة دائمًا من نفس الجهاز والمتصفح لرؤية سجلاتك السابقة.</p>
+
+      <h3>🧾 قبل البدء: بيانات المدرسة</h3>
+      <p>في أعلى الصفحة، عبِّئ اسم المدرسة والمنطقة واسم وكيل شؤون الطلاب والموجّه الطلابي مرة واحدة — تُحفظ تلقائيًا وتظهر في ترويسة كل نموذج تطبعه.</p>
+
+      <h3>1️⃣ المخالفات السلوكية</h3>
+      <p>اختر المرحلة الدراسية ثم درجة المخالفة (من الأولى إلى الخامسة)، فتظهر قائمة المخالفات الرسمية لهذه الدرجة مع الإجراء التربوي الصحيح تلقائيًا (وتتحدّث حسب "مرة الحدوث": الأولى، الثانية...). حدّد المخالفة المرتكبة، ووثّق التوقيعات، ثم اضغط <b>حفظ السجل محليًا</b>. إذا كان الإجراء يتضمن تحويل الحالة إلى الموجّه الطلابي، يظهر مربع مستقل خاص به لتوثيق ما قام به.</p>
+
+      <h3>2️⃣ الغياب والاستئذان</h3>
+      <p>بدّل بين "بعذر مقبول" و"بدون عذر"؛ يعرض النظام تلقائيًا إجراءات كل مرحلة من أيام الغياب (3 / 5 / 10 أيام) وفق اللائحة، مع قائمة بأسباب الغياب المقبولة والإثبات المطلوب لكل سبب.</p>
+
+      <h3>3️⃣ فرص التعويض (السلوك المتميز)</h3>
+      <p>لتعويض الدرجات المحسومة من مخالفات الطالب، اختر ما نفّذه من ممارسات السلوك المتميز المعتمدة (لكل ممارسة درجة محددة)، ويحسب النظام تلقائيًا تقدير رصيد السلوك الإيجابي (80) والسلوك المتميز (20) بعد التعويض.</p>
+
+      <h3>4️⃣ التقارير والإحصائيات</h3>
+      <ul>
+        <li><b>استيراد قائمة الطلاب من نور:</b> ارفع كشف أسماء الطلاب (Excel/CSV) فتُضاف الأسماء والصفوف تلقائيًا لكل مربعات البحث في الأداة (بدون رقم الهوية).</li>
+        <li><b>تقرير طالب:</b> اكتب اسم الطالب لعرض كل مخالفاته وغيابه وتعويضاته في تقرير واحد قابل للطباعة.</li>
+        <li><b>تقرير شامل:</b> فلترة كل السجلات حسب التاريخ والمرحلة.</li>
+        <li><b>إحصائيات:</b> نظرة عامة على أكثر المخالفات تكرارًا وتوزيعها حسب الدرجة والمرحلة.</li>
+      </ul>
+
+      <h3>🔍 البحث السريع</h3>
+      <p>أيقونة العدسة أعلى الصفحة تنقلك مباشرة لتقرير أي طالب بمجرد كتابة اسمه، من أي تبويب.</p>
+
+      <h3>🖨️ الطباعة</h3>
+      <p>كل قسم له زر طباعة مستقل يطبع النموذج أو التقرير الظاهر فقط، مع ترويسة رسمية تلقائية (اسم المدرسة والمسؤولين وتاريخ الطباعة) وهوامش مضبوطة لمقاس A4.</p>
+
+      <p class="hint" style="margin-top:16px;">💡 يمكنك دائمًا الوصول لهذا الشرح من أيقونة "؟" في أعلى الصفحة.</p>
+    </div>
+  </div>
+</div>
+
 <div class="shell">
   <div class="tabbar no-print">
     <button class="active" data-tab="behavior">المخالفات السلوكية</button>
     <button data-tab="attendance">الغياب والاستئذان</button>
     <button data-tab="reports">التقارير والإحصائيات</button>
+    <button data-tab="compensation">فرص التعويض</button>
   </div>
 
   <!-- ============ BEHAVIOR PANEL ============ -->
@@ -359,7 +493,7 @@
     <div class="card">
       <h2><span class="num">1</span> بيانات الطالب والمخالفة</h2>
       <div class="grid">
-        <div class="field"><label>اسم الطالب</label><input type="text" id="bStudent" placeholder="الاسم الرباعي"></div>
+        <div class="field"><label>اسم الطالب</label><input type="text" id="bStudent" list="studentNamesList" placeholder="الاسم الرباعي" onchange="autofillClassFromRoster('bStudent','bClass')"></div>
         <div class="field"><label>الصف</label><input type="text" id="bClass" placeholder="مثال: ثالث متوسط / 2"></div>
         <div class="field"><label>رقم المخالفة</label><input type="text" id="bCaseNo" placeholder="تلقائي"></div>
         <div class="field"><label>تاريخ المخالفة</label><input type="date" id="bDate"></div>
@@ -426,7 +560,7 @@
     <div class="card">
       <h2><span class="num">1</span> بيانات الطالب</h2>
       <div class="grid">
-        <div class="field"><label>اسم الطالب</label><input type="text" id="aStudent" placeholder="الاسم الرباعي"></div>
+        <div class="field"><label>اسم الطالب</label><input type="text" id="aStudent" list="studentNamesList" placeholder="الاسم الرباعي" onchange="autofillClassFromRoster('aStudent','aClass')"></div>
         <div class="field"><label>الصف</label><input type="text" id="aClass" placeholder="مثال: أول ثانوي / 1"></div>
         <div class="field">
           <label>المرحلة الدراسية</label>
@@ -484,6 +618,25 @@
 
   <!-- ============ REPORTS PANEL ============ -->
   <div class="panel" id="panel-reports">
+
+    <div class="card no-print">
+      <h2><span class="num">📋</span> قائمة الطلاب (استيراد من نور)</h2>
+      <div class="hint" style="margin-bottom:10px;">
+        ارفع ملف "كشف بأسماء الطلاب بالفصل" المُصدَّر من نظام نور (Excel أو CSV) لتعبئة أسماء الطلاب وصفوفهم تلقائيًا في كل مربعات البحث بالأداة.
+        لا يتم استيراد رقم السجل المدني أو أي رقم هوية — يُستخرج الاسم والصف فقط، وتبقى البيانات محفوظة على هذا الجهاز فقط.
+      </div>
+      <div class="grid g2">
+        <div class="field">
+          <label>ملف كشف الطلاب (xlsx / xls / csv)</label>
+          <input type="file" id="rosterFile" accept=".xlsx,.xls,.csv" onchange="handleRosterFile(event)">
+        </div>
+        <div class="field" style="display:flex;align-items:flex-end;gap:8px;">
+          <button class="btn btn-ghost" type="button" onclick="clearRoster()">🗑️ مسح قائمة الطلاب المستوردة</button>
+        </div>
+      </div>
+      <div id="rosterStatus" class="hint" style="margin-top:8px;"></div>
+      <div id="rosterPreview"></div>
+    </div>
 
     <div class="card no-print">
       <div class="absence-toggle">
@@ -544,6 +697,57 @@
     </div>
 
   </div>
+
+  <!-- ============ COMPENSATION PANEL ============ -->
+  <div class="panel" id="panel-compensation">
+
+    <div class="card">
+      <h2><span class="num">1</span> بيانات الطالب</h2>
+      <div class="grid">
+        <div class="field"><label>اسم الطالب</label><input type="text" id="cStudent" list="studentNamesList" placeholder="الاسم الرباعي" oninput="renderCompensationBalance()" onchange="autofillClassFromRoster('cStudent','cClass')"></div>
+        <div class="field"><label>الصف</label><input type="text" id="cClass" placeholder="مثال: أول متوسط / 3"></div>
+        <div class="field"><label>تاريخ التسجيل</label><input type="date" id="cDate"></div>
+      </div>
+      <div class="hint" id="compBalanceHint" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">2</span> ممارسات السلوك المتميز (فرص التعويض) <span style="font-size:12px;color:var(--muted);font-weight:500">(المادة 5)</span></h2>
+      <div class="hint" style="margin-bottom:10px;">تُستخدم هذه الممارسات لتعويض ما يُحسم من درجات السلوك الإيجابي (80 درجة)، وتُحسب أيضًا ضمن درجات السلوك المتميز (20 درجة)، بما لا يتجاوز مجموع درجة السلوك 100 درجة.</div>
+      <div id="compPracticesHost"></div>
+      <div class="field" id="compCustomWrap" style="display:none;margin-top:6px;">
+        <label>وصف السلوك المتميز الآخر (بتوصية لجنة التوجيه الطلابي)</label>
+        <input type="text" id="compCustomDesc" placeholder="وصف الممارسة...">
+      </div>
+      <div class="hint" style="margin-top:10px;font-weight:800;color:var(--green-800);" id="compTotalHint"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span> توثيق واعتماد</h2>
+      <div class="grid g2">
+        <div class="field"><label>إثبات المشاركة (الدليل/الشاهد)</label><textarea id="cEvidence" placeholder="وصف الدليل المرفق أو جهة الاعتماد..."></textarea></div>
+        <div class="field"><label>اسم وكيل شؤون الطلاب المستلم للإثبات</label><input type="text" id="cStaffName" placeholder="مثال: أ. سعيد المالكي - وكيل شؤون الطلاب"></div>
+      </div>
+      <div class="signrow">
+        <div class="field"><label>توقيع الطالب</label><input type="text" id="cSignStudent"></div>
+        <div class="field"><label>توقيع وكيل شؤون الطلاب</label><input type="text" id="cSignStaff"></div>
+        <div class="field"><label>تاريخ الاعتماد</label><input type="date" id="cSignDate"></div>
+      </div>
+      <div class="btnrow no-print">
+        <button class="btn btn-primary" onclick="saveCompensationRecord()">💾 حفظ السجل محليًا</button>
+        <button class="btn btn-ghost" onclick="printCompensation()">🖨️ طباعة النموذج</button>
+        <button class="btn btn-ghost" onclick="resetCompensationForm()">➕ نموذج جديد</button>
+      </div>
+    </div>
+
+    <div class="card no-print">
+      <h2><span class="num">4</span> السجلات المحفوظة (فرص التعويض)</h2>
+      <div class="searchbar">
+        <input type="text" id="cSearch" placeholder="ابحث باسم الطالب أو الصف..." oninput="renderCompensationLog()">
+      </div>
+      <div id="compensationLogHost"></div>
+    </div>
+  </div>
 </div>
 
 <footer class="foot">
@@ -552,6 +756,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* =====================================================================
    DATA — مستخرج من: قواعد السلوك والمواظبة لطلبة التعليم العام (الإصدار الخامس 1447هـ)
@@ -832,6 +1037,28 @@ const UNEXCUSED_TABLE = [
   ]}
 ];
 
+// ---- Compensation opportunities: Article 5 (distinguished-behavior practices & points)
+const COMPENSATION_PRACTICES = [
+  {label:"انضباط الطالب وعدم غيابه بدون عذر خلال الفصل الدراسي.", points:6, per:"مرة واحدة في الفصل الدراسي"},
+  {label:"المشاركة في الخدمة المجتمعية خارج المدرسة.", points:6, per:"كل مشاركة"},
+  {label:"تقديم فعالية حوارية.", points:6, per:"كل مشاركة"},
+  {label:"المشاركة في حملة توعوية.", points:6, per:"كل مشاركة"},
+  {label:"عرض تجارب شخصية ناجحة.", points:6, per:"كل مشاركة"},
+  {label:"الالتحاق ببرنامج أو دورة.", points:6, per:"كل مشاركة"},
+  {label:"مهارات الاتصال (العمل الجماعي، التعلم بالأقران...).", points:4, per:"كل مشاركة"},
+  {label:"مهارات القيادة والمسؤولية (التخطيط، التحفيز...).", points:4, per:"كل مشاركة"},
+  {label:"المهارات الرقمية (إعداد العروض، تصميم المحتوى الإلكتروني).", points:4, per:"كل مشاركة"},
+  {label:"مهارة إدارة الوقت.", points:4, per:"كل مشاركة"},
+  {label:"كتابة رسالة شكر (مثلًا: رسالة للوطن، للقيادة الرشيدة، للأسرة، للمعلم...).", points:2, per:"كل مشاركة"},
+  {label:"المشاركة في الإذاعة المدرسية.", points:2, per:"كل مشاركة"},
+  {label:"تقديم مقترح لصالح المجتمع المدرسي.", points:2, per:"كل مشاركة"},
+  {label:"التعاون مع الزملاء والمعلمين وإدارة المدرسة.", points:2, per:"كل مشاركة"}
+];
+const COMPENSATION_CUSTOM_MAX = 6; // سلوك متميز آخر بتوصية لجنة التوجيه الطلابي، بحد أقصى 6 درجات
+const POSITIVE_BEHAVIOR_BASE = 80;  // السلوك الإيجابي
+const DISTINGUISHED_BEHAVIOR_CAP = 20; // السلوك المتميز
+const TOTAL_BEHAVIOR_CAP = 100;
+
 /* =====================================================================
    STATE
    ===================================================================== */
@@ -849,19 +1076,60 @@ function todayISO(){ return new Date().toISOString().slice(0,10); }
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 
 /* ---------- tabs ---------- */
+function activateTab(tabName){
+  document.querySelectorAll(".tabbar button").forEach(b=>b.classList.toggle("active", b.dataset.tab===tabName));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  $("panel-"+tabName).classList.add("active");
+  if(tabName === "reports"){
+    refreshStudentNamesList();
+    if(reportMode === "student") renderStudentReport();
+    else if(reportMode === "summary") renderSummaryReport();
+    else renderStats();
+  }
+  if(tabName === "compensation"){
+    refreshStudentNamesList();
+    renderCompensationBalance();
+  }
+}
 document.querySelectorAll(".tabbar button").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    document.querySelectorAll(".tabbar button").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
-    $("panel-"+btn.dataset.tab).classList.add("active");
-    if(btn.dataset.tab === "reports"){
-      refreshStudentNamesList();
-      if(reportMode === "student") renderStudentReport();
-      else if(reportMode === "summary") renderSummaryReport();
-      else renderStats();
-    }
-  });
+  btn.addEventListener("click", ()=> activateTab(btn.dataset.tab));
+});
+
+/* ---------- quick student search (header icon) ---------- */
+function toggleQuickSearch(){
+  const box = $("quickSearchBox");
+  box.classList.toggle("open");
+  if(box.classList.contains("open")) $("quickSearchInput").focus();
+}
+function goToStudentSearch(){
+  const name = ($("quickSearchInput").value||"").trim();
+  if(!name){ $("quickSearchInput").focus(); return; }
+  refreshStudentNamesList();
+  activateTab("reports");
+  setReportMode("student");
+  $("repStudentName").value = name;
+  renderStudentReport();
+  $("quickSearchBox").classList.remove("open");
+  $("quickSearchInput").value = "";
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+$("quickSearchInput").addEventListener("keydown", (e)=>{
+  if(e.key === "Enter") goToStudentSearch();
+  if(e.key === "Escape") toggleQuickSearch();
+});
+document.addEventListener("click", (e)=>{
+  const box = $("quickSearchBox"), btn = $("quickSearchBtn");
+  if(box.classList.contains("open") && !box.contains(e.target) && e.target!==btn && !btn.contains(e.target)){
+    box.classList.remove("open");
+  }
+});
+
+/* ---------- help modal ---------- */
+function toggleHelpModal(open){
+  $("helpOverlay").classList.toggle("open", open);
+}
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape" && $("helpOverlay").classList.contains("open")) toggleHelpModal(false);
 });
 
 /* ---------- behavior: degree buttons ---------- */
@@ -1293,6 +1561,169 @@ function deleteAttendanceRecord(id){
 }
 
 /* =====================================================================
+   COMPENSATION OPPORTUNITIES (فرص التعويض - المادة 5)
+   ===================================================================== */
+function getCompensationRecords(){
+  try{ return JSON.parse(localStorage.getItem("moe_compensation_records_v1")||"[]"); }catch(e){ return []; }
+}
+function setCompensationRecords(list){ localStorage.setItem("moe_compensation_records_v1", JSON.stringify(list)); }
+
+function renderCompensationPractices(){
+  const host = $("compPracticesHost");
+  host.innerHTML = "";
+  const vwrap = document.createElement("div");
+  vwrap.className = "violations";
+  COMPENSATION_PRACTICES.forEach((p,i)=>{
+    const lbl = document.createElement("label");
+    lbl.className = "vio";
+    lbl.innerHTML = `<input type="checkbox" class="comp-check" data-points="${p.points}" id="comp_${i}">
+      <span>${p.label} <b style="color:var(--green-700)">(+${p.points} — ${p.per})</b></span>`;
+    lbl.querySelector("input").addEventListener("change", renderCompensationBalance);
+    vwrap.appendChild(lbl);
+  });
+  const customLbl = document.createElement("label");
+  customLbl.className = "vio";
+  customLbl.innerHTML = `<input type="checkbox" class="comp-check" id="comp_custom" data-points="${COMPENSATION_CUSTOM_MAX}">
+    <span>سلوك متميز آخر لم يرد أعلاه (بتوصية لجنة التوجيه الطلابي) <b style="color:var(--green-700)">(حتى +${COMPENSATION_CUSTOM_MAX})</b></span>`;
+  customLbl.querySelector("input").addEventListener("change", ()=>{
+    $("compCustomWrap").style.display = document.getElementById("comp_custom").checked ? "" : "none";
+    renderCompensationBalance();
+  });
+  vwrap.appendChild(customLbl);
+  host.appendChild(vwrap);
+  renderCompensationBalance();
+}
+
+function collectSelectedCompensation(){
+  const items = [];
+  document.querySelectorAll('#compPracticesHost .comp-check').forEach(cb=>{
+    if(cb.checked && cb.id !== "comp_custom"){
+      items.push({label: cb.nextElementSibling.firstChild.textContent.trim(), points: parseInt(cb.dataset.points,10)});
+    }
+  });
+  const customCb = document.getElementById("comp_custom");
+  if(customCb && customCb.checked){
+    const desc = $("compCustomDesc").value.trim() || "سلوك متميز آخر (بتوصية لجنة التوجيه الطلابي)";
+    items.push({label: desc, points: COMPENSATION_CUSTOM_MAX});
+  }
+  return items;
+}
+
+function renderCompensationBalance(){
+  const items = collectSelectedCompensation();
+  const totalNew = items.reduce((s,it)=>s+it.points,0);
+  $("compTotalHint").textContent = `إجمالي درجات هذا السجل: ${totalNew} درجة.`;
+
+  const name = ($("cStudent").value||"").trim();
+  const box = $("compBalanceHint");
+  if(!name){ box.textContent = ""; return; }
+
+  const bRecs = getBehaviorRecords().filter(r=>(r.student||"").trim()===name);
+  const cRecs = getCompensationRecords().filter(r=>(r.student||"").trim()===name);
+  const deducted = bRecs.reduce((s,r)=>s+(DEGREE_POINTS_NUM[r.degree]||0),0);
+  const earnedBefore = cRecs.reduce((s,r)=>s+(r.totalPoints||0),0);
+  const earnedAfter = earnedBefore + totalNew;
+  const positiveNow = Math.max(0, Math.min(POSITIVE_BEHAVIOR_BASE, POSITIVE_BEHAVIOR_BASE - deducted + earnedAfter));
+  const distinguishedNow = Math.max(0, Math.min(DISTINGUISHED_BEHAVIOR_CAP, earnedAfter - deducted));
+  box.innerHTML = `الدرجات المحسومة من مخالفات هذا الطالب: <b>${deducted}</b> — درجات تعويض سابقة: <b>${earnedBefore}</b> —
+    بعد حفظ هذا السجل: تقدير السلوك الإيجابي ≈ <b>${positiveNow}/80</b>، والسلوك المتميز ≈ <b>${distinguishedNow}/20</b> (بحد أقصى ${TOTAL_BEHAVIOR_CAP} درجة إجمالًا).`;
+}
+
+function saveCompensationRecord(){
+  const student = $("cStudent").value.trim();
+  if(!student){ toast("يرجى إدخال اسم الطالب أولًا"); $("cStudent").focus(); return; }
+  const items = collectSelectedCompensation();
+  if(!items.length){ toast("اختر ممارسة واحدة على الأقل"); return; }
+  const record = {
+    id: uid(),
+    date: $("cDate").value || todayISO(),
+    student, cls: $("cClass").value,
+    items, totalPoints: items.reduce((s,it)=>s+it.points,0),
+    evidence: $("cEvidence").value,
+    staffName: $("cStaffName").value,
+    signStudent: $("cSignStudent").value,
+    signStaff: $("cSignStaff").value,
+    signDate: $("cSignDate").value,
+    school: $("metaSchool").value, area: $("metaArea").value, viceDean: $("metaViceDean").value
+  };
+  const list = getCompensationRecords();
+  list.unshift(record);
+  setCompensationRecords(list);
+  toast("تم حفظ سجل التعويض محليًا ✓");
+  renderCompensationLog();
+  refreshStudentNamesList();
+}
+
+function resetCompensationForm(){
+  $("cStudent").value=""; $("cClass").value=""; $("cDate").value = todayISO();
+  document.querySelectorAll('#compPracticesHost .comp-check').forEach(cb=>cb.checked=false);
+  $("compCustomWrap").style.display = "none";
+  $("compCustomDesc").value = "";
+  $("cEvidence").value=""; $("cStaffName").value="";
+  $("cSignStudent").value=""; $("cSignStaff").value=""; $("cSignDate").value="";
+  renderCompensationBalance();
+  toast("نموذج جديد جاهز");
+}
+
+function printCompensation(){
+  preparePrintHeader("نموذج فرص تعويض السلوك المتميز");
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("print-target"));
+  $("panel-compensation").classList.add("print-target");
+  window.print();
+}
+
+function renderCompensationLog(){
+  const host = $("compensationLogHost");
+  const q = ($("cSearch").value||"").trim();
+  let list = getCompensationRecords();
+  if(q) list = list.filter(r => (r.student+r.cls).includes(q));
+  if(!list.length){ host.innerHTML = `<div class="empty">لا توجد سجلات تعويض محفوظة بعد.</div>`; return; }
+  let html = `<table class="log"><thead><tr>
+    <th>الطالب</th><th>الصف</th><th>عدد الممارسات</th><th>مجموع الدرجات</th><th>التاريخ</th><th>إجراءات</th>
+  </tr></thead><tbody>`;
+  list.forEach(r=>{
+    html += `<tr>
+      <td>${r.student}</td><td>${r.cls||""}</td><td>${(r.items||[]).length}</td>
+      <td>${r.totalPoints||0}</td><td>${r.date||""}</td>
+      <td class="log-actions">
+        <button class="icon-btn" onclick="loadCompensationRecord('${r.id}')">تحميل</button>
+        <button class="icon-btn" onclick="deleteCompensationRecord('${r.id}')">حذف</button>
+      </td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  host.innerHTML = html;
+}
+
+function loadCompensationRecord(id){
+  const r = getCompensationRecords().find(x=>x.id===id);
+  if(!r) return;
+  $("cStudent").value=r.student; $("cClass").value=r.cls; $("cDate").value=r.date;
+  $("cEvidence").value=r.evidence; $("cStaffName").value=r.staffName;
+  $("cSignStudent").value=r.signStudent; $("cSignStaff").value=r.signStaff; $("cSignDate").value=r.signDate;
+  document.querySelectorAll('#compPracticesHost .comp-check').forEach(cb=>cb.checked=false);
+  $("compCustomWrap").style.display="none"; $("compCustomDesc").value="";
+  (r.items||[]).forEach(it=>{
+    const match = COMPENSATION_PRACTICES.findIndex(p=>p.label===it.label);
+    if(match>-1){ document.getElementById("comp_"+match).checked = true; }
+    else{
+      document.getElementById("comp_custom").checked = true;
+      $("compCustomWrap").style.display = "";
+      $("compCustomDesc").value = it.label;
+    }
+  });
+  renderCompensationBalance();
+  toast("تم تحميل السجل للتعديل");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function deleteCompensationRecord(id){
+  if(!confirm("هل تريد حذف هذا السجل نهائيًا؟")) return;
+  setCompensationRecords(getCompensationRecords().filter(x=>x.id!==id));
+  renderCompensationLog();
+  toast("تم الحذف");
+}
+
+/* =====================================================================
    REPORTS & STATISTICS
    ===================================================================== */
 let reportMode = "student";
@@ -1312,8 +1743,140 @@ function refreshStudentNamesList(){
   const names = new Set();
   getBehaviorRecords().forEach(r=>{ if(r.student) names.add(r.student.trim()); });
   getAttendanceRecords().forEach(r=>{ if(r.student) names.add(r.student.trim()); });
+  getCompensationRecords().forEach(r=>{ if(r.student) names.add(r.student.trim()); });
+  getRoster().forEach(r=>{ if(r.name) names.add(r.name.trim()); });
   $("studentNamesList").innerHTML = Array.from(names).sort((a,b)=>a.localeCompare(b,'ar'))
     .map(n=>`<option value="${n}">`).join("");
+}
+
+/* =====================================================================
+   STUDENT ROSTER IMPORT (from Noor "كشف بأسماء الطلاب بالفصل" exports)
+   Only name + class are imported — civil registry / ID numbers are
+   intentionally never read into the roster or stored anywhere.
+   ===================================================================== */
+function getRoster(){
+  try{ return JSON.parse(localStorage.getItem("moe_roster_v1")||"[]"); }catch(e){ return []; }
+}
+function setRoster(list){ localStorage.setItem("moe_roster_v1", JSON.stringify(list)); }
+
+function handleRosterFile(evt){
+  const file = evt.target.files && evt.target.files[0];
+  if(!file) return;
+  const status = $("rosterStatus");
+  status.textContent = "جارٍ قراءة الملف...";
+
+  const finish = (workbook)=>{
+    let extracted = [];
+    try{ extracted = extractRosterFromWorkbook(workbook); }
+    catch(e){ status.textContent = "تعذّرت قراءة الملف. تأكد أنه ملف كشف أسماء طلاب صالح من نور."; return; }
+
+    if(!extracted.length){
+      status.textContent = "لم يتم التعرف على عمود «الاسم» في هذا الملف. تأكد أنه نفس تنسيق كشف أسماء الطلاب من نور.";
+      return;
+    }
+    const existing = getRoster();
+    const map = new Map(existing.map(r=>[r.name, r]));
+    extracted.forEach(r=>{
+      if(map.has(r.name)){ if(r.cls && !map.get(r.name).cls) map.get(r.name).cls = r.cls; }
+      else map.set(r.name, r);
+    });
+    const merged = Array.from(map.values());
+    setRoster(merged);
+    status.textContent = `تم استيراد ${extracted.length} اسمًا بنجاح — إجمالي القائمة الآن ${merged.length} طالبًا.`;
+    renderRosterPreview();
+    refreshStudentNamesList();
+    $("rosterFile").value = "";
+  };
+
+  const name = file.name.toLowerCase();
+  const reader = new FileReader();
+  if(name.endsWith(".csv")){
+    reader.onload = (e)=>{ finish(XLSX.read(e.target.result, {type:"string"})); };
+    reader.onerror = ()=>{ status.textContent = "تعذّرت قراءة الملف."; };
+    reader.readAsText(file, "utf-8");
+  } else {
+    reader.onload = (e)=>{ finish(XLSX.read(new Uint8Array(e.target.result), {type:"array"})); };
+    reader.onerror = ()=>{ status.textContent = "تعذّرت قراءة الملف."; };
+    reader.readAsArrayBuffer(file);
+  }
+}
+
+function extractRosterFromWorkbook(workbook){
+  const roster = [];
+  workbook.SheetNames.forEach(sheetName=>{
+    const ws = workbook.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:"", raw:false});
+    if(!rows.length) return;
+
+    // Find the header row containing a cell exactly "الاسم" — that column holds student names below it.
+    let headerRowIdx=-1, nameCol=-1;
+    for(let ri=0; ri<rows.length; ri++){
+      const idx = rows[ri].findIndex(c=>String(c).trim()==="الاسم");
+      if(idx>-1){ headerRowIdx=ri; nameCol=idx; break; }
+    }
+    if(headerRowIdx===-1) return;
+
+    // Case A — flat table: the same header row also has a "الصف"/"الفصل" column → read per-row.
+    const headerRow = rows[headerRowIdx];
+    const clsCol = headerRow.findIndex(c=>{ const t=String(c).trim(); return t==="الصف" || t==="الفصل"; });
+
+    // Case B — Noor-style banner: "الصف" appears alone in an earlier row paired with a value.
+    let bannerClass = "";
+    if(clsCol===-1){
+      for(let ri=0; ri<headerRowIdx; ri++){
+        const idx = rows[ri].findIndex(c=>String(c).trim()==="الصف");
+        if(idx>0){
+          for(let i=idx-1;i>=0;i--){
+            const v = String(rows[ri][i]).trim();
+            if(v && v!==":"){ bannerClass = v; break; }
+          }
+          break;
+        }
+      }
+    }
+
+    for(let ri=headerRowIdx+1; ri<rows.length; ri++){
+      const row = rows[ri];
+      const nm = String(row[nameCol]||"").trim();
+      if(!nm || nm==="الاسم") continue;
+      if(!/[\u0600-\u06FF]/.test(nm)) continue; // must contain Arabic letters
+      const cls = clsCol>-1 ? String(row[clsCol]||"").trim() : bannerClass;
+      roster.push({name: nm, cls});
+    }
+  });
+  // de-duplicate within this file, keep first occurrence
+  const seen = new Set(), out = [];
+  roster.forEach(r=>{ if(!seen.has(r.name)){ seen.add(r.name); out.push(r); } });
+  return out;
+}
+
+function renderRosterPreview(){
+  const host = $("rosterPreview");
+  const roster = getRoster();
+  if(!roster.length){ host.innerHTML = ""; return; }
+  let html = `<div class="roster-preview"><table class="log"><thead><tr><th>الاسم</th><th>الصف</th></tr></thead><tbody>`;
+  roster.slice().sort((a,b)=>a.name.localeCompare(b.name,'ar')).forEach(r=>{
+    html += `<tr><td>${r.name}</td><td>${r.cls||"—"}</td></tr>`;
+  });
+  html += `</tbody></table></div>`;
+  host.innerHTML = html;
+}
+
+function clearRoster(){
+  if(!confirm("هل تريد مسح كامل قائمة الطلاب المستوردة؟ (لن يؤثر هذا على السجلات المحفوظة)")) return;
+  setRoster([]);
+  renderRosterPreview();
+  refreshStudentNamesList();
+  $("rosterStatus").textContent = "تم مسح قائمة الطلاب المستوردة.";
+}
+
+function autofillClassFromRoster(studentInputId, classInputId){
+  const name = ($(studentInputId).value||"").trim();
+  if(!name) return;
+  const match = getRoster().find(r=>r.name===name);
+  if(match && match.cls && !$(classInputId).value.trim()){
+    $(classInputId).value = match.cls;
+  }
 }
 
 function reportHeaderHTML(title){
@@ -1334,8 +1897,9 @@ function renderStudentReport(){
 
   const bRecs = getBehaviorRecords().filter(r => (r.student||"").trim() === name);
   const aRecs = getAttendanceRecords().filter(r => (r.student||"").trim() === name);
+  const cRecs = getCompensationRecords().filter(r => (r.student||"").trim() === name);
 
-  if(!bRecs.length && !aRecs.length){
+  if(!bRecs.length && !aRecs.length && !cRecs.length){
     host.innerHTML = reportHeaderHTML("تقرير طالب") + `<div class="empty">لا توجد أي سجلات محفوظة لهذا الاسم.</div>`;
     return;
   }
@@ -1344,7 +1908,10 @@ function renderStudentReport(){
   let totalAbsDays = 0; aRecs.forEach(r => totalAbsDays += parseInt(r.daysTotal||0,10)||0);
   const excusedCount = aRecs.filter(r=>r.mode==="excused").length;
   const unexcusedCount = aRecs.filter(r=>r.mode==="unexcused").length;
-  const cls = bRecs[0]?.cls || aRecs[0]?.cls || "—";
+  const totalCompPoints = cRecs.reduce((s,r)=>s+(r.totalPoints||0),0);
+  const positiveNow = Math.max(0, Math.min(POSITIVE_BEHAVIOR_BASE, POSITIVE_BEHAVIOR_BASE - totalPoints + totalCompPoints));
+  const distinguishedNow = Math.max(0, Math.min(DISTINGUISHED_BEHAVIOR_CAP, totalCompPoints - totalPoints));
+  const cls = bRecs[0]?.cls || aRecs[0]?.cls || cRecs[0]?.cls || "—";
 
   let html = reportHeaderHTML("تقرير طالب مفصّل");
   html += `<div class="rep-report-block">`;
@@ -1352,7 +1919,12 @@ function renderStudentReport(){
   html += `<div class="stat-cards">
     <div class="stat-card"><div class="num">${bRecs.length}</div><div class="lbl">مخالفات سلوكية مسجّلة</div></div>
     <div class="stat-card"><div class="num">${totalPoints}</div><div class="lbl">إجمالي الدرجات المحسومة</div></div>
+    <div class="stat-card"><div class="num">${totalCompPoints}</div><div class="lbl">إجمالي درجات التعويض المكتسبة</div></div>
     <div class="stat-card"><div class="num">${aRecs.length}</div><div class="lbl">سجلات غياب/استئذان</div></div>
+  </div>
+  <div class="stat-cards">
+    <div class="stat-card"><div class="num">${positiveNow}/80</div><div class="lbl">تقدير السلوك الإيجابي الحالي</div></div>
+    <div class="stat-card"><div class="num">${distinguishedNow}/20</div><div class="lbl">تقدير السلوك المتميز الحالي</div></div>
     <div class="stat-card"><div class="num">${totalAbsDays}</div><div class="lbl">إجمالي أيام الغياب (آخر تسجيل)</div></div>
   </div>`;
 
@@ -1372,6 +1944,22 @@ function renderStudentReport(){
     html += `</tbody></table>`;
   } else {
     html += `<div class="empty">لا توجد مخالفات سلوكية مسجّلة لهذا الطالب.</div>`;
+  }
+
+  html += `<h3>فرص التعويض المسجّلة (السلوك المتميز)</h3>`;
+  if(cRecs.length){
+    html += `<table class="log"><thead><tr><th>التاريخ</th><th>الممارسات</th><th>الدرجات</th><th>وكيل شؤون الطلاب</th></tr></thead><tbody>`;
+    cRecs.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(r=>{
+      html += `<tr>
+        <td>${r.date||""}</td>
+        <td>${(r.items||[]).map(it=>it.label).join("، ")||"—"}</td>
+        <td>${r.totalPoints||0}</td>
+        <td>${r.staffName||"—"}</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+  } else {
+    html += `<div class="empty">لا توجد سجلات تعويض مسجّلة لهذا الطالب.</div>`;
   }
 
   html += `<h3>سجلات الغياب والاستئذان (بعذر: ${excusedCount} — بدون عذر: ${unexcusedCount})</h3>`;
@@ -1503,6 +2091,14 @@ function renderStats(){
     <div class="stat-card"><div class="num">${unexcusedCount}</div><div class="lbl">سجلات بدون عذر</div></div>
     <div class="stat-card"><div class="num">${avgDays}</div><div class="lbl">متوسط أيام الغياب لكل سجل</div></div>
   </div>`;
+
+  const cRecs = getCompensationRecords();
+  let totalCompPoints = 0; cRecs.forEach(r=> totalCompPoints += r.totalPoints||0);
+  html += `<h3>فرص تعويض السلوك المتميز</h3>`;
+  html += `<div class="stat-cards">
+    <div class="stat-card"><div class="num">${cRecs.length}</div><div class="lbl">سجلات تعويض محفوظة</div></div>
+    <div class="stat-card"><div class="num">${totalCompPoints}</div><div class="lbl">إجمالي درجات التعويض المكتسبة</div></div>
+  </div>`;
   html += `</div>`;
   host.innerHTML = html;
 }
@@ -1529,6 +2125,10 @@ renderBehaviorLog();
 renderReasonGrid();
 setAbsenceMode("excused");
 renderAttendanceLog();
+renderCompensationPractices();
+renderCompensationLog();
+if(!$("cDate").value) $("cDate").value = todayISO();
+renderRosterPreview();
 refreshStudentNamesList();
 if(!$("aSignDate").value) $("aSignDate").value = "";
 </script>
