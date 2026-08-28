@@ -3,159 +3,416 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تطبيقات مدرسية</title>
+<title>تطبيقات مدرسية — أدوات التحليل والتوثيق</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-body{
+  :root{
+    --navy-900:#0a2733;
+    --navy-800:#0f3d4c;
+    --teal-700:#155a6c;
+    --teal-600:#1d5c6e;
+    --teal-500:#237e93;
+    --gold:#c99a45;
+    --paper:#ffffff;
+    --bg:#f3f6f8;
+    --line:#dbe4ea;
+    --muted:#5c7180;
+    --ink:#16232b;
+    --shadow:0 2px 8px rgba(10,39,51,.06), 0 10px 30px rgba(10,39,51,.06);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
     margin:0;
-    font-family:Tahoma, Arial;
-    background:#f3f6f8;
-    color:#1a2a35;
-}
-.header{
-    background:#0f3d4c;
-    color:white;
-    padding:35px 20px;
-    text-align:center;
-}
-.header h1{
-    margin:0;
-    font-size:38px;
-}
-.header p{
-    margin-top:10px;
-    opacity:.9;
-}
-.tools-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    max-width:1100px;
-    margin:50px auto;
-    padding:0 20px;
-}
-.tool-card{
-    background:white;
-    border-radius:20px;
-    padding:30px;
-    text-align:center;
-    text-decoration:none;
-    color:#1a2a35;
-    box-shadow:0 4px 14px rgba(0,0,0,.08);
-    border:1px solid #d4dde4;
-    transition:.2s;
-}
-.tool-card:hover{
-    transform:translateY(-5px);
-    border-color:#1d5c6e;
-}
-.tool-icon{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:15px;
-}
-.tool-icon svg{
-    width:52px;
-    height:52px;
-    stroke:#0f3d4c;
-    stroke-width:1.4;
-    fill:none;
-}
-.tool-card h3{
-    margin:0 0 10px;
-    color:#0f3d4c;
-    font-size:24px;
-}
-.tool-card p{
-    margin:0;
-    color:#607d8b;
-    line-height:1.8;
-}
-.tool-card.new{
-    border-color:#1d5c6e;
-    background:linear-gradient(145deg,#ffffff,#f0f8fb);
-}
-.tool-card.new .tool-icon svg{
-    stroke:#1d5c6e;
-}
-.tool-card.new .badge{
-    display:inline-block;
-    background:#1d5c6e;
-    color:white;
-    font-size:11px;
-    padding:2px 10px;
-    border-radius:10px;
-    margin-bottom:10px;
-}
-.footer{
-    text-align:center;
-    padding:30px;
-    color:#78909c;
-    font-size:14px;
-}
+    font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.7;
+  }
+  a{color:inherit;text-decoration:none;}
+  ul{margin:0;padding:0;list-style:none;}
+  button{font-family:inherit;}
+
+  /* ===================== NAVBAR ===================== */
+  .navbar{
+    position:sticky;top:0;z-index:100;
+    background:var(--navy-800);
+    box-shadow:0 2px 14px rgba(0,0,0,.15);
+  }
+  .navbar-inner{
+    max-width:1180px;margin:0 auto;padding:0 22px;
+    display:flex;align-items:center;justify-content:space-between;
+    height:66px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:900;font-size:18px;}
+  .brand svg{width:26px;height:26px;stroke:var(--gold);fill:none;stroke-width:1.6;flex-shrink:0;}
+  .brand span.sub{display:block;font-size:11px;font-weight:500;color:#b9ccd3;margin-top:1px;}
+
+  .nav-menu{display:flex;align-items:center;gap:4px;}
+  .nav-menu > li{position:relative;}
+  .nav-link{
+    display:flex;align-items:center;gap:5px;color:#e7eef1;font-weight:700;font-size:14.5px;
+    padding:22px 14px;cursor:pointer;transition:.15s;border-bottom:3px solid transparent;
+  }
+  .nav-link:hover, .nav-link.open{color:#fff;border-bottom-color:var(--gold);}
+  .nav-link .chev{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;transition:.15s;}
+  .nav-link.open .chev{transform:rotate(180deg);}
+
+  /* Mega menu */
+  .mega{
+    position:absolute;top:100%;right:0;
+    background:#fff;border-radius:12px;box-shadow:0 16px 40px rgba(10,39,51,.25);
+    padding:14px;width:560px;
+    display:none;grid-template-columns:1fr 1fr;gap:6px;
+    border:1px solid var(--line);
+  }
+  .mega.open{display:grid;}
+  .mega-item{
+    display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:10px;color:var(--ink);
+  }
+  .mega-item:hover{background:#f1f6f8;}
+  .mega-item .mi-icon{
+    width:34px;height:34px;border-radius:8px;background:var(--bg);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .mega-item .mi-icon svg{width:18px;height:18px;stroke:var(--teal-600);fill:none;stroke-width:1.5;}
+  .mega-item h4{margin:0 0 2px;font-size:13.5px;color:var(--navy-800);}
+  .mega-item p{margin:0;font-size:11.5px;color:var(--muted);line-height:1.5;}
+  .mega-item .new-tag{
+    display:inline-block;background:var(--gold);color:#fff;font-size:9.5px;font-weight:800;
+    padding:1px 6px;border-radius:8px;margin-inline-start:6px;vertical-align:middle;
+  }
+
+  .nav-cta{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--gold);color:#3a2a06;font-weight:800;font-size:13.5px;
+    padding:9px 18px;border-radius:9px;border:0;cursor:pointer;
+  }
+  .nav-cta:hover{background:#dba94f;}
+
+  .nav-toggle{display:none;background:none;border:0;color:#fff;cursor:pointer;padding:6px;}
+  .nav-toggle svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8;}
+
+  /* ===================== HERO ===================== */
+  .hero{
+    background:
+      radial-gradient(circle at 15% 20%, rgba(201,154,69,.18) 0, transparent 40%),
+      linear-gradient(135deg,var(--navy-900),var(--navy-800) 60%, var(--teal-700));
+    color:#fff;padding:64px 22px 90px;position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle,#ffffff22 1.4px, transparent 1.5px);
+    background-size:18px 18px;opacity:.4;pointer-events:none;
+  }
+  .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;text-align:center;}
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);color:#f0e6cf;font-size:12.5px;font-weight:700;
+    padding:6px 14px;border-radius:20px;margin-bottom:20px;
+  }
+  .hero h1{font-size:38px;font-weight:900;margin:0 0 14px;}
+  .hero p{font-size:16px;color:#cfe0e6;max-width:620px;margin:0 auto 30px;}
+  .hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+  .hero-btn{
+    padding:13px 26px;border-radius:10px;font-weight:800;font-size:14.5px;cursor:pointer;border:0;
+  }
+  .hero-btn.primary{background:var(--gold);color:#3a2a06;}
+  .hero-btn.primary:hover{background:#dba94f;}
+  .hero-btn.ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.35);}
+  .hero-btn.ghost:hover{background:rgba(255,255,255,.18);}
+
+  .stats-row{
+    max-width:820px;margin:44px auto 0;display:grid;grid-template-columns:repeat(3,1fr);
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;
+    overflow:hidden;
+  }
+  .stats-row .stat{padding:18px 10px;text-align:center;border-inline-start:1px solid rgba(255,255,255,.18);}
+  .stats-row .stat:first-child{border-inline-start:0;}
+  .stats-row .stat b{display:block;font-size:24px;color:var(--gold);}
+  .stats-row .stat span{font-size:12px;color:#cfe0e6;}
+
+  /* ===================== TOOLS SECTIONS ===================== */
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px;}
+  .tools-area{margin-top:-46px;position:relative;z-index:2;}
+
+  .category{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:28px 26px;margin-bottom:24px;
+  }
+  .category-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+  .category-head .ci{
+    width:42px;height:42px;border-radius:11px;background:var(--navy-800);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .category-head .ci svg{width:21px;height:21px;stroke:var(--gold);fill:none;stroke-width:1.6;}
+  .category-head h2{margin:0;font-size:19px;color:var(--navy-800);}
+  .category-head p{margin:2px 0 0;font-size:12.5px;color:var(--muted);}
+
+  .tools-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;
+  }
+  .tool-card{
+    background:#fbfdfd;border:1px solid var(--line);border-radius:12px;padding:20px;
+    display:flex;flex-direction:column;gap:10px;transition:.18s;position:relative;
+  }
+  .tool-card:hover{border-color:var(--teal-500);transform:translateY(-3px);box-shadow:0 10px 24px rgba(10,39,51,.1);}
+  .tool-card.new{background:linear-gradient(160deg,#fbfdfd,#f0f7f5);border-color:var(--teal-500);}
+  .tool-card .tc-badge{
+    position:absolute;top:14px;left:14px;background:var(--gold);color:#3a2a06;font-size:10px;
+    font-weight:800;padding:2px 9px;border-radius:10px;
+  }
+  .tool-card .tc-icon{
+    width:44px;height:44px;border-radius:10px;background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .tool-card .tc-icon svg{width:22px;height:22px;stroke:var(--navy-800);fill:none;stroke-width:1.5;}
+  .tool-card h3{margin:0;font-size:16px;color:var(--navy-800);}
+  .tool-card p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.7;flex:1;}
+  .tool-card .tc-go{
+    display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;color:var(--teal-600);
+    margin-top:4px;
+  }
+  .tool-card .tc-go svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;transform:scaleX(-1);}
+  .tool-card:hover .tc-go{color:var(--gold);}
+
+  /* ===================== ABOUT ===================== */
+  .about{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:30px 26px;margin:24px 0 40px;
+    display:flex;gap:24px;flex-wrap:wrap;align-items:center;
+  }
+  .about .ai{
+    width:56px;height:56px;border-radius:14px;background:var(--navy-800);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .about .ai svg{width:28px;height:28px;stroke:var(--gold);fill:none;stroke-width:1.5;}
+  .about h2{margin:0 0 6px;font-size:18px;color:var(--navy-800);}
+  .about p{margin:0;font-size:13.5px;color:var(--muted);max-width:760px;}
+
+  /* ===================== FOOTER ===================== */
+  footer{background:var(--navy-900);color:#a9bcc4;padding:26px 22px;text-align:center;font-size:12.5px;}
+  footer b{color:#e7eef1;}
+
+  /* ===================== MOBILE ===================== */
+  @media(max-width:860px){
+    .nav-menu{
+      position:fixed;top:66px;right:0;left:0;bottom:0;background:var(--navy-800);
+      flex-direction:column;align-items:stretch;gap:0;padding:10px 16px;
+      display:none;overflow-y:auto;
+    }
+    .nav-menu.open{display:flex;}
+    .nav-link{padding:16px 6px;border-bottom:1px solid rgba(255,255,255,.1);justify-content:space-between;}
+    .mega{position:static;width:100%;box-shadow:none;border:0;background:rgba(255,255,255,.04);margin-top:4px;grid-template-columns:1fr;}
+    .mega-item h4{color:#fff;}
+    .mega-item p{color:#b9ccd3;}
+    .mega-item:hover{background:rgba(255,255,255,.06);}
+    .nav-cta{margin:14px 6px;justify-content:center;}
+    .nav-toggle{display:flex;}
+    .hero h1{font-size:28px;}
+    .stats-row{grid-template-columns:1fr;}
+    .stats-row .stat{border-inline-start:0;border-top:1px solid rgba(255,255,255,.18);}
+    .stats-row .stat:first-child{border-top:0;}
+  }
 </style>
 </head>
 <body>
-<div class="header">
-    <h1>تطبيقات مدرسية</h1>
-    <p>مجموعة من الأدوات للتحليل والتوثيق</p>
-</div>
 
-<section class="tools-grid">
-
-    <a class="tool-card" href="positive.html">
-        <div class="tool-icon">
-            <svg viewBox="0 0 24 24"><path stroke-linejoin="round" stroke-linecap="round" d="M12 3.5l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17.3l-5.4 3.1 1-6.1-4.4-4.3 6.1-.9L12 3.5z"/></svg>
-        </div>
-        <h3>محلل السلوك المتميز</h3>
-        <p>تحليل السلوك المتميز وإنشاء التقارير والرسوم البيانية.</p>
+<header class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#hero">
+      <svg viewBox="0 0 24 24"><path stroke-linejoin="round" stroke-linecap="round" d="M3 9.5 12 4l9 5.5-9 5.5-9-5.5Z"/><path stroke-linecap="round" d="M7 12v5c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-5"/></svg>
+      <span>تطبيقات مدرسية<span class="sub">أدوات التحليل والتوثيق المدرسي</span></span>
     </a>
 
-    <a class="tool-card" href="attendance.html">
-        <div class="tool-icon">
-            <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M3.5 10h17"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 15l2.3 2.3L16 12.5"/></svg>
-        </div>
-        <h3>محلل الغياب</h3>
-        <p>تحليل الغياب والمواظبة والمقارنات الزمنية والتقارير.</p>
-    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="القائمة" onclick="toggleMobileNav()">
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17"/></svg>
+    </button>
 
-    <a class="tool-card" href="violations.html">
-        <div class="tool-icon">
-            <svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M12 3.7L21 20H3L12 3.7z"/><path stroke-linecap="round" d="M12 9.8v4.6"/><circle cx="12" cy="16.9" r="0.55" fill="#0f3d4c" stroke="none"/></svg>
-        </div>
-        <h3>محلل المخالفات</h3>
-        <p>تحليل المخالفات السلوكية وتصنيف درجات الخطورة والتقارير.</p>
-    </a>
+    <ul class="nav-menu" id="navMenu">
+      <li><a class="nav-link" href="#hero" onclick="closeMobileNav()">الرئيسية</a></li>
+      <li>
+        <span class="nav-link" id="toolsMenuBtn" onclick="toggleMega(event)">
+          الأدوات
+          <svg class="chev" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+        </span>
+        <div class="mega" id="toolsMega"><!-- populated by JS from TOOLS data --></div>
+      </li>
+      <li><a class="nav-link" href="#about" onclick="closeMobileNav()">حول الموقع</a></li>
+      <li style="display:flex;align-items:center;">
+        <a class="nav-cta" href="#tools" onclick="closeMobileNav()">تصفح الأدوات</a>
+      </li>
+    </ul>
+  </div>
+</header>
 
-    <a class="tool-card" href="grades.html">
-        <div class="tool-icon">
-            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 21V11M10.5 21V6M17 21v-7.5M3 21h18"/></svg>
-        </div>
-        <h3>تحليل النتائج</h3>
-        <p>تحليل أعمال السنة ونهاية الفصل — العشرة الأوائل والضعف الدراسي ومقارنة المواد.</p>
-    </a>
-
-    <a class="tool-card" href="committees.html">
-        <div class="tool-icon">
-            <svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M3.5 7.2a2 2 0 0 1 2-2h3.6l1.8 1.8h7.6a2 2 0 0 1 2 2v9.3a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.2z"/></svg>
-        </div>
-        <h3>اللجان والتكليفات</h3>
-        <p>تشكيل اللجان والفرق المدرسية، قرارات التكليف، ومحاضر الاجتماعات والمتابعة.</p>
-    </a>
-
-    <a class="tool-card new" href="behavior-attendance-forms.html">
-        <div class="badge">جديد</div>
-        <div class="tool-icon">
-            <svg viewBox="0 0 24 24"><rect x="5.5" y="4" width="13" height="17" rx="2"/><path d="M9 3.3h6a1 1 0 0 1 1 1V6h-8V4.3a1 1 0 0 1 1-1z"/><path stroke-linecap="round" d="M8.7 11h6.6M8.7 14h6.6M8.7 17h4"/></svg>
-        </div>
-        <h3>نماذج السلوك والمواظبة</h3>
-        <p>تعبئة وطباعة نماذج المخالفات السلوكية وإجراءات الغياب والاستئذان وفق القواعد المعتمدة، مع حفظ السجلات محليًا على الجهاز.</p>
-    </a>
-
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"> أدوات مدرسية جاهزة للاستخدام من قِبل المدرسة</div>
+    <h1>أدوات رقمية لدعم العمل المدرسي</h1>
+    <p>مجموعة متكاملة من التطبيقات لتحليل السلوك والمواظبة والنتائج، وتوثيق الإجراءات والمحاضر — مصممة لتسريع العمل اليومي للموجّه الطلابي ووكيل شؤون الطلاب.</p>
+    <div class="hero-actions">
+      <a class="hero-btn primary" href="#tools">استعرض الأدوات</a>
+      <a class="hero-btn ghost" href="#about">حول الموقع</a>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><b id="statCount">6</b><span>أدوات متاحة</span></div>
+      <div class="stat"><b>100%</b><span>محلي وبدون سيرفر خارجي</span></div>
+      <div class="stat"><b>1447هـ</b><span>مطابقة لأحدث اللوائح</span></div>
+    </div>
+  </div>
 </section>
 
-<div class="footer">
-    تصميم وتطوير الأستاذ سعيد المالكي باستخدام الذكاء الاصطناعي © 2026
-</div>
+<main class="wrap tools-area" id="tools">
+  <div id="categoriesHost"><!-- populated by JS from TOOLS data --></div>
+
+  <div class="about" id="about">
+    <div class="ai"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path stroke-linecap="round" d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg></div>
+    <div>
+      <h2>حول الموقع</h2>
+      <p>هذه الأدوات مبنية لدعم عمل الموجّه الطلابي ووكيل شؤون الطلاب في المدرسة، وتعمل بالكامل داخل المتصفح دون الحاجة لاتصال بخادم خارجي — أي بيانات تُدخلها تبقى محفوظة على جهازك فقط.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  تصميم وتطوير الأستاذ <b>سعيد المالكي</b> باستخدام الذكاء الاصطناعي © 2026
+</footer>
+
+<script>
+/* Single source of truth for all tools — used to build both the mega-menu and the category grids */
+const TOOLS = [
+  {
+    category: "السلوك والمواظبة",
+    catDesc: "متابعة سلوك الطلاب وحضورهم وتوثيق الإجراءات",
+    catIcon: `<path stroke-linecap="round" stroke-linejoin="round" d="M12 3.7L21 20H3L12 3.7z"/><path stroke-linecap="round" d="M12 9.8v4.6"/><circle cx="12" cy="16.9" r="0.55" fill="currentColor" stroke="none"/>`,
+    items: [
+      {
+        href:"positive.html", title:"محلل السلوك المتميز",
+        desc:"تحليل السلوك المتميز وإنشاء التقارير والرسوم البيانية.",
+        icon:`<path stroke-linejoin="round" stroke-linecap="round" d="M12 3.5l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17.3l-5.4 3.1 1-6.1-4.4-4.3 6.1-.9L12 3.5z"/>`
+      },
+      {
+        href:"attendance.html", title:"محلل الغياب",
+        desc:"تحليل الغياب والمواظبة والمقارنات الزمنية والتقارير.",
+        icon:`<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M3.5 10h17"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 15l2.3 2.3L16 12.5"/>`
+      },
+      {
+        href:"violations.html", title:"محلل المخالفات",
+        desc:"تحليل المخالفات السلوكية وتصنيف درجات الخطورة والتقارير.",
+        icon:`<path stroke-linejoin="round" d="M12 3.7L21 20H3L12 3.7z"/><path stroke-linecap="round" d="M12 9.8v4.6"/><circle cx="12" cy="16.9" r="0.55" fill="currentColor" stroke="none"/>`
+      },
+      {
+        href:"behavior-attendance-forms.html", title:"نماذج السلوك والمواظبة",
+        desc:"تعبئة وطباعة نماذج المخالفات وإجراءات الغياب وفرص التعويض، مع تقارير وإحصائيات.",
+        icon:`<rect x="5.5" y="4" width="13" height="17" rx="2"/><path d="M9 3.3h6a1 1 0 0 1 1 1V6h-8V4.3a1 1 0 0 1 1-1z"/><path stroke-linecap="round" d="M8.7 11h6.6M8.7 14h6.6M8.7 17h4"/>`,
+        badge:"جديد"
+      }
+    ]
+  },
+  {
+    category: "الأداء الدراسي",
+    catDesc: "تحليل النتائج ومتابعة التحصيل الدراسي",
+    catIcon: `<path stroke-linecap="round" stroke-linejoin="round" d="M4 21V11M10.5 21V6M17 21v-7.5M3 21h18"/>`,
+    items: [
+      {
+        href:"grades.html", title:"تحليل النتائج",
+        desc:"تحليل أعمال السنة ونهاية الفصل — العشرة الأوائل والضعف الدراسي ومقارنة المواد.",
+        icon:`<path stroke-linecap="round" stroke-linejoin="round" d="M4 21V11M10.5 21V6M17 21v-7.5M3 21h18"/>`
+      }
+    ]
+  },
+  {
+    category: "الإدارة والتنظيم",
+    catDesc: "تنظيم اللجان والتكليفات والمحاضر الإدارية",
+    catIcon: `<path stroke-linejoin="round" d="M3.5 7.2a2 2 0 0 1 2-2h3.6l1.8 1.8h7.6a2 2 0 0 1 2 2v9.3a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.2z"/>`,
+    items: [
+      {
+        href:"committees.html", title:"اللجان والتكليفات",
+        desc:"تشكيل اللجان والفرق المدرسية، قرارات التكليف، ومحاضر الاجتماعات والمتابعة.",
+        icon:`<path stroke-linejoin="round" d="M3.5 7.2a2 2 0 0 1 2-2h3.6l1.8 1.8h7.6a2 2 0 0 1 2 2v9.3a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.2z"/>`
+      }
+    ]
+  }
+];
+
+function svgWrap(inner){ return `<svg viewBox="0 0 24 24">${inner}</svg>`; }
+
+function buildMegaMenu(){
+  const host = document.getElementById("toolsMega");
+  let html = "";
+  TOOLS.forEach(cat=>{
+    cat.items.forEach(item=>{
+      html += `<a class="mega-item" href="${item.href}">
+        <div class="mi-icon">${svgWrap(item.icon)}</div>
+        <div>
+          <h4>${item.title}${item.badge ? `<span class="new-tag">${item.badge}</span>` : ""}</h4>
+          <p>${item.desc}</p>
+        </div>
+      </a>`;
+    });
+  });
+  host.innerHTML = html;
+}
+
+function buildCategories(){
+  const host = document.getElementById("categoriesHost");
+  let html = "";
+  let total = 0;
+  TOOLS.forEach(cat=>{
+    total += cat.items.length;
+    html += `<div class="category">
+      <div class="category-head">
+        <div class="ci">${svgWrap(cat.catIcon)}</div>
+        <div><h2>${cat.category}</h2><p>${cat.catDesc}</p></div>
+      </div>
+      <div class="tools-grid">`;
+    cat.items.forEach(item=>{
+      html += `<a class="tool-card${item.badge ? " new":""}" href="${item.href}">
+        ${item.badge ? `<span class="tc-badge">${item.badge}</span>` : ""}
+        <div class="tc-icon">${svgWrap(item.icon)}</div>
+        <h3>${item.title}</h3>
+        <p>${item.desc}</p>
+        <span class="tc-go">فتح الأداة ${svgWrap('<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>')}</span>
+      </a>`;
+    });
+    html += `</div></div>`;
+  });
+  host.innerHTML = html;
+  document.getElementById("statCount").textContent = total;
+}
+
+function toggleMega(e){
+  e.stopPropagation();
+  document.getElementById("toolsMenuBtn").classList.toggle("open");
+  document.getElementById("toolsMega").classList.toggle("open");
+}
+document.addEventListener("click", (e)=>{
+  const btn = document.getElementById("toolsMenuBtn"), mega = document.getElementById("toolsMega");
+  if(mega.classList.contains("open") && !mega.contains(e.target) && e.target!==btn){
+    btn.classList.remove("open"); mega.classList.remove("open");
+  }
+});
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape"){
+    document.getElementById("toolsMenuBtn").classList.remove("open");
+    document.getElementById("toolsMega").classList.remove("open");
+  }
+});
+
+function toggleMobileNav(){
+  document.getElementById("navMenu").classList.toggle("open");
+}
+function closeMobileNav(){
+  document.getElementById("navMenu").classList.remove("open");
+  document.getElementById("toolsMenuBtn").classList.remove("open");
+  document.getElementById("toolsMega").classList.remove("open");
+}
+
+buildMegaMenu();
+buildCategories();
+</script>
 </body>
 </html>
