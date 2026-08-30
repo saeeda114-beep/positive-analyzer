@@ -458,11 +458,11 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
 <!-- ══ SETTINGS ══ -->
 <div class="settings-bar no-print">
   <div class="sg"><label>🏫 اسم المدرسة</label>
-    <input id="schoolName" value="متوسطة الحارث بن هشام" oninput="updateBranding()"></div>
+    <input id="schoolName" value="" placeholder="اكتب اسم المدرسة" oninput="updateBranding()"></div>
   <div class="sg"><label>👥 عدد طلاب المدرسة</label>
     <input type="number" id="totalStudents" value="300" min="1" oninput="refreshAnalysis()"></div>
   <div class="sg"><label>📅 العام الدراسي</label>
-    <input id="schoolYear" value="1446 / 1447هـ" oninput="updateBranding()"></div>
+    <input id="schoolYear" value="1447" placeholder="مثال: 1447" oninput="updateBranding()"></div>
 </div>
 
 <!-- ══ MAIN ══ -->
@@ -490,14 +490,14 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
     <div class="cover-page">
       <!-- محتوى وسط الغلاف -->
       <div class="cover-body">
-        <div class="cover-school" id="cover-school">متوسطة الحارث بن هشام</div>
-        <div class="cover-year" id="cover-year">العام الدراسي: 1446 / 1447هـ</div>
+        <div class="cover-school" id="cover-school">اسم المدرسة</div>
+        <div class="cover-year" id="cover-year">العام الدراسي: 1447</div>
         <div class="cover-title">تقرير السلوك المتميز</div>
         <div class="cover-date" id="cover-date"></div>
       </div>
       <!-- تذييل الغلاف -->
       <div class="cover-footer">
-        إعداد: التوجيه الطلابي &nbsp;|&nbsp; تصميم الأستاذ <strong>سعيد أحمد المالكي</strong>
+        إعداد: التوجيه الطلابي
       </div>
     </div>
 
@@ -598,9 +598,9 @@ td.nc{text-align:right;font-weight:500;font-size:13px;}
 
   <!-- SCREEN FOOTER -->
   <footer class="page-footer" id="screenFooter" style="display:none">
-    <span id="footer-school">متوسطة الحارث بن هشام</span> — تقرير السلوك المتميز —
-    <span id="footer-sub">1446 / 1447هـ</span><br>
-    <span style="font-size:11px">تصميم الأستاذ <strong style="color:var(--dark)">سعيد أحمد المالكي</strong> — التوجيه الطلابي</span>
+    <span id="footer-school">اسم المدرسة</span> — تقرير السلوك المتميز —
+    <span id="footer-sub">1447</span><br>
+    <span style="font-size:10px">إعداد الأداة: الأستاذ سعيد أحمد المالكي — التوجيه الطلابي</span>
   </footer>
 
 </div><!-- /main -->
