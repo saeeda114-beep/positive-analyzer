@@ -84,6 +84,8 @@
     display:inline-block;background:var(--gold);color:#fff;font-size:9.5px;font-weight:800;
     padding:1px 6px;border-radius:8px;margin-inline-start:6px;vertical-align:middle;
   }
+  .mega-item .new-tag.closed{background:#8f9aa1;}
+  .mega-item.disabled{opacity:.55;cursor:not-allowed;pointer-events:none;}
 
   .nav-cta{
     display:inline-flex;align-items:center;gap:6px;
@@ -164,6 +166,9 @@
     position:absolute;top:14px;left:14px;background:var(--gold);color:#3a2a06;font-size:10px;
     font-weight:800;padding:2px 9px;border-radius:10px;
   }
+  .tool-card .tc-badge.closed{background:#c7ced2;color:#3a4750;}
+  .tool-card.disabled{opacity:.6;cursor:not-allowed;pointer-events:none;}
+  .tool-card.disabled:hover{transform:none;box-shadow:none;border-color:var(--line);}
   .tool-card .tc-icon{
     width:44px;height:44px;border-radius:10px;background:var(--bg);
     display:flex;align-items:center;justify-content:center;
@@ -252,7 +257,7 @@
   <div class="hero-inner">
     <div class="hero-badge"> أدوات مدرسية جاهزة للاستخدام من قِبل المدرسة</div>
     <h1>أدوات رقمية لدعم العمل المدرسي</h1>
-    <p>مجموعة متكاملة من التطبيقات لتحليل السلوك والمواظبة والنتائج، وتوثيق الإجراءات والمحاضر — مصممة لتسريع العمل اليومي للموجّه الطلابي ووكيل شؤون الطلاب.</p>
+    <p>مجموعة متكاملة من التطبيقات لتحليل السلوك والمواظبة والنتائج، وتوثيق الإجراءات والمحاضر — مصممة لتنظيم العمل في المدرسة.</p>
     <div class="hero-actions">
       <a class="hero-btn primary" href="#tools">استعرض الأدوات</a>
       <a class="hero-btn ghost" href="#about">حول الموقع</a>
@@ -320,7 +325,8 @@ const TOOLS = [
       {
         href:"grades.html", title:"تحليل النتائج",
         desc:"تحليل أعمال السنة ونهاية الفصل — العشرة الأوائل والضعف الدراسي ومقارنة المواد.",
-        icon:`<path stroke-linecap="round" stroke-linejoin="round" d="M4 21V11M10.5 21V6M17 21v-7.5M3 21h18"/>`
+        icon:`<path stroke-linecap="round" stroke-linejoin="round" d="M4 21V11M10.5 21V6M17 21v-7.5M3 21h18"/>`,
+        disabled:true, badge:"مغلق للتطوير"
       }
     ]
   },
@@ -345,10 +351,11 @@ function buildMegaMenu(){
   let html = "";
   TOOLS.forEach(cat=>{
     cat.items.forEach(item=>{
-      html += `<a class="mega-item" href="${item.href}">
+      const href = item.disabled ? "javascript:void(0)" : item.href;
+      html += `<a class="mega-item${item.disabled ? " disabled":""}" href="${href}"${item.disabled ? ' onclick="return false;" tabindex="-1"':""}>
         <div class="mi-icon">${svgWrap(item.icon)}</div>
         <div>
-          <h4>${item.title}${item.badge ? `<span class="new-tag">${item.badge}</span>` : ""}</h4>
+          <h4>${item.title}${item.badge ? `<span class="new-tag${item.disabled ? " closed":""}">${item.badge}</span>` : ""}</h4>
           <p>${item.desc}</p>
         </div>
       </a>`;
@@ -370,12 +377,13 @@ function buildCategories(){
       </div>
       <div class="tools-grid">`;
     cat.items.forEach(item=>{
-      html += `<a class="tool-card${item.badge ? " new":""}" href="${item.href}">
-        ${item.badge ? `<span class="tc-badge">${item.badge}</span>` : ""}
+      const href = item.disabled ? "javascript:void(0)" : item.href;
+      html += `<a class="tool-card${item.badge && !item.disabled ? " new":""}${item.disabled ? " disabled":""}" href="${href}"${item.disabled ? ' onclick="return false;" tabindex="-1"':""}>
+        ${item.badge ? `<span class="tc-badge${item.disabled ? " closed":""}">${item.badge}</span>` : ""}
         <div class="tc-icon">${svgWrap(item.icon)}</div>
         <h3>${item.title}</h3>
         <p>${item.desc}</p>
-        <span class="tc-go">فتح الأداة ${svgWrap('<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>')}</span>
+        <span class="tc-go">${item.disabled ? "غير متاح حاليًا" : `فتح الأداة ${svgWrap('<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>')}`}</span>
       </a>`;
     });
     html += `</div></div>`;
