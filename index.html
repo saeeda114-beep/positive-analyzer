@@ -246,6 +246,7 @@
         <div class="mega" id="toolsMega"><!-- populated by JS from TOOLS data --></div>
       </li>
       <li><a class="nav-link" href="#about" onclick="closeMobileNav()">حول الموقع</a></li>
+      <li><a class="nav-link" href="#" onclick="closeMobileNav(); PN.open(); return false;">النسخ الاحتياطي</a></li>
       <li style="display:flex;align-items:center;">
         <a class="nav-cta" href="#tools" onclick="closeMobileNav()">تصفح الأدوات</a>
       </li>
@@ -428,5 +429,280 @@ function closeMobileNav(){
 buildMegaMenu();
 buildCategories();
 </script>
+<!-- ===== PORTAL NAV & BACKUP v1 (شريط التنقل والنسخ الاحتياطي الموحّد) ===== -->
+<style>
+.pn-bar{position:relative;z-index:900;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:0;padding:8px 14px;background:#0b3d2e;color:#fff;direction:rtl;
+  font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-size:14px;line-height:1.4;
+  box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.pn-bar *{box-sizing:border-box;}
+.pn-home{display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-weight:800;
+  padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);}
+.pn-home:hover,.pn-home:focus-visible{background:rgba(255,255,255,.22);outline:none;}
+.pn-home svg,.pn-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;}
+.pn-sec{display:flex;align-items:center;gap:6px;flex:1;min-width:200px;}
+.pn-sec label{opacity:.8;font-size:12.5px;white-space:nowrap;}
+.pn-sec select{flex:1;max-width:330px;font:inherit;font-size:13.5px;font-weight:700;color:#0b3d2e;background:#fff;
+  border:0;border-radius:8px;padding:6px 10px;cursor:pointer;}
+.pn-btn{position:relative;display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:800;color:#0b3d2e;
+  background:#f4c95d;border:0;border-radius:8px;padding:7px 13px;cursor:pointer;}
+.pn-btn:hover,.pn-btn:focus-visible{background:#ffd978;outline:2px solid #fff;outline-offset:1px;}
+.pn-btn .pn-dot{position:absolute;top:-4px;left:-4px;width:11px;height:11px;border-radius:50%;background:#d93a2b;border:2px solid #0b3d2e;display:none;}
+.pn-btn.warn .pn-dot{display:block;}
+@media (max-width:600px){ .pn-sec label{display:none;} .pn-btn .pn-t{display:none;} }
+
+.pn-ov{position:fixed;inset:0;z-index:9500;background:rgba(10,30,22,.55);display:none;align-items:flex-start;justify-content:center;
+  padding:5vh 12px;overflow:auto;direction:rtl;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;}
+.pn-ov.open{display:flex;}
+.pn-modal{background:#fff;color:#1b2a24;width:100%;max-width:620px;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.3);
+  font-size:14.5px;line-height:1.75;overflow:hidden;}
+.pn-mh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#0b3d2e;color:#fff;}
+.pn-mh h2{margin:0;font-size:17px;}
+.pn-x{background:none;border:0;color:#fff;font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:6px;}
+.pn-x:hover{background:rgba(255,255,255,.15);}
+.pn-mb{padding:16px 18px 18px;}
+.pn-steps{margin:0 0 14px;padding:10px 14px 10px 10px;background:#f2f8f5;border-radius:10px;border-inline-start:4px solid #178a5a;font-size:13.5px;}
+.pn-steps ol{margin:4px 0 0;padding-inline-start:20px;}
+.pn-box{border:1px solid #d7e6de;border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+.pn-box h3{margin:0 0 4px;font-size:15px;color:#0b3d2e;}
+.pn-meta{font-size:12.5px;color:#5d6b65;margin-bottom:8px;}
+.pn-meta b{color:#1b2a24;}
+.pn-sum{font-size:13px;margin:0 0 10px;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px;}
+.pn-sum li{background:#eef5f1;border-radius:20px;padding:2px 10px;}
+.pn-acts{display:flex;gap:8px;flex-wrap:wrap;}
+.pn-acts button,.pn-acts label{font:inherit;font-size:13.5px;font-weight:800;border-radius:8px;padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.pn-exp{background:#13704b;color:#fff;border:0;}
+.pn-exp:hover{background:#0f5c3f;}
+.pn-imp{background:#fff;color:#13704b;border:1.5px solid #13704b;}
+.pn-imp:hover{background:#f2f8f5;}
+.pn-imp input{display:none;}
+.pn-note{font-size:13px;color:#5d6b65;margin:0;}
+.pn-warn{font-size:13px;color:#a3312a;background:#fbeceb;border-radius:8px;padding:6px 10px;margin:0 0 10px;}
+.pn-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9800;background:#0b3d2e;color:#fff;
+  padding:11px 20px;border-radius:30px;font-family:'Tajawal',Tahoma,sans-serif;font-weight:700;font-size:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s;}
+.pn-toast.show{opacity:1;}
+@media print{ .pn-bar,.pn-ov,.pn-toast{display:none !important;} }
+</style>
+<script>
+(function(){
+  "use strict";
+  var PAGE = "home";
+  var APP = "school-tools-portal";
+  var SECTIONS = [
+    {id:"positive",   href:"positive.html",   title:"محلل السلوك المتميز", keys:[]},
+    {id:"attendance", href:"attendance.html", title:"محلل الغياب", keys:[]},
+    {id:"violations", href:"violations.html", title:"محلل المخالفات", keys:["VIOL_"]},
+    {id:"forms",      href:"behavior-attendance-forms.html", title:"نماذج السلوك والمواظبة", keys:["moe_"]},
+    {id:"grades",     href:"grades.html",     title:"تحليل النتائج", keys:[], disabled:true},
+    {id:"committees", href:"committees.html", title:"اللجان والتكليفات", keys:["SCV2"]},
+    {id:"jobs",       href:"job-description.html", title:"الوصف الوظيفي للتشكيلات المدرسية", keys:["JOBDESC_"]}
+  ];
+  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_"];
+  var LABELS = {
+    moe_behavior_records_v1:"مخالفة سلوكية", moe_absence_records_v1:"سجل غياب",
+    moe_compensation_records_v1:"فرصة تعويض", moe_roster_v1:"طالب مستورد من نور",
+    JOBDESC_V1:"وصف وظيفي", JOBDESC_PRINTLOG_V1:"عملية طباعة"
+  };
+  var REMIND_DAYS = 14;
+  var cur = SECTIONS.filter(function(s){return s.id===PAGE;})[0] || null;
+
+  function $(id){ return document.getElementById(id); }
+  function ls(){ try{ return window.localStorage; }catch(e){ return null; } }
+  function matches(k, prefixes){ return prefixes.some(function(p){ return k===p || k.indexOf(p)===0; }); }
+  function keysFor(prefixes){
+    var s = ls(), out = []; if(!s) return out;
+    for(var i=0;i<s.length;i++){ var k = s.key(i); if(k && matches(k, prefixes)) out.push(k); }
+    return out.sort();
+  }
+  function fmtDate(iso){ try{ return new Date(iso).toLocaleString("ar-SA",{dateStyle:"medium",timeStyle:"short"}); }catch(e){ return iso; } }
+  function toast(msg){
+    var t = $("pnToast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toast._h); toast._h = setTimeout(function(){ t.classList.remove("show"); }, 3200);
+  }
+  function lastKey(scope){ return "portal_lastBackup_" + scope; }
+  function getLast(scope){ var s=ls(); return s ? s.getItem(lastKey(scope)) : null; }
+
+  /* ---- summary of what is stored ---- */
+  function summary(prefixes){
+    var s = ls(), items = [], keys = keysFor(prefixes);
+    keys.forEach(function(k){
+      var v = s.getItem(k), p = null;
+      try{ p = JSON.parse(v); }catch(e){}
+      if(k === "SCV2" && p && typeof p === "object"){
+        items.push((p.staff||[]).length + " منسوب");
+        items.push((p.comms||[]).length + " لجنة");
+        items.push((p.decs||[]).length + " قرار");
+        items.push((p.meets||[]).length + " اجتماع");
+      } else if(k === "VIOL_LAST_V1" && p && Array.isArray(p.arr)){
+        items.push("تحليل محفوظ: " + (p.total||0) + " مخالفة لـ " + p.arr.length + " طالبًا");
+      } else if(Array.isArray(p) && LABELS[k]){
+        items.push(p.length + " " + LABELS[k]);
+      }
+    });
+    var meta = keys.filter(function(k){ return k.indexOf("moe_meta_")===0 && s.getItem(k); }).length;
+    if(meta) items.push("بيانات المدرسة");
+    var RECORD_KEYS = ["moe_behavior_records_v1","moe_absence_records_v1","moe_compensation_records_v1","JOBDESC_PRINTLOG_V1"];
+    var hasData = keys.some(function(k){
+      var p = null; try{ p = JSON.parse(s.getItem(k)); }catch(e){ return false; }
+      if(k === "VIOL_LAST_V1") return !!(p && Array.isArray(p.arr) && p.arr.length);
+      if(k === "SCV2") return !!(p && ["staff","comms","decs","meets"].some(function(x){ return (p[x]||[]).length; }));
+      return RECORD_KEYS.indexOf(k) > -1 && Array.isArray(p) && p.length > 0;
+    });
+    return {keys:keys, items:items, hasData:hasData};
+  }
+
+  /* ---- export ---- */
+  function doExport(scope){
+    var s = ls(); if(!s){ alert("المتصفح لا يسمح بالوصول للتخزين المحلي."); return; }
+    var prefixes = scope === "all" ? ALL_PREFIXES : cur.keys;
+    var keys = keysFor(prefixes);
+    if(keys.indexOf("SCV2") > -1){ // مزامنة تاريخ آخر نسخة مع تنبيه نظام اللجان
+      try{
+        if(PAGE === "committees" && typeof db === "object" && db && db.meta){
+          db.meta.lastExport = new Date().toISOString(); s.setItem("SCV2", JSON.stringify(db));
+          if(typeof renderDbWarn === "function") renderDbWarn();
+          if(typeof renderBackupInfo === "function") renderBackupInfo();
+        } else {
+          var sc = JSON.parse(s.getItem("SCV2")||"null");
+          if(sc && typeof sc === "object"){ sc.meta = sc.meta || {}; sc.meta.lastExport = new Date().toISOString(); s.setItem("SCV2", JSON.stringify(sc)); }
+        }
+      }catch(e){}
+    }
+    if(!keys.length){ toast("لا توجد بيانات محفوظة لتصديرها"); return; }
+    var data = {}; keys.forEach(function(k){ data[k] = s.getItem(k); });
+    var now = new Date();
+    var pack = {app:APP, v:1, scope:scope, title: scope==="all" ? "جميع الأقسام" : cur.title,
+                createdAt: now.toISOString(), keys:data};
+    var name = (scope==="all" ? "جميع-الأقسام" : cur.title.replace(/\s+/g,"-")) + "-نسخة-احتياطية-" + now.toISOString().slice(0,10) + ".json";
+    var blob = new Blob([JSON.stringify(pack)], {type:"application/json"});
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    s.setItem(lastKey(scope), now.toISOString());
+    if(scope === "all") SECTIONS.forEach(function(sec){ if(sec.keys.length) s.setItem(lastKey(sec.id), now.toISOString()); });
+    else s.setItem(lastKey(scope), now.toISOString());
+    render(); refreshDot();
+    toast("تم تنزيل النسخة الاحتياطية ✓ احفظها في بريدك أو OneDrive");
+  }
+
+  /* ---- import ---- */
+  function doImport(scope, file){
+    if(!file) return;
+    var r = new FileReader();
+    r.onload = function(){
+      var p; try{ p = JSON.parse(r.result); }catch(e){ alert("الملف ليس نسخة احتياطية صالحة (JSON)."); return; }
+      var s = ls(); if(!s) return;
+      var prefixes = scope === "all" ? ALL_PREFIXES : cur.keys;
+      var incoming = {};
+      if(p && p.app === APP && p.keys && typeof p.keys === "object"){
+        Object.keys(p.keys).forEach(function(k){ if(matches(k, prefixes) && typeof p.keys[k] === "string") incoming[k] = p.keys[k]; });
+      } else if(p && Array.isArray(p.staff) && Array.isArray(p.comms) && matches("SCV2", prefixes)){
+        incoming.SCV2 = JSON.stringify(p); // نسخة قديمة من نظام اللجان
+      } else {
+        alert("هذا الملف لا يطابق نسخ هذا الموقع، لم تتم الاستعادة."); return;
+      }
+      var n = Object.keys(incoming).length;
+      if(!n){ alert("الملف لا يحتوي بيانات خاصة بهذا القسم. جرّب الاستيراد من «النسخة الشاملة» أو من القسم الصحيح."); return; }
+      var when = p.createdAt ? "\nتاريخ النسخة: " + fmtDate(p.createdAt) : "";
+      if(!confirm("سيتم استبدال بيانات " + (scope==="all" ? "جميع الأقسام" : "هذا القسم") + " على هذا الجهاز ببيانات الملف." + when + "\n\nمتابعة؟")) return;
+      keysFor(prefixes).forEach(function(k){ s.removeItem(k); });
+      Object.keys(incoming).forEach(function(k){ s.setItem(k, incoming[k]); });
+      var stamp = p.createdAt || new Date().toISOString(); // البيانات مطابقة لهذه النسخة
+      s.setItem(lastKey(scope), stamp);
+      if(scope === "all") SECTIONS.forEach(function(sec){ if(sec.keys.length) s.setItem(lastKey(sec.id), stamp); });
+      alert("تمت الاستعادة بنجاح ✓ سيُعاد تحميل الصفحة لعرض البيانات.");
+      location.reload();
+    };
+    r.readAsText(file);
+  }
+
+  /* ---- UI ---- */
+  var icoHome = '<svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M3.5 11L12 4l8.5 7"/><path stroke-linejoin="round" d="M6 9.5V20h4.5v-5.5h3V20H18V9.5"/></svg>';
+  var icoSave = '<svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg>';
+
+  function box(scope, title, prefixes, extra){
+    var sm = summary(prefixes), last = getLast(scope);
+    return '<div class="pn-box"><h3>' + title + '</h3>' + (extra||"") +
+      '<div class="pn-meta">آخر نسخة احتياطية من هذا الجهاز: <b>' + (last ? fmtDate(last) : "لم تُنشأ بعد") + '</b></div>' +
+      (sm.items.length ? '<ul class="pn-sum">' + sm.items.map(function(x){return "<li>"+x+"</li>";}).join("") + '</ul>'
+                       : '<p class="pn-note" style="margin-bottom:10px">لا توجد بيانات محفوظة على هذا الجهاز حاليًا.</p>') +
+      '<div class="pn-acts"><button type="button" class="pn-exp" data-exp="' + scope + '">⬇️ تصدير نسخة</button>' +
+      '<label class="pn-imp">⬆️ استيراد نسخة<input type="file" accept=".json,application/json" data-imp="' + scope + '"></label></div></div>';
+  }
+
+  function render(){
+    var body = $("pnBody"); if(!body) return;
+    var html = '<div class="pn-steps"><b>لنقل بياناتك إلى جهاز آخر:</b><ol>' +
+      '<li>اضغط «تصدير نسخة» على هذا الجهاز، فيُنزَّل ملف بصيغة JSON.</li>' +
+      '<li>أرسل الملف لنفسك (البريد، OneDrive، واتساب…).</li>' +
+      '<li>افتح نفس القسم على الجهاز الآخر، ثم «استيراد نسخة» واختر الملف.</li></ol></div>';
+    if(cur && cur.keys.length){
+      var stale = isStale(cur.id, cur.keys);
+      html += box(cur.id, "نسخة هذا القسم: " + cur.title, cur.keys,
+        stale ? '<p class="pn-warn">⚠️ لديك بيانات بدون نسخة احتياطية حديثة. البيانات محفوظة في متصفح هذا الجهاز فقط، ومسح المتصفح يفقدها.</p>' : "");
+    } else if(cur){
+      html += '<div class="pn-box"><h3>' + cur.title + '</h3><p class="pn-note">هذا القسم لا يحفظ بيانات على الجهاز؛ فهو يحلل الملفات التي ترفعها مباشرة، لذلك لا يحتاج نسخة خاصة. لنقل بيانات الأقسام الأخرى استخدم النسخة الشاملة.</p></div>';
+    }
+    html += box("all", "نسخة شاملة لجميع الأقسام", ALL_PREFIXES,
+      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي — في ملف واحد.</p>');
+    body.innerHTML = html;
+  }
+
+  function isStale(scope, prefixes){
+    if(!summary(prefixes).hasData) return false;
+    var last = getLast(scope) || getLast("all");
+    if(!last) return true;
+    return (Date.now() - new Date(last).getTime()) / 86400000 >= REMIND_DAYS;
+  }
+  function refreshDot(){
+    var b = $("pnBackupBtn"); if(!b) return;
+    var warn = cur && cur.keys.length ? isStale(cur.id, cur.keys) : false;
+    b.classList.toggle("warn", !!warn);
+    b.title = warn ? "لا توجد نسخة احتياطية حديثة لبيانات هذا القسم" : "النسخ الاحتياطي ونقل البيانات";
+  }
+
+  function open(){ render(); $("pnOv").classList.add("open"); var x=$("pnOv").querySelector(".pn-x"); if(x) x.focus(); }
+  function close(){ $("pnOv").classList.remove("open"); }
+
+  function build(){
+    if(PAGE !== "home"){
+      var bar = document.createElement("nav");
+      bar.className = "pn-bar"; bar.setAttribute("aria-label","التنقل بين الأقسام");
+      var opts = SECTIONS.map(function(s){
+        return '<option value="' + s.href + '"' + (s.id===PAGE?" selected":"") + (s.disabled?" disabled":"") + '>' +
+          s.title + (s.disabled?" (مغلق للتطوير)":"") + '</option>';
+      }).join("");
+      bar.innerHTML = '<a class="pn-home" href="index.html">' + icoHome + '<span>الرئيسية</span></a>' +
+        '<div class="pn-sec"><label for="pnSel">الانتقال إلى:</label><select id="pnSel">' + opts + '</select></div>' +
+        '<button type="button" class="pn-btn" id="pnBackupBtn">' + icoSave + '<span class="pn-t">النسخ الاحتياطي</span><span class="pn-dot"></span></button>';
+      document.body.insertBefore(bar, document.body.firstChild);
+      $("pnSel").addEventListener("change", function(){ if(this.value) location.href = this.value; });
+      $("pnBackupBtn").addEventListener("click", open);
+    }
+    var ov = document.createElement("div");
+    ov.className = "pn-ov"; ov.id = "pnOv";
+    ov.innerHTML = '<div class="pn-modal" role="dialog" aria-modal="true" aria-labelledby="pnTitle">' +
+      '<div class="pn-mh"><h2 id="pnTitle">النسخ الاحتياطي ونقل البيانات</h2><button type="button" class="pn-x" aria-label="إغلاق">✕</button></div>' +
+      '<div class="pn-mb" id="pnBody"></div></div>';
+    document.body.appendChild(ov);
+    var t = document.createElement("div"); t.className = "pn-toast"; t.id = "pnToast"; document.body.appendChild(t);
+    ov.addEventListener("click", function(e){
+      if(e.target === ov || e.target.closest(".pn-x")) return close();
+      var ex = e.target.closest("[data-exp]"); if(ex) doExport(ex.getAttribute("data-exp"));
+    });
+    ov.addEventListener("change", function(e){
+      var inp = e.target.closest("[data-imp]"); if(inp){ doImport(inp.getAttribute("data-imp"), inp.files[0]); inp.value = ""; }
+    });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && ov.classList.contains("open")) close(); });
+    refreshDot();
+  }
+
+  window.PN = {open:open};
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", build); else build();
+})();
+</script>
+<!-- ===== /PORTAL NAV & BACKUP ===== -->
+
 </body>
 </html>
