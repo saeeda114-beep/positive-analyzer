@@ -1129,9 +1129,10 @@ setInterval(updateCover,500);
     {id:"forms",      href:"behavior-attendance-forms.html", title:"نماذج السلوك والمواظبة", keys:["moe_"]},
     {id:"grades",     href:"grades.html",     title:"تحليل النتائج", keys:[], disabled:true},
     {id:"committees", href:"committees.html", title:"اللجان والتكليفات", keys:["SCV2"]},
-    {id:"jobs",       href:"job-description.html", title:"الوصف الوظيفي للتشكيلات المدرسية", keys:["JOBDESC_"]}
+    {id:"jobs",       href:"job-description.html", title:"الوصف الوظيفي للتشكيلات المدرسية", keys:["JOBDESC_"]},
+    {id:"improvement", href:"improvement-plan.html", title:"تحليل الواقع وخطة التحسين", keys:["IMPPLAN_"]}
   ];
-  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_"];
+  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_","IMPPLAN_"];
   var LABELS = {
     moe_behavior_records_v1:"مخالفة سلوكية", moe_absence_records_v1:"سجل غياب",
     moe_compensation_records_v1:"فرصة تعويض", moe_roster_v1:"طالب مستورد من نور",
@@ -1169,6 +1170,10 @@ setInterval(updateCover,500);
         items.push((p.meets||[]).length + " اجتماع");
       } else if(k === "VIOL_LAST_V1" && p && Array.isArray(p.arr)){
         items.push("تحليل محفوظ: " + (p.total||0) + " مخالفة لـ " + p.arr.length + " طالبًا");
+      } else if(k === "IMPPLAN_V1" && p && typeof p === "object"){
+        items.push("تحليل واقع وخطة تحسين");
+        items.push(((p.plan && p.plan.rows) || []).length + " إجراء تحسين");
+        items.push((p.exec || []).length + " أسبوع تنفيذ");
       } else if(Array.isArray(p) && LABELS[k]){
         items.push(p.length + " " + LABELS[k]);
       }
@@ -1180,6 +1185,7 @@ setInterval(updateCover,500);
       var p = null; try{ p = JSON.parse(s.getItem(k)); }catch(e){ return false; }
       if(k === "VIOL_LAST_V1") return !!(p && Array.isArray(p.arr) && p.arr.length);
       if(k === "SCV2") return !!(p && ["staff","comms","decs","meets"].some(function(x){ return (p[x]||[]).length; }));
+      if(k === "IMPPLAN_V1") return !!(p && typeof p === "object" && ((p.school && p.school.name) || (p.plan && p.plan.rows && p.plan.rows.length) || (p.exec && p.exec.length) || (p.prio && p.prio.length)));
       return RECORD_KEYS.indexOf(k) > -1 && Array.isArray(p) && p.length > 0;
     });
     return {keys:keys, items:items, hasData:hasData};
@@ -1278,7 +1284,7 @@ setInterval(updateCover,500);
       html += '<div class="pn-box"><h3>' + cur.title + '</h3><p class="pn-note">هذا القسم لا يحفظ بيانات على الجهاز؛ فهو يحلل الملفات التي ترفعها مباشرة، لذلك لا يحتاج نسخة خاصة. لنقل بيانات الأقسام الأخرى استخدم النسخة الشاملة.</p></div>';
     }
     html += box("all", "نسخة شاملة لجميع الأقسام", ALL_PREFIXES,
-      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي — في ملف واحد.</p>');
+      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي، وتحليل الواقع وخطة التحسين — في ملف واحد.</p>');
     body.innerHTML = html;
   }
 
