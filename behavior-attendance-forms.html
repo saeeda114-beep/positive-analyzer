@@ -285,6 +285,10 @@
   .btn-gold:hover{background:#b98a37;}
   .icon-btn.of-go{background:var(--green-700);color:#fff;border-color:var(--green-700);}
   .of-casebar{border:2px solid #c99a45;background:#fffaf0;}
+  .of-procs{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px;}
+  .of-procs summary{cursor:pointer;font-weight:800;color:var(--green-900);font-size:14px;}
+  .of-proc{display:flex;gap:8px;align-items:flex-start;padding:6px 4px;font-size:13.5px;cursor:pointer;border-bottom:1px solid #f1ece0;}
+  .of-proc input{margin-top:5px;accent-color:var(--green-700);}
   .btn-danger:hover{background:#f6dcd9;}
 
   table.log{width:100%;border-collapse:collapse;font-size:13px;}
@@ -890,7 +894,7 @@
         <div class="field"><label>اسم الطالب</label><input type="text" id="ofStudent" list="studentNamesList" placeholder="اتركه فارغًا لطباعة نماذج فارغة" onchange="ofOnStudent()"></div>
         <div class="field"><label>الصف / الفصل</label><input type="text" id="ofClass" placeholder="مثال: ثالث متوسط / 2" onchange="ofRefill()"></div>
         <div class="field"><label>المرحلة</label><input type="text" id="ofStage" placeholder="مثال: المتوسطة" onchange="ofRefill()"></div>
-        <div class="field"><label>المخالفة المرجعية</label><select id="ofBehRec" onchange="ofState.noBeh=false;ofRefill()"><option value="">—</option></select></div>
+        <div class="field"><label>المخالفة المرجعية</label><select id="ofBehRec" onchange="ofState.noBeh=false;ofSyncProcs();ofRefill()"><option value="">—</option></select></div>
       </div>
       <div class="hint" style="margin-top:8px;">تُعبّأ النماذج تلقائيًا من بيانات المدرسة (أعلى الصفحة) ومن سجلات الطالب المحفوظة: المخالفات، الغياب، وفرص التعويض. ويمكنك الكتابة أو التعديل مباشرة على أي حقل داخل النموذج قبل الطباعة. تغيير بيانات الطالب يعيد تعبئة النماذج ويلغي التعديلات اليدوية.</div>
       <div class="btnrow no-print" style="margin-top:10px;">
@@ -2389,6 +2393,7 @@ function ofCtx(){
     violation: beh ? (beh.violations||[]).join("، ") : "",
     degree: beh ? degreeLabel(beh.degree) : "",
     behDate: beh ? beh.date : "",
+    procs: ofState.noBeh ? [] : (ofState.procs || []),
     attExc: ofPickAtt(atts, true),
     attUnx: ofPickAtt(atts, false)
   };
@@ -2557,7 +2562,7 @@ const OF_BUILD = {
       ${LN([["نشعركم بأن الطالب/الطالبة قام/قامت بمشكلة سلوكية من الدرجة", c.degree]])}
       ${LN([["وهي", c.violation]])}
       <div>وقد قُررت الإجراءات التالية حياله/حيالها وفق ما ورد في قواعد السلوك والمواظبة:</div>
-      <ol class="ol-lines"><li>1. ${F("")}</li><li>2. ${F("")}</li><li>3. ${F("")}</li></ol>
+      <ol class="ol-lines"><li>1. ${F((c.procs||[])[0]||"")}</li><li>2. ${F((c.procs||[])[1]||"")}</li><li>3. ${F((c.procs||[])[2]||"")}</li></ol>
       <p>لذا يرجى منكم المتابعة والتعاون مع المدرسة بما يسهم في انضباط سلوك ابنكم/ابنتكم.</p>
       <div class="sig-row split" style="margin-top:14mm"><div class="seal">الختم</div>${SIG2("مدير/مديرة المدرسة", c.principal)}</div>`,
       {secret:"سري"});
@@ -2720,12 +2725,14 @@ function ofOnStudent(){
   $("ofBehRec").innerHTML = behs.length
     ? behs.map(r=>`<option value="${r.id}">${ofHijri(r.date)||r.date||"—"} — الدرجة ${degreeLabel(r.degree)} — ${ofEsc(((r.violations||[])[0]||"").slice(0,45))}</option>`).join("")
     : `<option value="">لا توجد مخالفات مسجّلة لهذا الطالب</option>`;
+  ofSyncProcs();
   ofRefill();
   if(name) toast("تمت تعبئة النماذج ببيانات الطالب ✓");
 }
 function ofClearStudent(){
   $("ofStudent").value = ""; $("ofClass").value = "";
   $("ofBehRec").innerHTML = `<option value="">—</option>`;
+  ofState.procs = [];
   ofRefill(); toast("النماذج فارغة وجاهزة للطباعة");
 }
 
@@ -2802,9 +2809,49 @@ const OF_RULES = [
   [/تعهد/, "pledgeB"],
   [/إشعار ولي|إبلاغ ولي|تبليغه/, "notify"],
   [/دعوة ولي|استدعاء ولي/, "invite"],
-  [/محضرًا لإثبات|محضرا لإثبات|محضر ضبط|إعداد محضر/, "incident"],
+  [/محضر\S* لإثبات|محضر ضبط|إعداد محضر/, "incident"],
   [/لجنة التوجيه/, "committee"]
 ];
+/* إجراءات إشعار ولي الأمر: ثلاثة أسطر كما في النموذج الرسمي، يُقترح أهمها ويختار المستخدم ويعدّل */
+const PROC_PRIORITY = [/حسم/, /تعهد/, /(إحالة|تحويل) الطالب/, /دعوة ولي|استدعاء ولي/, /نقل الطالب|بنقل الطالب/, /تعديل السلوك/, /مصادرة/, /إصلاح ما أتلفه/, /الاعتذار/, /تنبيه/];
+function procShort(t){ return String(t).replace(/،?\s*و?إشعار ولي (الأمر|أمره) بذلك/g,"").replace(/[.\s]+$/,"").trim(); }
+function behProcList(r){
+  const out = [], notes = new Set();
+  (((DATA[r.stage]||{})[r.degree]) || []).forEach(c=>(c.notes||[]).forEach(n=>notes.add(n)));
+  behActiveItems(r).forEach(t=>{ if(notes.has(t)) return; if(/^(تنفيذ )?جميع ما (ورد|ذكر)|^إشعار ولي|^تبليغ الجهات/.test(t)) return; const x = procShort(t); if(x && !out.includes(x)) out.push(x); });
+  return out;
+}
+function behProcSuggest(list){
+  const picked = [];
+  PROC_PRIORITY.forEach(re=>{ if(picked.length >= 3) return; const i = list.findIndex((t,k)=>re.test(t) && !picked.includes(k)); if(i >= 0) picked.push(i); });
+  list.forEach((t,k)=>{ if(picked.length < 3 && !picked.includes(k)) picked.push(k); });
+  return picked.sort((a,b)=>a-b).map(k=>list[k]);
+}
+function ofSyncProcs(){
+  ofState.procAll = []; ofState.procs = [];
+  if(ofState.noBeh) return;
+  const name = ($("ofStudent").value||"").trim(); if(!name) return;
+  const behs = getBehaviorRecords().filter(r=>(r.student||"").trim()===name);
+  const r = behs.find(x=>x.id===$("ofBehRec").value) || behs[0];
+  if(!r) return;
+  ofState.procAll = behProcList(r); ofState.procs = behProcSuggest(ofState.procAll);
+}
+function ofProcToggle(i, el){
+  const t = ofState.procAll[i]; let p = (ofState.procs||[]).slice();
+  if(el.checked){ if(p.length >= 3){ el.checked = false; toast("النموذج الرسمي فيه ثلاثة أسطر — ألغِ إجراءً أولًا"); return; } p.push(t); }
+  else p = p.filter(x=>x!==t);
+  ofState.procs = ofState.procAll.filter(x=>p.includes(x));
+  delete ofState.edits.notify;
+  if(ofState.current === "notify") ofRenderPreview();
+  const n = $("ofProcCount"); if(n) n.textContent = ofState.procs.length;
+}
+function ofProcPicker(){
+  const all = ofState.procAll || [];
+  if(!all.length) return "";
+  return `<details class="of-procs" open><summary>الإجراءات المكتوبة في «إشعار ولي الأمر» (<span id="ofProcCount">${(ofState.procs||[]).length}</span>/3) — اختر ما يناسب المخالفة</summary>
+    <div class="hint">اقترحنا أهم ثلاثة إجراءات من الإجراء المطبّق. بعض إجراءات الدرجة لا تناسب كل مخالفاتها، فاختر المناسب، ويمكنك أيضًا الكتابة مباشرة على النموذج.</div>
+    ${all.map((t,i)=>`<label class="of-proc"><input type="checkbox" ${(ofState.procs||[]).includes(t)?"checked":""} onchange="ofProcToggle(${i},this)"> <span>${ofEsc(t)}</span></label>`).join("")}</details>`;
+}
 function behFormKeys(r){
   const txt = behActiveItems(r), set = new Set();
   txt.forEach(t=>OF_RULES.forEach(([re,k])=>{ if(re.test(t)) set.add(k); }));
@@ -2832,6 +2879,7 @@ function ofOpenFor(kind, id){
   ofState.attId = kind === "att" ? r.id : "";
   ofState.noBeh = kind !== "beh";
   if(kind !== "beh") $("ofBehRec").value = "";
+  ofSyncProcs();
   const keys = kind==="beh" ? behFormKeys(r) : kind==="att" ? attFormKeys(r) : ["comp"];
   ofState.batch = new Set(keys);
   if(keys.length) ofState.current = keys[0];
@@ -2843,6 +2891,7 @@ function ofOpenFor(kind, id){
   bar.innerHTML = `<h2 style="margin-bottom:6px">🖨️ النماذج الرسمية لحالة: ${ofEsc(r.student)} — ${ofEsc(what)}</h2>
     ${names.length ? `<div class="hint">حُددت النماذج المرتبطة بالإجراء المطبّق: <b>${names.map(ofEsc).join("، ")}</b>. راجع كل نموذج من القائمة وعدّل ما تحتاجه، وأضف أو ألغِ أي نموذج بعلامة التحديد.</div>`
       : `<div class="hint">الإجراء المطبّق لا يتطلب نموذجًا رسميًا (مثل التنبيه الشفهي). يمكنك اختيار أي نموذج من القائمة عند الحاجة.</div>`}
+    ${kind==="beh" ? ofProcPicker() : ""}
     <div class="btnrow" style="margin-top:10px">${names.length?`<button class="btn btn-primary" onclick="ofPrintBatch()">🖨️ طباعة نماذج الحالة (${names.length})</button>`:""}
       <button class="btn btn-ghost" onclick="ofHideCase()">إغلاق</button></div>`;
   bar.style.display = "";
