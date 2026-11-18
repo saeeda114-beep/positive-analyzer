@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متابعة معايير الأداء والالتزام</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--navy-900:#0a2733;--navy-800:#0f3d4c;--teal-700:#155a6c;--teal-600:#1d5c6e;--teal-500:#237e93;--gold:#c99a45;--bg:#f3f6f8;--line:#dbe4ea;--muted:#5c7180;--ink:#16232b;--rd:#b3261e;--ok:#13824a;
+  --shadow:0 2px 8px rgba(10,39,51,.06),0 10px 30px rgba(10,39,51,.06);--form:#1a8a4a;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;}
+button{font-family:inherit;}
+header.top{background:linear-gradient(135deg,var(--navy-900),var(--navy-800) 60%,var(--teal-700));color:#fff;padding:22px 24px;}
+header.top .in{max-width:1180px;margin:0 auto;} header.top h1{margin:0 0 4px;font-size:22px;font-weight:900;} header.top p{margin:0;font-size:13px;color:#cfe0e6;}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px;}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.step{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:800;font-size:13px;color:var(--navy-800);cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.step .n{min-width:22px;height:22px;border-radius:11px;background:#e6eef2;color:var(--navy-800);display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;padding:0 5px;}
+.step.active{background:var(--navy-800);color:#fff;border-color:var(--navy-800);} .step.active .n{background:var(--gold);color:#3a2a06;}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px;}
+.card h2{margin:0 0 12px;font-size:16.5px;color:var(--navy-800);border-inline-start:4px solid var(--gold);padding-inline-start:10px;}
+.card h3{margin:14px 0 8px;font-size:14.5px;color:var(--teal-600);}
+.hint{font-size:12.5px;color:var(--muted);margin:0 0 10px;}
+.note{background:#fff8e8;border-inline-start:4px solid var(--gold);border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px;}
+.warnbar{background:#fbeceb;color:#8f2a22;border-radius:10px;padding:10px 14px;font-size:13.5px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+label.lb{display:block;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:4px;}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid #cfd9de;border-radius:8px;font-family:inherit;font-size:13.5px;background:#fff;color:var(--ink);}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--teal-500);outline-offset:0;}
+.g{display:grid;gap:12px;} .g2{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:860px){.g3,.g4{grid-template-columns:repeat(2,1fr);}} @media(max-width:560px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+.btn{border:0;border-radius:9px;padding:9px 16px;font-weight:800;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;}
+.btn.primary{background:var(--teal-600);color:#fff;} .btn.gold{background:var(--gold);color:#3a2a06;} .btn.light{background:#eef3f5;color:var(--navy-800);border:1px solid var(--line);}
+.btn.danger{background:#fdecea;color:var(--rd);border:1px solid #f4c7c2;padding:6px 10px;font-size:12.5px;} .btn.sm{padding:6px 11px;font-size:12.5px;}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;} .between{justify-content:space-between;}
+.navbtns{display:flex;justify-content:space-between;gap:10px;margin-top:6px;}
+.std{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;}
+.std > b{display:block;color:var(--navy-800);margin-bottom:6px;}
+.ev{display:grid;grid-template-columns:1fr 210px;gap:10px;align-items:center;padding:8px 0;border-top:1px dashed var(--line);}
+.ev .tx{font-size:13.5px;}
+.ev .tx small{color:var(--muted);}
+.tog{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;}
+.tog button{border:0;background:#fff;padding:6px 12px;font-weight:800;font-size:12.5px;cursor:pointer;color:var(--muted);}
+.tog button.on.c{background:var(--ok);color:#fff;} .tog button.on.n{background:var(--rd);color:#fff;}
+.ev .nt{grid-column:1/-1;}
+.ev .nt input{font-size:12.5px;padding:5px 8px;}
+@media(max-width:600px){.ev{grid-template-columns:1fr;}}
+.tool{font-size:12px;font-weight:800;color:var(--teal-600);margin-inline-start:6px;}
+.prog{height:10px;border-radius:6px;background:#e6eef2;overflow:hidden;} .prog i{display:block;height:100%;background:var(--ok);}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;} .kpi b{display:block;font-size:24px;color:var(--navy-800);}
+.stu{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;background:#fbfdfd;}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;} .tbl th,.tbl td{border:1px solid var(--line);padding:6px 7px;vertical-align:middle;text-align:right;} .tbl th{background:#eef4f6;color:var(--navy-800);}
+.scroll{overflow-x:auto;} .num{text-align:center !important;}
+.pill{display:inline-block;font-size:11.5px;font-weight:800;border-radius:20px;padding:1px 9px;background:#e8f3ef;color:#13704b;} .pill.warn{background:#fdecea;color:var(--rd);}
+.hidden{display:none !important;}
+#printArea{display:none;}
+@media print{ @page{size:A4 portrait;margin:9mm;} body{background:#fff;} body.printing > *:not(#printArea){display:none !important;} body.printing #printArea{display:block;} *{-webkit-print-color-adjust:exact;print-color-adjust:exact;} }
+#printArea{font-family:'Tajawal',Arial,sans-serif;color:#111;font-size:10.5pt;line-height:1.45;}
+#printArea thead{display:table-header-group;}
+#printArea .pg{page-break-after:always;break-after:page;} #printArea .pg:last-child{page-break-after:auto;break-after:auto;}
+#printArea .ph{display:flex;justify-content:space-between;align-items:center;border-bottom:2.5px solid var(--form);padding-bottom:4px;margin-bottom:8px;}
+#printArea .ph .r{font-size:9.5pt;font-weight:800;line-height:1.45;} #printArea .ph img{height:15mm;}
+#printArea h1{font-size:14pt;text-align:center;color:var(--form);margin:6px 0 8px;} #printArea h2{font-size:12pt;color:var(--form);margin:10px 0 5px;}
+#printArea table{width:100%;border-collapse:collapse;margin-bottom:8px;}
+#printArea th,#printArea td{border:1px solid #333;padding:3px 5px;font-size:9.5pt;vertical-align:middle;text-align:right;}
+#printArea th{background:var(--form);color:#fff;text-align:center;} #printArea td.c{text-align:center;} #printArea td.lbl{background:var(--form);color:#fff;font-weight:800;white-space:nowrap;}
+#printArea td.std{font-weight:800;background:#f4faf6;}
+#printArea tr{break-inside:avoid;page-break-inside:avoid;}
+#printArea .cb{display:inline-block;margin-inline-end:9px;white-space:nowrap;}
+#printArea .cb i{display:inline-block;width:10px;height:10px;border:1.3px solid #222;margin-inline-end:3px;vertical-align:-1px;font-style:normal;font-size:8px;line-height:8px;text-align:center;font-weight:900;}
+#printArea .tick{font-weight:900;font-size:11pt;}
+#printArea .stuh{background:#eef7f1;font-weight:800;}
+</style>
+</head>
+<body>
+<header class="top"><div class="in"><h1>متابعة تطبيق معايير الأداء والالتزام</h1>
+<p>جاهزية المدرسة قبل الزيارة: شواهد مجالات الإشراف التربوي والنشاط الطلابي والتوجيه الطلابي، وعينات الغياب والمخالفات وإجراءاتها — وفق استمارة متابعة أداء المدرسة 1448هـ.</p></div></header>
+<div class="wrap" id="app"><div id="backupWarn"></div><nav class="steps" id="steps"></nav><div id="view"></div></div>
+<div id="printArea"></div>
+<script>
+"use strict";
+/* المرجع: استمارة متابعة أداء المدرسة في تطبيق معايير الأداء والالتزام للعام الدراسي 1448هـ،
+   وقواعد السلوك والمواظبة (الإصدار الخامس 1447هـ) لأرقام الصفحات والنماذج الواردة في الشواهد. */
+const KEY="STDFOLLOW_V1";
+const LOGO="data:image/png;base64,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";
+const EASTERN_SECTORS=["الدمام","الخبر","القطيف","رأس تنورة","الجبيل","بقيق","النعيرية","قرية العليا","الخفجي","حفر الباطن"];
+const T_IMP="improvement-plan.html", T_ACT="activity-plan.html", T_FORMS="behavior-attendance-forms.html";
+/* [المعيار، [الشواهد]، رابط أداة مساعدة] */
+const DOMAINS=[
+ {id:"sup", title:"1- معايير مجال الإشراف التربوي", stds:[
+  ["إعداد خطة التحسين والتنفيذ وفق النموذج الإشرافي في ضوء تمكين المدرسة",[
+   "استخدام النموذج المعتمد لخطة التحسين في المجالات الإشرافية ( استمارة تحليل واقع المدرسة- استمارة (1) بناء خطة التحسين ـ استمارة (2) استمارة تنفيذ خطة التحسين)",
+   "اكتمال عناصر الخطة (البيانات الأولية- المجال- العنصر- وصف الاحتياج- اجراءات التحسين- أساليب وطرق التحسين- مدة الإنجاز- مسؤول التنفيذ- التوصيات والمقترحات)",
+   "شمولية الخطة للمجالات الإشرافية",
+   "صياغة الاحتياج وفق (تحليل واقع المدرسة وآخر تقرير تقويم مدرسي)",
+   "تحديد إجراءات وطرق تحسين مناسبة للعنصر المراد تحسينه",
+   "الإجراءات متسلسلة لتحسين العنصر المستهدف",
+   "الإجراءات مزمنة تحديد (تاريخ – أسبوع- فصل) مناسب لكل إجراء",
+   "وجود الإجراءات التي تستدعي الاستمرار أو التطوير في ضوء نتائج التنفيذ ضمن التوصيات.",
+   "تحديد الممارسة المستهدفة بالتطوير لبرامج أو أنشطة تطوير مهني",
+   "التوصيات والمقترحات شاملة للمجالات الإشرافية."],T_IMP],
+  ["تفعيل ونشر الخطة الأسبوعية والفصلية.",[
+   "الخطة الفصلية وفق النموذج المعتمد في دليل \"خطة المدرسة التعليمية ومشاركتها مع الأسرة\" [الخطة تتضمن الفعاليات- القيم- الأنشطة اللاصفية]",
+   "الخطة الأسبوعية وفق النموذج المعتمد في دليل \"خطة المدرسة التعليمية ومشاركتها مع الأسرة\" [الخطة الأسبوعية تتضمن جميع المواد وفق الجدول الأسبوعي للصف]",
+   "وضوح تنفيذ إدارة المدرسة لإجراءات بناء وتنفيذ الخطط التعليمية وفق الوثيقة المعتمدة للخطط التعليمية.",
+   "إدراج فعاليات وأنشطة ترتبط بأولويات خطة التحسين.",
+   "اتساق الفعاليات والأنشطة مع خصائص النمو والمرحلة العمرية للطلاب.",
+   "تضمين ما يعكس مشاركة الأسرة في تعلم الأبناء.",
+   "نشر المدرسة الخطة الفصلية على منصة مدرستي",
+   "نشر المدرسة الخطة الأسبوعية على منصة مدرستي للأسبوع الذي تمت الزيارة فيه.",
+   "صور الخطط (الأسبوعية والفصلية) واضحة وموثقة تاريخ النشر"],""],
+  ["نشر الجدول المدرسي في نظام نور",[
+   "يظهر في الجدول المدرسي إسناد حصص النشاط للمعلمين",
+   "صورة من الجدول المدرسي المعتمد في نظام نور  ( الجدول الشامل حسب المعلمين- المادة)",
+   "صورة من نشر الجدول في نظام نور"],""]
+ ]},
+ {id:"act", title:"2- معايير مجال النشاط الطلابي", stds:[
+  ["تكليف رائد النشاط في المدرسة",[
+   "إدخال بيانات رائد النشاط كاملة (الاسم- المسمى الوظيفي- تاريخ التكليف) في نظام نور",
+   "قرار تكليف (كلي/ جزئي) لرائد النشاط من مدير المدرسة مكتمل البيانات",
+   "صورة (اللقطة من نظام نور وقرار التكليف) واضحة ومكتملة البيانات."],""],
+  ["إعداد خطة المدرسة لبرامج النشاط الطلابي",[
+   "خطة برامج النشاط الطلابي المعتمدة",
+   "شمول وتنوع الخطة (لمجالات الأنشطة والأيام والمناسبات)",
+   "الالتزام بالبرامج المعتمدة للنشاط الطلابي وفق دليل الخطط الدراسية الإصدار السادس- وفق المحتوى العلمي لقناة عين الإثرائية.",
+   "أن تكون الفئة المنفذة معلم فقط"],T_ACT],
+  ["ملف معتمد ومحدث يتضمن بطاقات تنفيذ برامج ومسابقات النشاط الطلابي مع توثيق تنفيذها وفق الخطة المعتمدة",[
+   "نسخة من سجل رائد النشاط بصيغة Excel بالمدرسة (نموذج متابعة أداء المدرسة ملف الأكسل)",
+   "تنفيذ جميع الأيام والمناسبات لجميع الصفوف الدراسية",
+   "تنفيذ جميع برامج الفترات اللاصفية حتى الأسبوع الخامس في الفترات اللاصفية (الحضور والاصطفاف الصباحي- الممارسات اليومية- صلاة الظهر والمناوبة)",
+   "تنوع مجالات الأنشطة الصفية (العلوم والتقنية- الثقافة والفنون- الرياضة والصحة- الكشافة- المواطنة والحياة)",
+   "الدقة في تعبئة السجل بحيث يظهر برامج متنوعة لجميع الصفوف، ويكون مجموع عدد حصص النشاط للبرامج المنفذة مطابقًا لعدد حصص النشاط المعتمدة في دليل الخطط المدرسية الإصدار السادس.",
+   "تعبئة الأعمدة في ملف الاكسل وفقًا لعدد فصول المدرسة (دون حذف للأعمدة الفارغة",
+   "استكمال تعبئة الجدول الثاني في السجل (الإكسل) المتضمن (مشاركة أولياء الأمور وتنفيذ الشراكات)",
+   "توفر بطاقات تنفيذ برامج النشاط الطلابي خلال الفترة المطلوبة",
+   "توفربطاقات تنفيذ مسابقات النشاط الطلابي  خلال الفترة المطلوبة"],T_ACT]
+ ]}
+];
+/* التوجيه الطلابي — الغياب بعذر */
+const EXC_ITEMS=[
+ ["1-الالتزام بمعايير الغياب بعذر","تطابق تواريخ شواهد تطبيق إجراءات الغياب للطلبة مع التواريخ المحددة لكل طالب في العينة المختارة"],
+ ["1-الالتزام بمعايير الغياب بعذر","توفر ما يثبت عذر الغياب وفق حالات الغياب بعذر المعتمدة \"ص 49 \" بقواعد السلوك والمواظبة لكل طالب في العينة المختارة."],
+ ["إطلاع الطالب وولي أمره على قواعد السلوك والمواظبة وأخذ توقيعهما بما يفيد الاطلاع والالتزام بها","توفر نموذج الالتزام المدرسي\" ص 58 \" بقواعد السلوك والمواظبة لعينة الطلبة ذاتها المستخدمة للتحقق من الغياب بعذر"]
+];
+/* الغياب بدون عذر — [م، الإجراء، وقت التنفيذ، الشاهد، الجهة المنفذة، تعذر توفير الشاهد] */
+const REF_S="في حال رفض الطالبـ/ـة على التوقيع أو غيابه المتصل يتم إعداد محضر بذلك مع استكمال الإجراءات التالية";
+const REF_P="في حال رفض ولي أمر الطالبـ/ـة على التوقيع أو غيابه المتصل يتم إعداد محضر بذلك مع استكمال الإجراءات التالية";
+const T3="بعد وصول الطالب لغياب (3) أيام بدون عذر منفصل أو متصل", T5="بعد وصول الطالب لغياب (5) أيام بدون عذر منفصل أو متصل", T10="بعد وصول الطالب لغياب (10) أيام بدون عذر منفصل أو متصل";
+const UNEXC=[
+ [1,"تعبئة نموذج إجراءات الغياب بدون عذر ص (74) من قواعد السلوك والمواظبة الإصدار الخامس 1447هـ","بعد وصول الطالب لغياب (3) وأكثر أيام بدون عذر منفصل أو متصل","نسخة من النموذج متكمل الاجراءات","إدارة المدرسة",""],
+ [2,"الاستدعاء الأول لولي أمر الطالبـ/ـة",T3,"نسخة من خطاب الاستدعاء الذي تم تقديمه موثقاً بتوقيع مدير/ة المدرسة ومختوماً بالختم","إدارة المدرسة",""],
+ [3,"تحويل الطالب للموجه/ـة الطلابي/ـة لدراسة حالته",T3,"خطاب التحويل من قبل إدارة المدرسة للموجه/ـة الطلابي/ـة","إدارة المدرسة",""],
+ [4,"دراسة الحالة من قبل الموجه الطلابي في نظام نور- إرشاد فردي أو جمعي",T3,"نسخة من دراسة الحالة حسب نظام نور- نسخة من نظام نور إرشاد فردي أو جمعي","الموجه الطلابي",""],
+ [5,"توقيع الطالبـ/ـة على التعهد بالالتزام وعدم الغياب",T3,"نسخة من التعهد بتوقيع الطالبـ/ـة","إدارة المدرسة",REF_S],
+ [6,"توقيع ولي أمر الطالبـ/ـة على التعهد بالالتزام وعدم الغياب",T3,"نسخة من التعهد بتوقيع ولي أمر الطالبـ/ـة","إدارة المدرسة",REF_P],
+ [7,"الاستدعاء الثاني لولي أمر الطالبـ/ـة",T5,"نسخة من خطاب الاستدعاء الذي تم تقديمه موثقاً بتوقيع مدير/ة المدرسة ومختوماً بالختم","إدارة المدرسة",""],
+ [8,"توقيع الطالبـ/ـة على التعهد بالالتزام وعدم الغياب",T5,"نسخة من التعهد بتوقيع الطالبـ/ـة","إدارة المدرسة",REF_S],
+ [9,"توقيع ولي أمر الطالبـ/ـة على التعهد بالالتزام وعدم الغياب",T5,"نسخة من التعهد بتوقيع ولي أمر الطالبـ/ـة","إدارة المدرسة",REF_P],
+ [10,"تحويل حالة الطالبـ/ـة للجنة التوجيه الطلابي بالمدرسة لدراسة حالته وإبداء التوصيات",T5,"نسخة من خطاب التحويل للجنة","إدارة المدرسة",""],
+ [12,"مخاطبة الجهات ذات الاختصاص من قبل المدرسة حيال تطبيق ما ورد في نظام حماية الطفل ونظام الحماية من الإيذاء ولائحتيهما التنفيذية.",T10,"نسخة من الخطاب الذي تم تحويله لجهة الاختصاص","إدارة المدرسة",""],
+ [13,"مع إشعار إدارة التعليم بمخاطبة إدارة المدرسة للجهات ذات الاختصاص.",T10,"نسخة من الخطاب الذي تم إشعاره لإدارة التعليم","إدارة المدرسة",""]
+];
+const TIERS=[{id:"3",label:"في حال كان غياب الطالب/ـة من 3 إلى 4 أيام بدون عذر",n:6},{id:"5",label:"في حال كان غياب الطالب/ـة من 5 إلى 9 أيام بدون عذر",n:10},{id:"10",label:"في حال كان غياب الطالب/ـة 10أيام وأكثر بدون عذر",n:12}];
+function tierOf(days){ const d=parseInt(days); if(!(d>=3)) return null; return d>=10?TIERS[2]:d>=5?TIERS[1]:TIERS[0]; }
+/* المخالفات السلوكية */
+const BEH_STD="تطبيق الإجراءات المنصوص عليها في المواد / (6-16) من قواعد السلوك والمواظبة الإصدار الخامس وفق نوع المشكلة السلوكية وتصنيفها والمرحلة الدراسية للطالب.";
+const BEH={
+ "3":["خطاب دعوة ولي أمر  الطالب  نموذج ص 68 من قواعد السلوك والمواظبة الإصدار الخامس",
+  "تعهد سلوكي  على الطالب وتوقيع ولي أمره  بالعلم نموذج 66  من قواعد السلوك والمواظبة الإصدار الخامس / (توثيق رفض الطالب المخالف سلوكباً أو ولي أمره التعهد بعدم تكرار المشكلة  من خلال محضر  مع الاستمرار في بقية الإجراءات.)",
+  "إشعار ولي أمر الطالب /الطالبة بمشكلة سلوكية  نموذج ص 67  من قواعد السلوك والمواظبة الإصدار الخامس",
+  "الاعتذار لمن أساء إليهم  نموذج لاعتذار الطالب",
+  "إحالة طالب/ة  إلى الموجه الطلابي/ الموجهة الطلابية  نموذج ص 65  من قواعد السلوك والمواظبة الإصدار الخامس",
+  "دراسة حالة نموذج دراسة الحالة من نظام نور.",
+  "نموذج الالتزام المدرسي ص58  من قواعد السلوك والمواظبة الإصدار الخامس"],
+ "4":["خطاب إحالة الطالب من قبل إدارة المدرسة  إلى لجنة التوجيه الطلابي لدراسة مشكلته السلوكية بعد حدوثها مباشرة.",
+  "خطاب دعوة ولي أمر  الطالب  نموذج ص 68 من قواعد السلوك والمواظبة الإصدار الخامس",
+  "تعهد سلوكي  على الطالب وتوقيع ولي أمره  بالعلم  وتدوين إنذاره  بالنقل إلى مدرسة أخرى في حالة إعادة تكرار المشكلة نموذج 66  من قواعد السلوك والمواظبة الإصدار الخامس / (توثيق رفض الطالب المخالف سلوكباً أو ولي أمره التعهد بعدم تكرار المشكلة  من خلال محضر  مع الاستمرار في بقية الإجراءات.)",
+  "إشعار ولي أمر الطالب /الطالبة بمشكلة سلوكية  نموذج ص 67 ( قواعد السلوك والمواظبة الإصدار الخامس)",
+  "الاعتذار لمن أساء إليهم  نموذج لاعتذار الطالب",
+  "إحالة طالب/ة  إلى الموجه الطلابي/ الموجهة الطلابية  نموذج ص 65  من قواعد السلوك والمواظبة الإصدار الخامس",
+  "محضر اجتماع لجنة التوجيه الطلابي يدون فيه وصف المشكلة وتصنيفها وقرارات اللجنة بما فيها نقل الطالب من فصل إلى أخر نموذج ص70 من قواعد السلوك والمواظبة الإصدار الخامس",
+  "نموذج الالتزام المدرسي ص58  من قواعد السلوك والمواظبة الإصدار الخامس",
+  "دراسة حالة نوذج دراسة حالة من نظام نور"],
+ "5":["نموذج محضر لاثبات الواقعة ص69 من قواعد السلوك والمواظبة الإصدار الخامس",
+  "خطاب دعوة ولي أمر  الطالب  نموذج ص 68 من قواعد السلوك والمواظبة الإصدار الخامس",
+  "إشعار ولي أمر الطالب /الطالبة بمشكلة سلوكية  نموذج ص 67 ( قواعد السلوك والمواظبة الإصدار الخامس)",
+  "محضر اجتماع لجنة التوجيه الطلابي يدون فيه وصف المشكلة وتصنيفها وقرارات اللجنة نموذج ص70 من قواعد السلوك والمواظبة الإصدار الخامس",
+  "دراسة حالة- نموذج دراسة الحالة من نظام نور",
+  "خطاب الرفع بمحضر اجتماع لجنة التوجيه الطلابي  بخصوص القضية لإدارة التعليم  رسميا وبصفة عاجلة",
+  "الاعتذار لمن أساء إليهم  نموذج لاعتذار الطالب",
+  "قرار مدير التعليم بنقل الطالب /ة.",
+  "نموذج الالتزام المدرسي ص58  من قواعد السلوك والمواظبة الإصدار الخامس"]
+};
+const DEG_NAME={"3":"الثالثة","4":"الرابعة","5":"الخامسة"};
+
+/* ===================== الحالة ===================== */
+function blank(){ return {v:1,school:{name:"",admin:"",sector:"",stage:"",gender:"",year:"1448"},st:{},exc:{},excStu:[],unexc:[],beh:[],step:0}; }
+function load(){ let d=null; try{ d=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){} const b=blank(); if(!d||typeof d!=="object") return b;
+  for(const k in b) if(d[k]===undefined||d[k]===null) d[k]=b[k]; for(const k in b.school) if(d.school[k]===undefined) d.school[k]=b.school[k];
+  ["excStu","unexc","beh"].forEach(k=>{ if(!Array.isArray(d[k])) d[k]=[]; }); d.unexc.forEach(u=>{ if(!u.steps) u.steps={}; }); d.beh.forEach(x=>{ if(!x.items) x.items={}; });
+  if(!(d.step>=0&&d.step<6)) d.step=0; return d; }
+let S=load(), saveT=null;
+function save(){ clearTimeout(saveT); saveT=setTimeout(()=>{ try{ S.updated=new Date().toISOString(); localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){ alert("تعذر الحفظ: "+e.message); } renderBackupWarn(); renderSteps(); },250); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4); }
+function getPath(p){ return p.split(".").reduce((o,k)=>o==null?undefined:o[k],S); }
+function setPath(p,v){ const ks=p.split("."); let o=S; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null||typeof o[ks[i]]!=="object") o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=v; }
+function inp(p,ph,ex){ const v=getPath(p); return `<input data-k="${p}" value="${esc(v==null?"":v)}" placeholder="${esc(ph||"")}" ${ex||""}>`; }
+function sel(p,opts,ph){ const v=getPath(p)||""; return `<select data-k="${p}"><option value="">${esc(ph||"— اختر —")}</option>${opts.map(o=>{ const val=Array.isArray(o)?o[0]:o, lab=Array.isArray(o)?o[1]:o; return `<option value="${esc(val)}"${String(val)===String(v)?" selected":""}>${esc(lab)}</option>`; }).join("")}</select>`; }
+function field(l,h){ return `<div><label class="lb">${l}</label>${h}</div>`; }
+function tog(path){ const v=getPath(path)||""; return `<span class="tog"><button class="c${v==="c"?" on":""}" data-tog="${path}" data-v="c">مكتمل</button><button class="n${v==="n"?" on":""}" data-tog="${path}" data-v="n">غير مكتمل</button></span>`; }
+
+/* ===================== حساب الاكتمال ===================== */
+function domStats(d){ let t=0,c=0; d.stds.forEach((s,si)=>s[1].forEach((e,ei)=>{ t++; if((S.st[`${d.id}-${si}-${ei}`]||{}).s==="c") c++; })); return {t,c}; }
+function guidStats(){
+  let t=0,c=0;
+  EXC_ITEMS.forEach((x,i)=>{ t++; if((S.exc[i]||{}).s==="c") c++; });
+  S.unexc.forEach(u=>{ const tr=tierOf(u.days); if(!tr) return; UNEXC.slice(0,tr.n).forEach(r=>{ t++; if(((u.steps||{})[r[0]]||{}).s==="c") c++; }); });
+  S.beh.forEach(x=>{ const L=BEH[x.deg]||[]; L.forEach((e,i)=>{ t++; if(((x.items||{})[i]||{}).s==="c") c++; }); });
+  return {t,c};
+}
+function pct(s){ return s.t?Math.round(s.c*100/s.t):0; }
+
+/* ===================== الواجهة ===================== */
+const STEPS=[{t:"البيانات",r:vBasic},{t:"الإشراف التربوي",r:()=>vDomain(DOMAINS[0]),st:()=>domStats(DOMAINS[0])},{t:"النشاط الطلابي",r:()=>vDomain(DOMAINS[1]),st:()=>domStats(DOMAINS[1])},{t:"التوجيه الطلابي",r:vGuid,st:guidStats},{t:"ملخص الجاهزية",r:vSummary},{t:"الطباعة",r:vPrint}];
+function renderSteps(){ document.getElementById("steps").innerHTML=STEPS.map((s,i)=>`<button class="step${i===S.step?" active":""}" data-step="${i}"><span class="n">${s.st?pct(s.st())+"%":i+1}</span>${s.t}</button>`).join(""); }
+function go(i){ S.step=Math.max(0,Math.min(STEPS.length-1,i)); save(); render(); window.scrollTo({top:0,behavior:"smooth"}); }
+function navBtns(){ return `<div class="navbtns">${S.step>0?`<button class="btn light" data-go="${S.step-1}">→ السابق</button>`:"<span></span>"}${S.step<STEPS.length-1?`<button class="btn primary" data-go="${S.step+1}">التالي ←</button>`:""}</div>`; }
+function render(){ renderSteps(); document.getElementById("view").innerHTML=STEPS[S.step].r()+navBtns(); }
+function vBasic(){ const s="school.";
+  return `<div class="card"><h2>بيانات المدرسة</h2><div class="g g3">${field("اسم المدرسة",inp(s+"name"))}${field("إدارة التعليم",inp(s+"admin","مثال: الإدارة العامة للتعليم بالمنطقة الشرقية"))}${field("القطاع",inp(s+"sector","مثال: بقيق"))}
+  ${field("المرحلة",sel(s+"stage",["ابتدائي","متوسط","ثانوي"]))}${field("النوع",sel(s+"gender",["بنين","بنات"]))}${field("العام الدراسي (هـ)",inp(s+"year","1448"))}</div>
+  <p class="hint" style="margin-top:10px">الأداة لجاهزية المدرسة قبل زيارة المتابعة: حدّد حالة كل شاهد (مكتمل/غير مكتمل)، واكتب مكان حفظه أو ملاحظة، ثم راجع «ملخص الجاهزية» لمعرفة النواقص. خانتا «اسم المقيّم» و«التخصص» تُترك فارغة في الطباعة.</p></div>`; }
+function vDomain(d){
+  const s=domStats(d);
+  let h=`<div class="card"><div class="row between"><h2 style="margin:0">${d.title}</h2><span class="pill">${s.c} من ${s.t} مكتمل (${pct(s)}%)</span></div><div class="prog" style="margin-top:10px"><i style="width:${pct(s)}%"></i></div></div>`;
+  d.stds.forEach((st,si)=>{
+    h+=`<div class="card"><div class="std"><b>${esc(st[0])}${st[2]?`<a class="tool" href="${st[2]}" target="_blank">↗ الأداة المساعدة في المنصة</a>`:""}</b>
+      ${st[1].map((e,ei)=>{ const p=`st.${d.id}-${si}-${ei}`; return `<div class="ev"><span class="tx">${esc(e)}</span>${tog(p+".s")}<div class="nt">${inp(p+".note","مكان الشاهد أو ملاحظة (اختياري)")}</div></div>`; }).join("")}</div></div>`;
+  });
+  return h;
+}
+function vGuid(){
+  const s=guidStats();
+  let h=`<div class="card"><div class="row between"><h2 style="margin:0">3- معايير مجال التوجيه الطلابي</h2><span class="pill">${s.c} من ${s.t} مكتمل (${pct(s)}%)</span></div>
+    <p class="hint" style="margin-top:8px">المقيّم يختار عينة من الطلاب. سجّل هنا الطلاب المحتمل اختيارهم، فتظهر لكل طالب الإجراءات والشواهد المطلوبة حسب عدد أيام غيابه أو درجة مخالفته. <a class="tool" href="${T_FORMS}" target="_blank">↗ نماذج السلوك والمواظبة في المنصة</a></p></div>`;
+  h+=`<div class="card"><h2>الغياب بعذر والالتزام المدرسي</h2>${EXC_ITEMS.map((x,i)=>`<div class="ev"><span class="tx"><small>${esc(x[0])}</small><br>${esc(x[1])}</span>${tog(`exc.${i}.s`)}<div class="nt">${inp(`exc.${i}.note`,"ملاحظة (اختياري)")}</div></div>`).join("")}
+    <h3>عينة طلاب الغياب بعذر (اختياري للمراجعة)</h3>
+    ${S.excStu.length?`<div class="scroll"><table class="tbl"><thead><tr><th>اسم الطالب/ة</th><th>الصف</th><th>تواريخ الغياب</th><th class="num">إثبات العذر</th><th class="num">تطابق التواريخ</th><th class="num">نموذج الالتزام</th><th></th></tr></thead><tbody>
+    ${S.excStu.map((x,i)=>`<tr><td>${inp(`excStu.${i}.name`)}</td><td>${inp(`excStu.${i}.cls`)}</td><td>${inp(`excStu.${i}.dates`)}</td>${["proof","match","commit"].map(k=>`<td class="num">${tog(`excStu.${i}.${k}`)}</td>`).join("")}<td class="num"><button class="btn danger" data-act="del" data-l="excStu" data-i="${i}">✕</button></td></tr>`).join("")}</tbody></table></div>`:""}
+    <button class="btn light sm" style="margin-top:8px" data-act="addExc">+ طالب/ة</button></div>`;
+  h+=`<div class="card"><h2>الغياب بدون عذر</h2><p class="hint">اكتب عدد أيام الغياب بدون عذر، فتظهر الإجراءات المطلوبة حسب الفئة (3–4، 5–9، 10 فأكثر).</p>`;
+  S.unexc.forEach((u,i)=>{ const tr=tierOf(u.days);
+    h+=`<div class="stu"><div class="g g4" style="align-items:end">${field("اسم الطالب/ة",inp(`unexc.${i}.name`))}${field("الصف",inp(`unexc.${i}.cls`))}${field("أيام الغياب بدون عذر",inp(`unexc.${i}.days`,"",'inputmode="numeric"'))}<div class="row" style="justify-content:flex-end">${tr?`<span class="pill">${esc(tr.label.replace("في حال كان غياب الطالب/ـة ",""))}</span>`:""}<button class="btn danger" data-act="del" data-l="unexc" data-i="${i}">حذف</button></div></div>
+      ${tr?UNEXC.slice(0,tr.n).map(r=>`<div class="ev"><span class="tx"><b>${r[0]}-</b> ${esc(r[1])}<br><small>الشاهد: ${esc(r[3])} — ${esc(r[4])}</small></span>${tog(`unexc.${i}.steps.${r[0]}.s`)}<div class="nt">${inp(`unexc.${i}.steps.${r[0]}.note`,r[5]?"تعذر توفير الشاهد: "+r[5]:"التاريخ أو ملاحظة")}</div></div>`).join(""):`<p class="hint" style="margin:8px 0 0">الإجراءات تبدأ من غياب 3 أيام بدون عذر.</p>`}</div>`; });
+  h+=`<button class="btn light sm" data-act="addUnexc">+ طالب/ة</button></div>`;
+  h+=`<div class="card"><h2>المخالفات السلوكية (الدرجة الثالثة والرابعة والخامسة)</h2><p class="hint">${esc(BEH_STD)}</p>`;
+  S.beh.forEach((x,i)=>{ const L=BEH[x.deg];
+    h+=`<div class="stu"><div class="g g4" style="align-items:end">${field("اسم الطالب/ة",inp(`beh.${i}.name`))}${field("الصف",inp(`beh.${i}.cls`))}${field("درجة المخالفة",sel(`beh.${i}.deg`,[["3","الثالثة"],["4","الرابعة"],["5","الخامسة"]]))}<div class="row" style="justify-content:flex-end"><button class="btn danger" data-act="del" data-l="beh" data-i="${i}">حذف</button></div></div>
+      ${L?L.map((e,k)=>`<div class="ev"><span class="tx">${esc(e)}</span>${tog(`beh.${i}.items.${k}.s`)}<div class="nt">${inp(`beh.${i}.items.${k}.note`,"ملاحظة (اختياري)")}</div></div>`).join(""):`<p class="hint" style="margin:8px 0 0">اختر درجة المخالفة لتظهر الشواهد المطلوبة.</p>`}</div>`; });
+  return h+`<button class="btn light sm" data-act="addBeh">+ طالب/ة</button></div>`;
+}
+function missing(){
+  const out=[];
+  DOMAINS.forEach(d=>d.stds.forEach((st,si)=>st[1].forEach((e,ei)=>{ const v=(S.st[`${d.id}-${si}-${ei}`]||{}).s; if(v!=="c") out.push([d.title.replace(/^\d- معايير مجال /,""),e,v]); })));
+  EXC_ITEMS.forEach((x,i)=>{ const v=(S.exc[i]||{}).s; if(v!=="c") out.push(["التوجيه الطلابي",x[1],v]); });
+  S.unexc.forEach(u=>{ const tr=tierOf(u.days); if(!tr) return; UNEXC.slice(0,tr.n).forEach(r=>{ const v=((u.steps||{})[r[0]]||{}).s; if(v!=="c") out.push(["الغياب بدون عذر — "+(u.name||"طالب"),r[1],v]); }); });
+  S.beh.forEach(x=>{ (BEH[x.deg]||[]).forEach((e,k)=>{ const v=((x.items||{})[k]||{}).s; if(v!=="c") out.push(["مخالفة الدرجة "+(DEG_NAME[x.deg]||"")+" — "+(x.name||"طالب"),e,v]); }); });
+  return out;
+}
+function vSummary(){
+  const a=domStats(DOMAINS[0]), b=domStats(DOMAINS[1]), g=guidStats(), all={t:a.t+b.t+g.t,c:a.c+b.c+g.c}, m=missing();
+  return `<div class="card"><h2>ملخص جاهزية المدرسة</h2><div class="g g4">
+    ${[["الإجمالي",all],["الإشراف التربوي",a],["النشاط الطلابي",b],["التوجيه الطلابي",g]].map(x=>`<div class="kpi"><b>${pct(x[1])}%</b>${x[0]}<div class="hint" style="margin:4px 0 0">${x[1].c} من ${x[1].t}</div><div class="prog"><i style="width:${pct(x[1])}%"></i></div></div>`).join("")}</div></div>
+  <div class="card"><h2>الشواهد غير المكتملة أو غير المحددة <span class="pill warn">${m.length}</span></h2>
+    ${m.length?`<div class="scroll"><table class="tbl"><thead><tr><th style="width:24%">المجال</th><th>الشاهد</th><th class="num" style="width:110px">الحالة</th></tr></thead><tbody>${m.map(x=>`<tr><td>${esc(x[0])}</td><td>${esc(x[1])}</td><td class="num">${x[2]==="n"?'<span class="pill warn">غير مكتمل</span>':'<span class="pill" style="background:#eef3f5;color:#5c7180">لم يُحدد</span>'}</td></tr>`).join("")}</tbody></table></div>`:`<p class="ok" style="color:#13824a;font-weight:800">✔ جميع الشواهد مكتملة.</p>`}</div>`;
+}
+function vPrint(){
+  return `<div class="card"><h2>الطباعة (A4)</h2><div class="g g2">
+    <label class="row" style="font-weight:700"><input type="checkbox" id="pForm" checked style="width:auto"> استمارة متابعة أداء المدرسة (معبأة بحالة الشواهد)</label>
+    <label class="row" style="font-weight:700"><input type="checkbox" id="pBlank" style="width:auto"> نسخة فارغة من الاستمارة</label>
+    <label class="row" style="font-weight:700"><input type="checkbox" id="pMiss" checked style="width:auto"> قائمة النواقص للمتابعة الداخلية</label></div>
+    <div class="row" style="margin-top:14px"><button class="btn primary" data-act="doPrint">🖨️ طباعة / حفظ PDF</button></div></div>
+  <div class="card"><h2>إدارة البيانات</h2><p class="hint">البيانات محفوظة في متصفح هذا الجهاز فقط. صدّر نسخة احتياطية بانتظام.</p>
+    <div class="row"><button class="btn gold" data-act="backup">💾 النسخ الاحتياطي ونقل البيانات</button><button class="btn danger" data-act="reset" style="padding:9px 14px">مسح جميع بيانات الأداة</button></div></div>`;
+}
+
+/* ===================== الطباعة ===================== */
+function P(v){ return esc(v==null?"":v); }
+function hdr(){ const s=S.school; return `<div class="ph"><div class="r">وزارة التعليم<br>${P(s.admin||"الإدارة العامة للتعليم ..................")}<br>اللجنة التنفيذية لمتابعة معايير الأداء<br>والالتزام في مدارس التعليم العام</div><img src="${LOGO}" alt="وزارة التعليم"></div>`; }
+function cb(on,l){ return `<span class="cb"><i>${on?"✓":""}</i>${esc(l)}</span>`; }
+function cbs(v,o){ return o.map(x=>cb(v===x,x)).join(""); }
+function mark(v,blank){ if(blank) return ["",""]; return [v==="c"?'<span class="tick">✓</span>':"", v==="n"?'<span class="tick">✓</span>':""]; }
+function stdTable(rows,stdLabel,blank){
+  return `<table><thead><tr><th rowspan="2" style="width:24%">المعيار</th><th rowspan="2">${stdLabel||"شواهد تحقق المعيار"}</th><th colspan="2" style="width:17%">مستوى اكتمال الشواهد</th></tr><tr><th>مكتمل</th><th>غير مكتمل</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+function printForm(blank){
+  const s=S.school, eastern=/الشرقية/.test(s.admin||"")||EASTERN_SECTORS.indexOf(s.sector)>-1;
+  let h=`<section class="pg">${hdr()}<h1>استمارة متابعة أداء المدرسة في تطبيق معايير الأداء والالتزام للعام الدراسي ${P(s.year||"1448")}هـ</h1>
+  <table><tr><td class="lbl">اسم المقيّم</td><td></td><td class="lbl">التخصص</td><td></td></tr>
+  <tr><td class="lbl">القطاع</td><td colspan="3">${blank?(eastern?cbs("",EASTERN_SECTORS):""):(eastern?cbs(s.sector,EASTERN_SECTORS):(s.sector?cb(true,s.sector):""))}</td></tr>
+  <tr><td class="lbl">المدرسة</td><td colspan="3">${blank?"":P(s.name)}</td></tr>
+  <tr><td class="lbl">المرحلة</td><td>${cbs(blank?"":s.stage,["ابتدائي","متوسط","ثانوي"])}</td><td class="lbl">النوع</td><td>${cbs(blank?"":s.gender,["بنين","بنات"])}</td></tr></table>`;
+  DOMAINS.forEach(d=>{
+    let rows="";
+    d.stds.forEach((st,si)=>st[1].forEach((e,ei)=>{ const m=mark((S.st[`${d.id}-${si}-${ei}`]||{}).s,blank);
+      rows+=`<tr>${ei===0?`<td rowspan="${st[1].length}" class="std">${esc(st[0])}</td>`:""}<td>${esc(e)}</td><td class="c">${m[0]}</td><td class="c">${m[1]}</td></tr>`; }));
+    h+=`<h2>${d.title}</h2>${stdTable(rows)}`;
+  });
+  /* التوجيه الطلابي */
+  let rows="";
+  EXC_ITEMS.forEach((x,i)=>{ const m=mark((S.exc[i]||{}).s,blank); const first=i===0||EXC_ITEMS[i-1][0]!==x[0]; const span=EXC_ITEMS.filter(y=>y[0]===x[0]).length;
+    rows+=`<tr>${first?`<td rowspan="${span}" class="std">${esc(x[0])}</td>`:""}<td>${esc(x[1])}</td><td class="c">${m[0]}</td><td class="c">${m[1]}</td></tr>`; });
+  h+=`<h2>3- معايير مجال التوجيه الطلابي</h2>${stdTable(rows)}`;
+  const unexcList=blank||!S.unexc.length?TIERS.map(t=>({tier:t,u:null})):S.unexc.map(u=>({tier:tierOf(u.days),u})).filter(x=>x.tier);
+  unexcList.forEach(({tier,u})=>{
+    h+=`<table><thead><tr><th colspan="7" style="background:#fff;color:#111">${esc(tier.label)}${u?` — الطالب/ة: ${P(u.name)} ${u.cls?"("+P(u.cls)+")":""} — عدد الأيام: ${P(u.days)}`:""}</th></tr>
+    <tr><th style="width:6%">اكتمال</th><th style="width:4%">م</th><th>الإجراء</th><th style="width:17%">وقت تنفيذ الإجراء</th><th style="width:20%">الشاهد الواجب توفير</th><th style="width:9%">الجهة المنفذة</th><th style="width:17%">تعذر توفير الشاهد من قبل المدرسة</th></tr></thead><tbody>
+    ${UNEXC.slice(0,tier.n).map(r=>{ const v=u?(((u.steps||{})[r[0]]||{}).s):""; return `<tr><td class="c">${v==="c"?'<span class="tick">✓</span>':v==="n"?"✗":""}</td><td class="c">${r[0]}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td class="c">${esc(r[4])}</td><td style="font-size:8.5pt">${esc(r[5])}</td></tr>`; }).join("")}</tbody></table>`;
+  });
+  const behList=blank||!S.beh.length?["3","4","5"].map(d=>({deg:d,x:null})):S.beh.filter(x=>BEH[x.deg]).map(x=>({deg:x.deg,x}));
+  behList.forEach(({deg,x})=>{
+    const L=BEH[deg]; let r="";
+    L.forEach((e,k)=>{ const m=mark(x?((x.items||{})[k]||{}).s:"",!x); r+=`<tr>${k===0?`<td rowspan="${L.length}" class="std">${esc(BEH_STD)}</td>`:""}<td>${esc(e)}</td><td class="c">${m[0]}</td><td class="c">${m[1]}</td></tr>`; });
+    h+=`${x?`<p class="stuh" style="margin:6px 0 2px;padding:3px 6px">الطالب/ة: ${P(x.name)} ${x.cls?"("+P(x.cls)+")":""}</p>`:""}${stdTable(r,"شواهد تحقق المعيار / مخالفات الدرجة "+DEG_NAME[deg])}`;
+  });
+  return h+`</section>`;
+}
+function printMissing(){ const m=missing(); return `<section class="pg">${hdr()}<h1>قائمة الشواهد غير المكتملة — ${P(S.school.name)}</h1>
+  <table><thead><tr><th style="width:5%">م</th><th style="width:26%">المجال</th><th>الشاهد</th><th style="width:16%">المسؤول / الموعد</th></tr></thead><tbody>
+  ${m.map((x,i)=>`<tr><td class="c">${i+1}</td><td>${esc(x[0])}</td><td>${esc(x[1])}</td><td></td></tr>`).join("")||`<tr><td colspan="4" class="c">جميع الشواهد مكتملة</td></tr>`}</tbody></table></section>`; }
+function doPrint(parts){ const h=parts.join(""); if(!h){ alert("اختر جزءًا للطباعة."); return; } document.getElementById("printArea").innerHTML=h; document.body.classList.add("printing"); setTimeout(()=>window.print(),80); }
+window.addEventListener("afterprint",()=>{ document.body.classList.remove("printing"); document.getElementById("printArea").innerHTML=""; });
+
+/* ===================== النسخ الاحتياطي ===================== */
+function hasData(){ return !!(S.school.name||Object.keys(S.st).length||S.unexc.length||S.beh.length); }
+function renderBackupWarn(){ const box=document.getElementById("backupWarn"); if(!box) return; let last=null; try{ last=localStorage.getItem("portal_lastBackup_standards")||localStorage.getItem("portal_lastBackup_all"); }catch(e){}
+  const stale=hasData()&&(!last||(Date.now()-new Date(last).getTime())/86400000>=14);
+  box.innerHTML=stale?`<div class="warnbar">⚠️ ${last?"مضى أكثر من 14 يومًا على آخر نسخة احتياطية.":"لم تصدّر نسخة احتياطية لهذه الأداة بعد."} البيانات محفوظة في متصفح هذا الجهاز فقط.<button class="btn gold sm" data-act="backup">تصدير نسخة الآن</button></div>`:""; }
+
+/* ===================== الأحداث ===================== */
+const view=document.getElementById("app");
+function onField(e){ const t=e.target, k=t.getAttribute&&t.getAttribute("data-k"); if(!k) return; setPath(k,t.value); save(); if(e.type==="change"&&(/\.days$/.test(k)||/\.deg$/.test(k))) render(); }
+view.addEventListener("input",onField); view.addEventListener("change",onField);
+document.getElementById("steps").addEventListener("click",e=>{ const b=e.target.closest("[data-step]"); if(b) go(+b.getAttribute("data-step")); });
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]"); if(g){ go(+g.getAttribute("data-go")); return; }
+  const t=e.target.closest("[data-tog]"); if(t){ const p=t.getAttribute("data-tog"), v=t.getAttribute("data-v"); setPath(p,getPath(p)===v?"":v); save(); const y=window.scrollY; render(); window.scrollTo(0,y); return; }
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const a=b.getAttribute("data-act"), i=+b.getAttribute("data-i");
+  switch(a){
+    case "addExc": S.excStu.push({id:uid(),name:"",cls:"",dates:""}); break;
+    case "addUnexc": S.unexc.push({id:uid(),name:"",cls:"",days:"",steps:{}}); break;
+    case "addBeh": S.beh.push({id:uid(),name:"",cls:"",deg:"",items:{}}); break;
+    case "del": if(!confirm("حذف هذا الطالب من العينة؟")) return; S[b.getAttribute("data-l")].splice(i,1); break;
+    case "doPrint": { const on=id=>{ const x=document.getElementById(id); return x&&x.checked; }, parts=[]; if(on("pForm")) parts.push(printForm(false)); if(on("pBlank")) parts.push(printForm(true)); if(on("pMiss")) parts.push(printMissing()); doPrint(parts); return; }
+    case "backup": if(window.PN) PN.open(); return;
+    case "reset": if(!confirm("حذف جميع بيانات هذه الأداة من هذا الجهاز؟")) return; if(!confirm("تأكيد نهائي؟")) return; localStorage.removeItem(KEY); S=blank(); render(); renderBackupWarn(); return;
+    default: return;
+  }
+  save(); const y=window.scrollY; render(); window.scrollTo(0,y);
+});
+render(); renderBackupWarn();
+</script>
+<!-- ===== PORTAL NAV & BACKUP v1 (شريط التنقل والنسخ الاحتياطي الموحّد) ===== -->
+<style>
+.pn-bar{position:relative;z-index:900;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:0;padding:8px 14px;background:#0b3d2e;color:#fff;direction:rtl;
+  font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-size:14px;line-height:1.4;
+  box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.pn-bar *{box-sizing:border-box;}
+.pn-home{display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-weight:800;
+  padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);}
+.pn-home:hover,.pn-home:focus-visible{background:rgba(255,255,255,.22);outline:none;}
+.pn-home svg,.pn-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;}
+.pn-sec{display:flex;align-items:center;gap:6px;flex:1;min-width:200px;}
+.pn-sec label{opacity:.8;font-size:12.5px;white-space:nowrap;}
+.pn-sec select{flex:1;max-width:330px;font:inherit;font-size:13.5px;font-weight:700;color:#0b3d2e;background:#fff;
+  border:0;border-radius:8px;padding:6px 10px;cursor:pointer;}
+.pn-btn{position:relative;display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:800;color:#0b3d2e;
+  background:#f4c95d;border:0;border-radius:8px;padding:7px 13px;cursor:pointer;}
+.pn-btn:hover,.pn-btn:focus-visible{background:#ffd978;outline:2px solid #fff;outline-offset:1px;}
+.pn-btn .pn-dot{position:absolute;top:-4px;left:-4px;width:11px;height:11px;border-radius:50%;background:#d93a2b;border:2px solid #0b3d2e;display:none;}
+.pn-btn.warn .pn-dot{display:block;}
+@media (max-width:600px){ .pn-sec label{display:none;} .pn-btn .pn-t{display:none;} }
+
+.pn-ov{position:fixed;inset:0;z-index:9500;background:rgba(10,30,22,.55);display:none;align-items:flex-start;justify-content:center;
+  padding:5vh 12px;overflow:auto;direction:rtl;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;}
+.pn-ov.open{display:flex;}
+.pn-modal{background:#fff;color:#1b2a24;width:100%;max-width:620px;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.3);
+  font-size:14.5px;line-height:1.75;overflow:hidden;}
+.pn-mh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#0b3d2e;color:#fff;}
+.pn-mh h2{margin:0;font-size:17px;}
+.pn-x{background:none;border:0;color:#fff;font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:6px;}
+.pn-x:hover{background:rgba(255,255,255,.15);}
+.pn-mb{padding:16px 18px 18px;}
+.pn-steps{margin:0 0 14px;padding:10px 14px 10px 10px;background:#f2f8f5;border-radius:10px;border-inline-start:4px solid #178a5a;font-size:13.5px;}
+.pn-steps ol{margin:4px 0 0;padding-inline-start:20px;}
+.pn-box{border:1px solid #d7e6de;border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+.pn-box h3{margin:0 0 4px;font-size:15px;color:#0b3d2e;}
+.pn-meta{font-size:12.5px;color:#5d6b65;margin-bottom:8px;}
+.pn-meta b{color:#1b2a24;}
+.pn-sum{font-size:13px;margin:0 0 10px;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px;}
+.pn-sum li{background:#eef5f1;border-radius:20px;padding:2px 10px;}
+.pn-acts{display:flex;gap:8px;flex-wrap:wrap;}
+.pn-acts button,.pn-acts label{font:inherit;font-size:13.5px;font-weight:800;border-radius:8px;padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.pn-exp{background:#13704b;color:#fff;border:0;}
+.pn-exp:hover{background:#0f5c3f;}
+.pn-imp{background:#fff;color:#13704b;border:1.5px solid #13704b;}
+.pn-imp:hover{background:#f2f8f5;}
+.pn-imp input{display:none;}
+.pn-note{font-size:13px;color:#5d6b65;margin:0;}
+.pn-warn{font-size:13px;color:#a3312a;background:#fbeceb;border-radius:8px;padding:6px 10px;margin:0 0 10px;}
+.pn-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9800;background:#0b3d2e;color:#fff;
+  padding:11px 20px;border-radius:30px;font-family:'Tajawal',Tahoma,sans-serif;font-weight:700;font-size:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s;}
+.pn-toast.show{opacity:1;}
+@media print{ .pn-bar,.pn-ov,.pn-toast{display:none !important;} }
+</style>
+<script>
+(function(){
+  "use strict";
+  var PAGE = "standards";
+  var APP = "school-tools-portal";
+  var SECTIONS = [
+    {id:"positive",   href:"positive.html",   title:"محلل السلوك المتميز", keys:[]},
+    {id:"attendance", href:"attendance.html", title:"محلل الغياب", keys:[]},
+    {id:"violations", href:"violations.html", title:"محلل المخالفات", keys:["VIOL_"]},
+    {id:"forms",      href:"behavior-attendance-forms.html", title:"نماذج السلوك والمواظبة", keys:["moe_"]},
+    {id:"grades",     href:"grades.html",     title:"تحليل النتائج", keys:[], disabled:true},
+    {id:"committees", href:"committees.html", title:"اللجان والتكليفات", keys:["SCV2"]},
+    {id:"jobs",       href:"job-description.html", title:"الوصف الوظيفي للتشكيلات المدرسية", keys:["JOBDESC_"]},
+    {id:"improvement", href:"improvement-plan.html", title:"تحليل الواقع وخطة التحسين", keys:["IMPPLAN_"]},
+    {id:"activity", href:"activity-plan.html", title:"خطة النشاط الطلابي وبطاقات التنفيذ", keys:["ACTPLAN_"]},
+    {id:"standards", href:"standards-followup.html", title:"متابعة معايير الأداء والالتزام", keys:["STDFOLLOW_"]}
+  ];
+  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_","IMPPLAN_","ACTPLAN_","STDFOLLOW_"];
+  var LABELS = {
+    moe_behavior_records_v1:"مخالفة سلوكية", moe_absence_records_v1:"سجل غياب",
+    moe_compensation_records_v1:"فرصة تعويض", moe_roster_v1:"طالب مستورد من نور",
+    JOBDESC_V1:"وصف وظيفي", JOBDESC_PRINTLOG_V1:"عملية طباعة"
+  };
+  var REMIND_DAYS = 14;
+  var cur = SECTIONS.filter(function(s){return s.id===PAGE;})[0] || null;
+
+  function $(id){ return document.getElementById(id); }
+  function ls(){ try{ return window.localStorage; }catch(e){ return null; } }
+  function matches(k, prefixes){ return prefixes.some(function(p){ return k===p || k.indexOf(p)===0; }); }
+  function keysFor(prefixes){
+    var s = ls(), out = []; if(!s) return out;
+    for(var i=0;i<s.length;i++){ var k = s.key(i); if(k && matches(k, prefixes)) out.push(k); }
+    return out.sort();
+  }
+  function fmtDate(iso){ try{ return new Date(iso).toLocaleString("ar-SA",{dateStyle:"medium",timeStyle:"short"}); }catch(e){ return iso; } }
+  function toast(msg){
+    var t = $("pnToast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toast._h); toast._h = setTimeout(function(){ t.classList.remove("show"); }, 3200);
+  }
+  function lastKey(scope){ return "portal_lastBackup_" + scope; }
+  function getLast(scope){ var s=ls(); return s ? s.getItem(lastKey(scope)) : null; }
+
+  /* ---- summary of what is stored ---- */
+  function summary(prefixes){
+    var s = ls(), items = [], keys = keysFor(prefixes);
+    keys.forEach(function(k){
+      var v = s.getItem(k), p = null;
+      try{ p = JSON.parse(v); }catch(e){}
+      if(k === "SCV2" && p && typeof p === "object"){
+        items.push((p.staff||[]).length + " منسوب");
+        items.push((p.comms||[]).length + " لجنة");
+        items.push((p.decs||[]).length + " قرار");
+        items.push((p.meets||[]).length + " اجتماع");
+      } else if(k === "VIOL_LAST_V1" && p && Array.isArray(p.arr)){
+        items.push("تحليل محفوظ: " + (p.total||0) + " مخالفة لـ " + p.arr.length + " طالبًا");
+      } else if(k === "IMPPLAN_V1" && p && typeof p === "object"){
+        items.push("تحليل واقع وخطة تحسين");
+        items.push(((p.plan && p.plan.rows) || []).length + " إجراء تحسين");
+        items.push((p.exec || []).length + " أسبوع تنفيذ");
+      } else if(k === "ACTPLAN_V1" && p && typeof p === "object"){
+        items.push((p.entries || []).length + " برنامج نشاط");
+        items.push((p.teachers || []).length + " معلم في الإسناد");
+      } else if(k === "STDFOLLOW_V1" && p && typeof p === "object"){
+        items.push("متابعة معايير الأداء والالتزام");
+      } else if(Array.isArray(p) && LABELS[k]){
+        items.push(p.length + " " + LABELS[k]);
+      }
+    });
+    var meta = keys.filter(function(k){ return k.indexOf("moe_meta_")===0 && s.getItem(k); }).length;
+    if(meta) items.push("بيانات المدرسة");
+    var RECORD_KEYS = ["moe_behavior_records_v1","moe_absence_records_v1","moe_compensation_records_v1","JOBDESC_PRINTLOG_V1"];
+    var hasData = keys.some(function(k){
+      var p = null; try{ p = JSON.parse(s.getItem(k)); }catch(e){ return false; }
+      if(k === "VIOL_LAST_V1") return !!(p && Array.isArray(p.arr) && p.arr.length);
+      if(k === "SCV2") return !!(p && ["staff","comms","decs","meets"].some(function(x){ return (p[x]||[]).length; }));
+      if(k === "IMPPLAN_V1") return !!(p && typeof p === "object" && ((p.school && p.school.name) || (p.plan && p.plan.rows && p.plan.rows.length) || (p.exec && p.exec.length) || (p.prio && p.prio.length)));
+      if(k === "ACTPLAN_V1") return !!(p && typeof p === "object" && ((p.entries && p.entries.length) || (p.teachers && p.teachers.length)));
+      if(k === "STDFOLLOW_V1") return !!(p && typeof p === "object" && ((p.school && p.school.name) || (p.st && Object.keys(p.st).length) || (p.unexc && p.unexc.length) || (p.beh && p.beh.length)));
+      return RECORD_KEYS.indexOf(k) > -1 && Array.isArray(p) && p.length > 0;
+    });
+    return {keys:keys, items:items, hasData:hasData};
+  }
+
+  /* ---- export ---- */
+  function doExport(scope){
+    var s = ls(); if(!s){ alert("المتصفح لا يسمح بالوصول للتخزين المحلي."); return; }
+    var prefixes = scope === "all" ? ALL_PREFIXES : cur.keys;
+    var keys = keysFor(prefixes);
+    if(keys.indexOf("SCV2") > -1){ // مزامنة تاريخ آخر نسخة مع تنبيه نظام اللجان
+      try{
+        if(PAGE === "committees" && typeof db === "object" && db && db.meta){
+          db.meta.lastExport = new Date().toISOString(); s.setItem("SCV2", JSON.stringify(db));
+          if(typeof renderDbWarn === "function") renderDbWarn();
+          if(typeof renderBackupInfo === "function") renderBackupInfo();
+        } else {
+          var sc = JSON.parse(s.getItem("SCV2")||"null");
+          if(sc && typeof sc === "object"){ sc.meta = sc.meta || {}; sc.meta.lastExport = new Date().toISOString(); s.setItem("SCV2", JSON.stringify(sc)); }
+        }
+      }catch(e){}
+    }
+    if(!keys.length){ toast("لا توجد بيانات محفوظة لتصديرها"); return; }
+    var data = {}; keys.forEach(function(k){ data[k] = s.getItem(k); });
+    var now = new Date();
+    var pack = {app:APP, v:1, scope:scope, title: scope==="all" ? "جميع الأقسام" : cur.title,
+                createdAt: now.toISOString(), keys:data};
+    var name = (scope==="all" ? "جميع-الأقسام" : cur.title.replace(/\s+/g,"-")) + "-نسخة-احتياطية-" + now.toISOString().slice(0,10) + ".json";
+    var blob = new Blob([JSON.stringify(pack)], {type:"application/json"});
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    s.setItem(lastKey(scope), now.toISOString());
+    if(scope === "all") SECTIONS.forEach(function(sec){ if(sec.keys.length) s.setItem(lastKey(sec.id), now.toISOString()); });
+    else s.setItem(lastKey(scope), now.toISOString());
+    render(); refreshDot();
+    toast("تم تنزيل النسخة الاحتياطية ✓ احفظها في بريدك أو OneDrive");
+  }
+
+  /* ---- import ---- */
+  function doImport(scope, file){
+    if(!file) return;
+    var r = new FileReader();
+    r.onload = function(){
+      var p; try{ p = JSON.parse(r.result); }catch(e){ alert("الملف ليس نسخة احتياطية صالحة (JSON)."); return; }
+      var s = ls(); if(!s) return;
+      var prefixes = scope === "all" ? ALL_PREFIXES : cur.keys;
+      var incoming = {};
+      if(p && p.app === APP && p.keys && typeof p.keys === "object"){
+        Object.keys(p.keys).forEach(function(k){ if(matches(k, prefixes) && typeof p.keys[k] === "string") incoming[k] = p.keys[k]; });
+      } else if(p && Array.isArray(p.staff) && Array.isArray(p.comms) && matches("SCV2", prefixes)){
+        incoming.SCV2 = JSON.stringify(p); // نسخة قديمة من نظام اللجان
+      } else {
+        alert("هذا الملف لا يطابق نسخ هذا الموقع، لم تتم الاستعادة."); return;
+      }
+      var n = Object.keys(incoming).length;
+      if(!n){ alert("الملف لا يحتوي بيانات خاصة بهذا القسم. جرّب الاستيراد من «النسخة الشاملة» أو من القسم الصحيح."); return; }
+      var when = p.createdAt ? "\nتاريخ النسخة: " + fmtDate(p.createdAt) : "";
+      if(!confirm("سيتم استبدال بيانات " + (scope==="all" ? "جميع الأقسام" : "هذا القسم") + " على هذا الجهاز ببيانات الملف." + when + "\n\nمتابعة؟")) return;
+      keysFor(prefixes).forEach(function(k){ s.removeItem(k); });
+      Object.keys(incoming).forEach(function(k){ s.setItem(k, incoming[k]); });
+      var stamp = p.createdAt || new Date().toISOString(); // البيانات مطابقة لهذه النسخة
+      s.setItem(lastKey(scope), stamp);
+      if(scope === "all") SECTIONS.forEach(function(sec){ if(sec.keys.length) s.setItem(lastKey(sec.id), stamp); });
+      alert("تمت الاستعادة بنجاح ✓ سيُعاد تحميل الصفحة لعرض البيانات.");
+      location.reload();
+    };
+    r.readAsText(file);
+  }
+
+  /* ---- UI ---- */
+  var icoHome = '<svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M3.5 11L12 4l8.5 7"/><path stroke-linejoin="round" d="M6 9.5V20h4.5v-5.5h3V20H18V9.5"/></svg>';
+  var icoSave = '<svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg>';
+
+  function box(scope, title, prefixes, extra){
+    var sm = summary(prefixes), last = getLast(scope);
+    return '<div class="pn-box"><h3>' + title + '</h3>' + (extra||"") +
+      '<div class="pn-meta">آخر نسخة احتياطية من هذا الجهاز: <b>' + (last ? fmtDate(last) : "لم تُنشأ بعد") + '</b></div>' +
+      (sm.items.length ? '<ul class="pn-sum">' + sm.items.map(function(x){return "<li>"+x+"</li>";}).join("") + '</ul>'
+                       : '<p class="pn-note" style="margin-bottom:10px">لا توجد بيانات محفوظة على هذا الجهاز حاليًا.</p>') +
+      '<div class="pn-acts"><button type="button" class="pn-exp" data-exp="' + scope + '">⬇️ تصدير نسخة</button>' +
+      '<label class="pn-imp">⬆️ استيراد نسخة<input type="file" accept=".json,application/json" data-imp="' + scope + '"></label></div></div>';
+  }
+
+  function render(){
+    var body = $("pnBody"); if(!body) return;
+    var html = '<div class="pn-steps"><b>لنقل بياناتك إلى جهاز آخر:</b><ol>' +
+      '<li>اضغط «تصدير نسخة» على هذا الجهاز، فيُنزَّل ملف بصيغة JSON.</li>' +
+      '<li>أرسل الملف لنفسك (البريد، OneDrive، واتساب…).</li>' +
+      '<li>افتح نفس القسم على الجهاز الآخر، ثم «استيراد نسخة» واختر الملف.</li></ol></div>';
+    if(cur && cur.keys.length){
+      var stale = isStale(cur.id, cur.keys);
+      html += box(cur.id, "نسخة هذا القسم: " + cur.title, cur.keys,
+        stale ? '<p class="pn-warn">⚠️ لديك بيانات بدون نسخة احتياطية حديثة. البيانات محفوظة في متصفح هذا الجهاز فقط، ومسح المتصفح يفقدها.</p>' : "");
+    } else if(cur){
+      html += '<div class="pn-box"><h3>' + cur.title + '</h3><p class="pn-note">هذا القسم لا يحفظ بيانات على الجهاز؛ فهو يحلل الملفات التي ترفعها مباشرة، لذلك لا يحتاج نسخة خاصة. لنقل بيانات الأقسام الأخرى استخدم النسخة الشاملة.</p></div>';
+    }
+    html += box("all", "نسخة شاملة لجميع الأقسام", ALL_PREFIXES,
+      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي، وتحليل الواقع وخطة التحسين، وخطة النشاط الطلابي، ومتابعة معايير الأداء والالتزام — في ملف واحد.</p>');
+    body.innerHTML = html;
+  }
+
+  function isStale(scope, prefixes){
+    if(!summary(prefixes).hasData) return false;
+    var last = getLast(scope) || getLast("all");
+    if(!last) return true;
+    return (Date.now() - new Date(last).getTime()) / 86400000 >= REMIND_DAYS;
+  }
+  function refreshDot(){
+    var b = $("pnBackupBtn"); if(!b) return;
+    var warn = cur && cur.keys.length ? isStale(cur.id, cur.keys) : false;
+    b.classList.toggle("warn", !!warn);
+    b.title = warn ? "لا توجد نسخة احتياطية حديثة لبيانات هذا القسم" : "النسخ الاحتياطي ونقل البيانات";
+  }
+
+  function open(){ render(); $("pnOv").classList.add("open"); var x=$("pnOv").querySelector(".pn-x"); if(x) x.focus(); }
+  function close(){ $("pnOv").classList.remove("open"); }
+
+  function build(){
+    if(PAGE !== "home"){
+      var bar = document.createElement("nav");
+      bar.className = "pn-bar"; bar.setAttribute("aria-label","التنقل بين الأقسام");
+      var opts = SECTIONS.map(function(s){
+        return '<option value="' + s.href + '"' + (s.id===PAGE?" selected":"") + (s.disabled?" disabled":"") + '>' +
+          s.title + (s.disabled?" (مغلق للتطوير)":"") + '</option>';
+      }).join("");
+      bar.innerHTML = '<a class="pn-home" href="index.html">' + icoHome + '<span>الرئيسية</span></a>' +
+        '<div class="pn-sec"><label for="pnSel">الانتقال إلى:</label><select id="pnSel">' + opts + '</select></div>' +
+        '<button type="button" class="pn-btn" id="pnBackupBtn">' + icoSave + '<span class="pn-t">النسخ الاحتياطي</span><span class="pn-dot"></span></button>';
+      document.body.insertBefore(bar, document.body.firstChild);
+      $("pnSel").addEventListener("change", function(){ if(this.value) location.href = this.value; });
+      $("pnBackupBtn").addEventListener("click", open);
+    }
+    var ov = document.createElement("div");
+    ov.className = "pn-ov"; ov.id = "pnOv";
+    ov.innerHTML = '<div class="pn-modal" role="dialog" aria-modal="true" aria-labelledby="pnTitle">' +
+      '<div class="pn-mh"><h2 id="pnTitle">النسخ الاحتياطي ونقل البيانات</h2><button type="button" class="pn-x" aria-label="إغلاق">✕</button></div>' +
+      '<div class="pn-mb" id="pnBody"></div></div>';
+    document.body.appendChild(ov);
+    var t = document.createElement("div"); t.className = "pn-toast"; t.id = "pnToast"; document.body.appendChild(t);
+    ov.addEventListener("click", function(e){
+      if(e.target === ov || e.target.closest(".pn-x")) return close();
+      var ex = e.target.closest("[data-exp]"); if(ex) doExport(ex.getAttribute("data-exp"));
+    });
+    ov.addEventListener("change", function(e){
+      var inp = e.target.closest("[data-imp]"); if(inp){ doImport(inp.getAttribute("data-imp"), inp.files[0]); inp.value = ""; }
+    });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && ov.classList.contains("open")) close(); });
+    refreshDot();
+  }
+
+  window.PN = {open:open};
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", build); else build();
+})();
+</script>
+<!-- ===== /PORTAL NAV & BACKUP ===== -->
+</body>
+</html>

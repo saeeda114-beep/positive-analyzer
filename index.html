@@ -365,6 +365,12 @@ const TOOLS = [
         desc:"خطة برامج النشاط وفق دليل الخطط الدراسية، وإسنادها للمعلمين ضمن نسبة الحصص، وبطاقات تنفيذ البرامج والمسابقات، ونموذج ربط البرامج بالمستهدفات.",
         icon:`<circle cx="12" cy="8.5" r="4.5"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.5 7.5 20.5l4.5-2.5 4.5 2.5L15 12.5"/>`,
         badge:"جديد"
+      },
+      {
+        href:"standards-followup.html", title:"متابعة معايير الأداء والالتزام",
+        desc:"جاهزية المدرسة لزيارة المتابعة: شواهد الإشراف التربوي والنشاط والتوجيه الطلابي، وإجراءات عينات الغياب والمخالفات، ونسبة الاكتمال والنواقص.",
+        icon:`<rect x="5.5" y="4" width="13" height="17" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M8.5 9.5l1.5 1.5 3-3M8.5 15.5l1.5 1.5 3-3M15 10h1M15 16h1"/>`,
+        badge:"جديد"
       }
     ]
   }
@@ -517,9 +523,10 @@ buildCategories();
     {id:"committees", href:"committees.html", title:"اللجان والتكليفات", keys:["SCV2"]},
     {id:"jobs",       href:"job-description.html", title:"الوصف الوظيفي للتشكيلات المدرسية", keys:["JOBDESC_"]},
     {id:"improvement", href:"improvement-plan.html", title:"تحليل الواقع وخطة التحسين", keys:["IMPPLAN_"]},
-    {id:"activity", href:"activity-plan.html", title:"خطة النشاط الطلابي وبطاقات التنفيذ", keys:["ACTPLAN_"]}
+    {id:"activity", href:"activity-plan.html", title:"خطة النشاط الطلابي وبطاقات التنفيذ", keys:["ACTPLAN_"]},
+    {id:"standards", href:"standards-followup.html", title:"متابعة معايير الأداء والالتزام", keys:["STDFOLLOW_"]}
   ];
-  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_","IMPPLAN_","ACTPLAN_"];
+  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_","IMPPLAN_","ACTPLAN_","STDFOLLOW_"];
   var LABELS = {
     moe_behavior_records_v1:"مخالفة سلوكية", moe_absence_records_v1:"سجل غياب",
     moe_compensation_records_v1:"فرصة تعويض", moe_roster_v1:"طالب مستورد من نور",
@@ -564,6 +571,8 @@ buildCategories();
       } else if(k === "ACTPLAN_V1" && p && typeof p === "object"){
         items.push((p.entries || []).length + " برنامج نشاط");
         items.push((p.teachers || []).length + " معلم في الإسناد");
+      } else if(k === "STDFOLLOW_V1" && p && typeof p === "object"){
+        items.push("متابعة معايير الأداء والالتزام");
       } else if(Array.isArray(p) && LABELS[k]){
         items.push(p.length + " " + LABELS[k]);
       }
@@ -577,6 +586,7 @@ buildCategories();
       if(k === "SCV2") return !!(p && ["staff","comms","decs","meets"].some(function(x){ return (p[x]||[]).length; }));
       if(k === "IMPPLAN_V1") return !!(p && typeof p === "object" && ((p.school && p.school.name) || (p.plan && p.plan.rows && p.plan.rows.length) || (p.exec && p.exec.length) || (p.prio && p.prio.length)));
       if(k === "ACTPLAN_V1") return !!(p && typeof p === "object" && ((p.entries && p.entries.length) || (p.teachers && p.teachers.length)));
+      if(k === "STDFOLLOW_V1") return !!(p && typeof p === "object" && ((p.school && p.school.name) || (p.st && Object.keys(p.st).length) || (p.unexc && p.unexc.length) || (p.beh && p.beh.length)));
       return RECORD_KEYS.indexOf(k) > -1 && Array.isArray(p) && p.length > 0;
     });
     return {keys:keys, items:items, hasData:hasData};
@@ -675,7 +685,7 @@ buildCategories();
       html += '<div class="pn-box"><h3>' + cur.title + '</h3><p class="pn-note">هذا القسم لا يحفظ بيانات على الجهاز؛ فهو يحلل الملفات التي ترفعها مباشرة، لذلك لا يحتاج نسخة خاصة. لنقل بيانات الأقسام الأخرى استخدم النسخة الشاملة.</p></div>';
     }
     html += box("all", "نسخة شاملة لجميع الأقسام", ALL_PREFIXES,
-      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي، وتحليل الواقع وخطة التحسين، وخطة النشاط الطلابي — في ملف واحد.</p>');
+      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي، وتحليل الواقع وخطة التحسين، وخطة النشاط الطلابي، ومتابعة معايير الأداء والالتزام — في ملف واحد.</p>');
     body.innerHTML = html;
   }
 

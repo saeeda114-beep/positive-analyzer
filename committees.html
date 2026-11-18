@@ -118,9 +118,10 @@ function openM(){modal.classList.remove('hidden')}function closeM(){modal.classL
     {id:"committees", href:"committees.html", title:"اللجان والتكليفات", keys:["SCV2"]},
     {id:"jobs",       href:"job-description.html", title:"الوصف الوظيفي للتشكيلات المدرسية", keys:["JOBDESC_"]},
     {id:"improvement", href:"improvement-plan.html", title:"تحليل الواقع وخطة التحسين", keys:["IMPPLAN_"]},
-    {id:"activity", href:"activity-plan.html", title:"خطة النشاط الطلابي وبطاقات التنفيذ", keys:["ACTPLAN_"]}
+    {id:"activity", href:"activity-plan.html", title:"خطة النشاط الطلابي وبطاقات التنفيذ", keys:["ACTPLAN_"]},
+    {id:"standards", href:"standards-followup.html", title:"متابعة معايير الأداء والالتزام", keys:["STDFOLLOW_"]}
   ];
-  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_","IMPPLAN_","ACTPLAN_"];
+  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_","IMPPLAN_","ACTPLAN_","STDFOLLOW_"];
   var LABELS = {
     moe_behavior_records_v1:"مخالفة سلوكية", moe_absence_records_v1:"سجل غياب",
     moe_compensation_records_v1:"فرصة تعويض", moe_roster_v1:"طالب مستورد من نور",
@@ -165,6 +166,8 @@ function openM(){modal.classList.remove('hidden')}function closeM(){modal.classL
       } else if(k === "ACTPLAN_V1" && p && typeof p === "object"){
         items.push((p.entries || []).length + " برنامج نشاط");
         items.push((p.teachers || []).length + " معلم في الإسناد");
+      } else if(k === "STDFOLLOW_V1" && p && typeof p === "object"){
+        items.push("متابعة معايير الأداء والالتزام");
       } else if(Array.isArray(p) && LABELS[k]){
         items.push(p.length + " " + LABELS[k]);
       }
@@ -178,6 +181,7 @@ function openM(){modal.classList.remove('hidden')}function closeM(){modal.classL
       if(k === "SCV2") return !!(p && ["staff","comms","decs","meets"].some(function(x){ return (p[x]||[]).length; }));
       if(k === "IMPPLAN_V1") return !!(p && typeof p === "object" && ((p.school && p.school.name) || (p.plan && p.plan.rows && p.plan.rows.length) || (p.exec && p.exec.length) || (p.prio && p.prio.length)));
       if(k === "ACTPLAN_V1") return !!(p && typeof p === "object" && ((p.entries && p.entries.length) || (p.teachers && p.teachers.length)));
+      if(k === "STDFOLLOW_V1") return !!(p && typeof p === "object" && ((p.school && p.school.name) || (p.st && Object.keys(p.st).length) || (p.unexc && p.unexc.length) || (p.beh && p.beh.length)));
       return RECORD_KEYS.indexOf(k) > -1 && Array.isArray(p) && p.length > 0;
     });
     return {keys:keys, items:items, hasData:hasData};
@@ -276,7 +280,7 @@ function openM(){modal.classList.remove('hidden')}function closeM(){modal.classL
       html += '<div class="pn-box"><h3>' + cur.title + '</h3><p class="pn-note">هذا القسم لا يحفظ بيانات على الجهاز؛ فهو يحلل الملفات التي ترفعها مباشرة، لذلك لا يحتاج نسخة خاصة. لنقل بيانات الأقسام الأخرى استخدم النسخة الشاملة.</p></div>';
     }
     html += box("all", "نسخة شاملة لجميع الأقسام", ALL_PREFIXES,
-      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي، وتحليل الواقع وخطة التحسين، وخطة النشاط الطلابي — في ملف واحد.</p>');
+      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي، وتحليل الواقع وخطة التحسين، وخطة النشاط الطلابي، ومتابعة معايير الأداء والالتزام — في ملف واحد.</p>');
     body.innerHTML = html;
   }
 
