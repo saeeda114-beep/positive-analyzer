@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحليل واقع المدرسة وخطة التحسين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-900:#0a2733;--navy-800:#0f3d4c;--teal-700:#155a6c;--teal-600:#1d5c6e;--teal-500:#237e93;
+  --gold:#c99a45;--bg:#f3f6f8;--line:#dbe4ea;--muted:#5c7180;--ink:#16232b;--rd:#b3261e;
+  --shadow:0 2px 8px rgba(10,39,51,.06),0 10px 30px rgba(10,39,51,.06);
+  --lv-ex:#00a651;--lv-pr:#0070c0;--lv-st:#f0a800;--lv-pp:#e02020;
+  --form:#0e7c7b;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;}
+button{font-family:inherit;}
+header.top{background:linear-gradient(135deg,var(--navy-900),var(--navy-800) 60%,var(--teal-700));color:#fff;padding:22px 24px;}
+header.top .in{max-width:1180px;margin:0 auto;}
+header.top h1{margin:0 0 4px;font-size:22px;font-weight:900;}
+header.top p{margin:0;font-size:13px;color:#cfe0e6;}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px;}
+
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.step{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:800;font-size:13px;
+  color:var(--navy-800);cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.step .n{width:22px;height:22px;border-radius:50%;background:#e6eef2;color:var(--navy-800);display:inline-flex;align-items:center;justify-content:center;font-size:12px;}
+.step.done .n{background:#13824a;color:#fff;}
+.step.active{background:var(--navy-800);color:#fff;border-color:var(--navy-800);}
+.step.active .n{background:var(--gold);color:#3a2a06;}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px;}
+.card h2{margin:0 0 12px;font-size:16.5px;color:var(--navy-800);border-inline-start:4px solid var(--gold);padding-inline-start:10px;}
+.card h3{margin:14px 0 8px;font-size:14.5px;color:var(--teal-600);}
+.hint{font-size:12.5px;color:var(--muted);margin:0 0 10px;}
+.note{background:#fff8e8;border-inline-start:4px solid var(--gold);border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px;}
+.sugg{background:#eef7f4;border-inline-start:4px solid #13824a;border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px;}
+.warnbar{background:#fbeceb;color:#8f2a22;border-radius:10px;padding:10px 14px;font-size:13.5px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+label.lb{display:block;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:4px;}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid #cfd9de;border-radius:8px;font-family:inherit;font-size:13.5px;background:#fff;color:var(--ink);}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--teal-500);outline-offset:0;border-color:var(--teal-500);}
+textarea{min-height:70px;resize:vertical;line-height:1.7;}
+.g{display:grid;gap:12px;}
+.g2{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g4{grid-template-columns:repeat(4,1fr);} .g6{grid-template-columns:repeat(6,1fr);}
+@media(max-width:860px){.g3,.g4,.g6{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.g2,.g3,.g4,.g6{grid-template-columns:1fr;}}
+.btn{border:0;border-radius:9px;padding:9px 16px;font-weight:800;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.btn.primary{background:var(--teal-600);color:#fff;} .btn.primary:hover{background:var(--teal-500);}
+.btn.gold{background:var(--gold);color:#3a2a06;} .btn.gold:hover{background:#dba94f;}
+.btn.light{background:#eef3f5;color:var(--navy-800);border:1px solid var(--line);}
+.btn.danger{background:#fdecea;color:var(--rd);border:1px solid #f4c7c2;padding:6px 10px;font-size:12.5px;}
+.btn.sm{padding:6px 11px;font-size:12.5px;}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.between{justify-content:space-between;}
+.navbtns{display:flex;justify-content:space-between;gap:10px;margin-top:6px;}
+
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th,.tbl td{border:1px solid var(--line);padding:6px 7px;vertical-align:middle;text-align:right;}
+.tbl th{background:#eef4f6;color:var(--navy-800);font-weight:800;}
+.tbl td input,.tbl td select,.tbl td textarea{padding:6px 7px;font-size:13px;}
+.tbl td textarea{min-height:54px;}
+.scroll{overflow-x:auto;}
+.num{text-align:center !important;}
+.lv{display:inline-block;font-size:11.5px;font-weight:800;color:#fff;border-radius:20px;padding:1px 9px;white-space:nowrap;}
+.lv.ex{background:var(--lv-ex);} .lv.pr{background:var(--lv-pr);} .lv.st{background:var(--lv-st);} .lv.pp{background:var(--lv-pp);} .lv.na{background:#a9b6bd;}
+.legend{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center;}
+.tag{display:inline-block;font-size:11px;font-weight:800;border-radius:6px;padding:1px 7px;background:#e8f3ef;color:#13704b;margin-inline-start:6px;}
+.tag.opp{background:#eaf1fb;color:#1f5fa8;}
+
+.ind{display:grid;grid-template-columns:72px 1fr 110px 92px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line);}
+.ind:last-child{border-bottom:0;}
+.ind .code{font-weight:800;color:var(--teal-600);direction:ltr;text-align:right;font-size:13px;}
+.ind .tx{font-size:13.5px;}
+.ind input{text-align:center;}
+.grp{font-size:12.5px;font-weight:800;color:#3a2a06;background:#f6efe1;border-radius:8px;padding:4px 10px;margin:12px 0 2px;display:inline-block;}
+@media(max-width:600px){.ind{grid-template-columns:60px 1fr;}.ind .tx{grid-column:2;}.ind input{grid-column:1/2;}}
+
+.listbox{border:1px solid var(--line);border-radius:12px;padding:12px;}
+.listbox h3{margin:0 0 8px;}
+.li{display:flex;gap:6px;align-items:flex-start;margin-bottom:6px;}
+.li textarea{min-height:40px;}
+.sw{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:760px){.sw{grid-template-columns:1fr;}}
+.sw .s{border-top:4px solid #3cb44b;} .sw .w{border-top:4px solid #4aa3df;} .sw .o{border-top:4px solid #e3b21d;} .sw .t{border-top:4px solid #e02020;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;}
+.chip{background:#f1f6f8;border:1px dashed #b9cbd4;border-radius:16px;padding:3px 10px;font-size:12px;cursor:pointer;text-align:right;}
+.chip:hover{background:#e3eff3;}
+.pitem{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fbfdfd;}
+.check li{margin-bottom:4px;}
+.ok{color:#13824a;font-weight:800;} .no{color:var(--rd);font-weight:800;}
+.hidden{display:none !important;}
+
+/* ===================== PRINT ===================== */
+#printArea{display:none;}
+@media print{
+  @page{size:A4 landscape;margin:9mm 10mm;}
+  body{background:#fff;}
+  body.printing > *:not(#printArea){display:none !important;}
+  body.printing #printArea{display:block;}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+#printArea{font-family:'Tajawal',Arial,sans-serif;color:#111;font-size:10.5pt;line-height:1.45;}
+#printArea thead{display:table-header-group;}
+#printArea .pg{page-break-after:always;break-after:page;}
+#printArea .pg:last-child{page-break-after:auto;break-after:auto;}
+#printArea .ph{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:3px solid var(--form);padding-bottom:4px;margin-bottom:6px;}
+#printArea .ph .r{font-size:8.8pt;font-weight:800;line-height:1.4;text-align:center;min-width:42%;}
+#printArea .ph .m{flex:1;text-align:center;}
+#printArea .ph .m img{height:15mm;}
+#printArea .ph .l{font-size:9pt;text-align:left;color:#333;line-height:1.4;min-width:20%;}
+#printArea h1{font-size:15pt;text-align:center;color:var(--form);margin:4px 0 8px;}
+#printArea h2{font-size:12pt;margin:8px 0 5px;}
+#printArea h3{font-size:10.5pt;margin:7px 0 4px;}
+#printArea table{width:100%;border-collapse:collapse;margin-bottom:6px;}
+#printArea th,#printArea td{border:1px solid #333;padding:3px 5px;font-size:9.5pt;vertical-align:middle;text-align:right;}
+#printArea th{background:var(--form);color:#fff;font-weight:800;text-align:center;}
+#printArea th.gy{background:#f2f2f2;color:#111;}
+#printArea td.gy{background:#f2f2f2;font-weight:700;text-align:center;}
+#printArea table.it td,#printArea table.it th{font-size:8.8pt;padding:2px 4px;}
+#printArea td.c{text-align:center;}
+#printArea td.lbl{background:var(--form);color:#fff;font-weight:800;white-space:nowrap;}
+#printArea tr{break-inside:avoid;page-break-inside:avoid;}
+#printArea .avoid{break-inside:avoid;page-break-inside:avoid;}
+#printArea .cb{display:inline-block;margin-inline-end:10px;white-space:nowrap;}
+#printArea .cb i{display:inline-block;width:11px;height:11px;border:1.4px solid #222;margin-inline-end:4px;vertical-align:-1px;font-style:normal;font-size:9px;line-height:9px;text-align:center;font-weight:900;}
+#printArea .pct{font-weight:800;font-size:9.5pt;}
+#printArea .pct.ex{color:var(--lv-ex);} #printArea .pct.pr{color:var(--lv-pr);} #printArea .pct.st{color:var(--lv-st);} #printArea .pct.pp{color:var(--lv-pp);}
+#printArea .foot{font-size:8.5pt;color:#c00000;margin:1px 0;}
+#printArea .fn{font-size:8.5pt;color:#1f6fd1;margin:1px 0 6px;}
+#printArea .cover{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140mm;text-align:center;}
+#printArea .cover .t{font-size:20pt;font-weight:900;line-height:2.1;margin-bottom:26px;}
+#printArea .cover .f{font-size:14pt;font-weight:800;margin:8px 0 2px;}
+#printArea .cover .f small{font-size:8pt;color:#1f6fd1;font-weight:400;}
+#printArea .cover .v{font-size:13pt;border-bottom:1.5px dotted #333;min-width:70mm;padding:2px 10px;margin-bottom:10px;}
+#printArea .sig{display:flex;justify-content:space-between;margin-top:14px;font-weight:800;}
+#printArea .recs{border:1px solid #333;padding:6px 8px;min-height:22mm;white-space:pre-wrap;}
+#printArea ul.b{margin:0;padding-inline-start:18px;}
+#printArea .swot td{vertical-align:top;}
+#printArea .swot .side{width:7mm;padding:0;text-align:center;color:#fff;font-weight:900;writing-mode:vertical-rl;}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <h1>تحليل واقع المدرسة وخطة التحسين</h1>
+  <p>تحليل واقع المدرسة وبناء خطة التحسين وتنفيذها في مجالات الممارسات الإشرافية ونماذج التنفيذ — وفق النموذج الإشرافي المعتمد 1448هـ، مع مقترحات جاهزة قابلة للتعديل.</p>
+</div></header>
+
+<div class="wrap" id="app">
+  <div id="backupWarn"></div>
+  <nav class="steps" id="steps"></nav>
+  <div id="view"></div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   المرجع: النموذج الإشرافي — «أنموذج استرشادي لتحليل واقع المدرسة وبناء خطة التحسين
+   وتنفيذها في مجالات الممارسات الإشرافية ونماذج التنفيذ» 1448هـ (وزارة التعليم)،
+   والنموذج المعتمد لرفع خطة التحسين والتنفيذ، واستمارات المدرسة (1) لمستويات الانطلاق والتقدم والتميز.
+   مستويات الأداء: التميز ≥90، التقدم 75–<90، الانطلاق 50–<75، التهيئة <50
+   نقطة القوة = التميز والتقدم — نقطة الضعف = الانطلاق والتهيئة
+   ============================================================ */
+const KEY = "IMPPLAN_V1";
+const LOGO = "data:image/png;base64,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";
+
+/* ===== جداول مجالات الممارسات الإشرافية كما وردت في النموذج الإشرافي ===== */
+const SUP = [
+  {id:"teach", name:"التدريس", title:"أولاً: مجال التدريس",
+   frame:["تخطيط التدريس","تنفيذ التدريس","تقويم التعلم"],
+   groups:[
+    {area:"التعليم والتعلم", std:"بناء خبرات التعلم", items:[
+      ["2-1-1-1","توفر المدرسة فرصًا متكافئة للتعلم تلبي احتياجات المتعلمين بمن فيهم ذوو الإعاقة والموهوبون"],
+      ["2-1-1-2","تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة"],
+      ["2-1-1-3","تنوع المدرسة في إستراتيجيات التعليم والتعلم لتلبية احتياجات المتعلمين، ودعم تعلمهم"],
+      ["2-1-1-4","تفعل المدرسة التقنية الرقمية لدعم تعلم المتعلمين وتلبية احتياجاتهم"],
+      ["2-1-1-5","تنفذ المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين"],
+      ["2-1-1-6","تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين"],
+      ["2-1-1-7","تنمي المدرسة مهارات التفكير والبحث والابتكار لدى المتعلمين"],
+      ["2-1-1-8","تنمي المدرسة المهارات العاطفية والاجتماعية لدى المتعلمين"],
+      ["2-1-1-9","تعزز المدرسة دافعية المتعلمين للتعلم والاستمتاع به"]]},
+    {area:"التعليم والتعلم", std:"تقويم التعلم", items:[
+      ["2-2-1-1","تطبق المدرسة أساليب وأدوات تقويم متنوعة للكشف عن مستويات أداء المتعلمين المختلفة"],
+      ["2-2-1-2","تطبق المدرسة أساليب وأدوات متنوعة لتقويم نواتج التعلم المستهدفة في مناهج التعليم"],
+      ["2-2-1-3","تحلل المدرسة نتائج التقويم، وتوظفها في تحسين عمليات التعليم والتعلم والتقويم"],
+      ["2-2-1-4","تقدم المدرسة التغذية الراجعة للمتعلمين وأولياء أمورهم وتتابع تقدمهم بشكل مستمر"]]}
+   ]},
+  {id:"out", name:"نواتج التعلم", title:"ثانياً: مجال نواتج التعلم",
+   frame:["تحسين التحصيل العلمي والدراسي للطالب"],
+   groups:[
+    {area:"نواتج التعلم", std:"التحصيل التعليمي", items:[
+      ["3-1-1-1","يحقق المتعلمون نتائج مرتفعة في مجال القراءة وفقاً للاختبارات الوطنية"],
+      ["3-1-1-2","يحقق المتعلمون نتائج مرتفعة في مجال الرياضيات وفقًا للاختبارات الوطنية"],
+      ["3-1-1-3","يحقق المتعلمون نتائج مرتفعة في مجال العلوم وفقًا للاختبارات الوطنية"],
+      ["3-1-1-4","يحقق المتعلمون تقدماً في مجال القراءة قياساً على مستوى أداء المدرسة السابق في للاختبارات الوطنية"],
+      ["3-1-1-5","يحقق المتعلمون تقدماً في مجال الرياضيات قياساً على مستوى أداء المدرسة السابق في للاختبارات الوطنية"],
+      ["3-1-1-6","يحقق المتعلمون تقدماً في مجال العلوم قياساً على مستوى أداء المدرسة السابق في للاختبارات الوطنية"],
+      ["3-1-1-1","يحقق المتعلمون نتائج متقدمة في الاختبارات التحصيلية للمرحلة الثانوية","SEC-T"],
+      ["3-1-1-2","حقق المتعلمون نتائج متقدمة في اختبارات القدرات العامة للمرحلة الثانوية","SEC-Q"]]}
+   ]},
+  {id:"guid", name:"التوجيه الطلابي", title:"ثالثاً: مجال التوجيه الطلابي",
+   frame:["توجيه سلوك الطلاب","التوجيه التعليمي والمهني للطلاب","الشراكة مع الأسرة والمجتمع"],
+   groups:[
+    {area:"التعليم والتعلم", std:"التطور الشخصي والصحي والاجتماعي", items:[
+      ["3-2-1-1","يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية"],
+      ["3-2-1-2","يظهر المتعلمون اتجاهات إيجابية نحو ذواتهم والآخرين"],
+      ["3-2-1-3","يظهر المتعلمون التزامًا بالممارسات الصحية السليمة"],
+      ["3-2-1-4","يشارك المتعلمون في الأنشطة المجتمعية والأعمال التطوعية"],
+      ["3-2-1-5","يلتزم المتعلمون بقواعد السلوك والانضباط المدرسي"],
+      ["3-2-1-6","يظهر المتعلمون الاستقلالية والقدرة على التعلم الذاتي"],
+      ["3-2-1-7","يظهر المتعلمون اعتزازًا بثقافتهم واحترامًا للتنوع الثقافي في المجتمع"]]},
+    {area:"الإدارة المدرسية", std:"قيادة العملية التعليمية", items:[
+      ["1-2-1-1","تعزز المدرسة القيم الإسلامية والهوية الوطنية"],
+      ["1-2-1-2","تطبق المدرسة قيم مهنة التعليم وأخلاقياتها وتتابع الالتزام بها"],
+      ["1-2-1-3","تطبق المدرسة إجراءات محددة لدعم الانضباط المدرسي وتتابع الالتزام بها"],
+      ["1-2-1-4","تنفذ المدرسة برامج وأنشطة تربوية داعمة للسلوك الإيجابي لدى المتعلمين ومنهم ذوو الإعاقة والموهوبون وتتابعها"],
+      ["1-2-1-5","تنفذ المدرسة برامج وأنشطة إثرائية لتطوير مواهب المتعلمين وتهيئتهم للمستقبل وتتابعها"]]},
+    {area:"الإدارة المدرسية", std:"المجتمع المدرسي", items:[
+      ["1-3-1-1","تعزز المدرسة بناء العلاقات الإيجابية والتعاون في المجتمع المدرسي"],
+      ["1-3-1-2","تعزز المدرسة مشاركة الأسرة في تعلم أبنائهم والتحضير لمستقبلهم"],
+      ["1-3-1-3","تعزز المدرسة الشراكة المجتمعية لدعم التعلم والتأثير الإيجابي في المجتمع"]]}
+   ]},
+  {id:"act", name:"الأنشطة المدرسية", title:"رابعاً: مجال الأنشطة الطلابية",
+   frame:["البرامج والأنشطة المدرسية الصفية وغير الصفية"],
+   groups:[
+    {area:"الإدارة المدرسية", std:"قيادة العملية التعليمية", items:[
+      ["1-2-1-4","تنفذ المدرسة برامج وأنشطة تربوية داعمة للسلوك الإيجابي لدى المتعلمين ومنهم ذوو الإعاقة والموهوبون وتتابعها"],
+      ["1-2-1-5","تنفذ المدرسة برامج وأنشطة إثرائية لتطوير مواهب المتعلمين وتهيئتهم للمستقبل وتتابعها"]]},
+    {area:"الإدارة المدرسية", std:"المجتمع المدرسي", items:[
+      ["1-3-1-1","تعزز المدرسة بناء العلاقات الإيجابية والتعاون في المجتمع المدرسي"],
+      ["1-3-1-2","تعزز المدرسة مشاركة الأسرة في تعلم أبنائهم والتحضير لمستقبلهم"],
+      ["1-3-1-3","تعزز المدرسة الشراكة المجتمعية لدعم التعلم والتأثير الإيجابي في المجتمع"]]}
+   ]},
+  {id:"dev", name:"التطوير المستمر", title:"خامساً: مجال التطوير المستمر",
+   frame:["التطوير المستمر والتفاعل مع التربويين والمجتمع"],
+   groups:[
+    {area:"الإدارة المدرسية", std:"التطوير المؤسسي", items:[
+      ["1-4-1-4","تدعم المدرسة منسوبيها للحصول على الرخصة المهنية وتتابعها"],
+      ["1-4-1-5","تدعم المدرسة التطوير المهني لمنسوبيها وفقاً لنتائج التقويم وتحليل احتياجاتهم"],
+      ["1-4-1-6","تطبق المدرسة التقويم الذاتي المبني على المعايير المعتمدة من الهيئة بشكل مستمر"]]}
+   ]}
+];
+const PRIO_ORDER = ["teach","out","act","guid","dev"];
+const DOMAIN_NAMES = ["التدريس","نواتج التعلم","التوجيه الطلابي","الأنشطة المدرسية","التطوير المستمر"];
+const EVAL_ROWS = [["overall","الأداء العام للمدرسة"],["out","نواتج التعلم"],["tl","التعليم والتعلم"],["adm","الإدارة المدرسية"],["env","البيئة المدرسية"]];
+const STAFF_COLS = [["dep","الوكلاء"],["coun","الموجه الطلابي"],["act","رائد النشاط"],["teach","المعلمون"],["lab","محضر المختبر"],["adm","المساعد الإداري"]];
+const DEFAULT_SPECS = ["الدراسات الإسلامية","اللغة العربية","الرياضيات","العلوم الطبيعية","اللغة الإنجليزية","الدراسات الاجتماعية","التربية الأسرية","التربية الفنية","الحاسب الآلي"];
+const GRADES = {
+  "ابتدائي":["الأول","الثاني","الثالث","الرابع","الخامس","السادس"],
+  "متوسط":["الأول المتوسط","الثاني المتوسط","الثالث المتوسط"],
+  "ثانوي":["الأول الثانوي","الثاني الثانوي","الثالث الثانوي"]
+};
+const NAFS = [
+  {id:"math", name:"الرياضيات", subs:["الهندسة والقياس","الجبر","البيانات والاحتمالات","الأعداد والعمليات عليها"]},
+  {id:"sci",  name:"العلوم", subs:["علوم الحياة","علم الأرض والفلك","العلوم الفيزيائية والكيميائية"]},
+  {id:"read", name:"القراءة", subs:["دلالات الألفاظ","استيعاب المقروء"]}
+];
+const PRIO_CRITERIA = ["ارتباطها بمستهدفات ومؤشرات وزارة التعليم","تأثيرها على نواتج التعلم بصورة مباشرة","أهميتها بالنسبة لمجالات التقويم المدرسي","مستوى المدرسة في مجالات التقويم المدرسي","تأثيرها على المجالات الأخرى"];
+const PRIO_LEVELS = ["عال","متوسط","منخفض"];
+const EASTERN_SECTORS = ["الدمام","الخبر","القطيف","رأس تنورة","الجبيل","بقيق","النعيرية","قرية العليا","الخفجي","حفر الباطن"];
+const SUG_O = [
+  "إمكانية الاستفادة من برامج التدريب التي تقدمها وزارة التعليم لتنمية مهارات المعلمين في التقنية والتعلم الإلكتروني.",
+  "توفر منصات تعليمية وطنية مجانية (مثل منظومة «مدرستي» و«عين») يمكن دمجها في العملية التعليمية.",
+  "إمكانية إقامة شراكات مع المدارس المتميزة في المحافظة أو المنطقة لتبادل الخبرات في رفع نتائج الاختبارات.",
+  "توفر بيانات الاختبارات الوطنية (نافس) التي يمكن تحليلها بدقة لتحديد نقاط الضعف الخاصة بكل مهارة.",
+  "إمكانية تعزيز التعاون وعقد شراكات مع جمعيات التنمية الأهلية والأندية الرياضية في المجتمع المحلي لتنظيم برامج توعوية وأنشطة لاصفية للطلاب.",
+  "الاستفادة من المناسبات الوطنية والثقافية (اليوم الوطني، يوم التأسيس، اليوم العالمي للتعليم) لعقد أنشطة وفعاليات متميزة."
+];
+const SUG_T = [
+  "قلة المرونة في بعض المناهج الدراسية التي قد لا تلائم جميع الفروق الفردية للطلاب.",
+  "نقص الدعم الفني السريع لأعطال الأجهزة التقنية من قبل الجهات المسؤولة.",
+  "المنافسة الشديدة مع المدارس الأخرى على المستوى المحلي والوطني، مما يضع ضغطًا على المدرسة لتحسين نتائجها.",
+  "بعض العوامل الاجتماعية والاقتصادية لأسر الطلاب التي قد تؤثر سلبًا على سلوكياتهم وتركيزهم الدراسي.",
+  "قلة الوعي المجتمعي الكافي بأهمية دعم المدرسة معنويًا كشريك أساسي في العملية التربوية."
+];
+const COMMITTEES = ["لجنة التميز","لجنة التحصيل الدراسي","لجنة التوجيه الطلابي","لجنة التوجيه والإرشاد","لجنة شراكة المدرسة مع الأسرة والمجتمع","اللجنة الإدارية","لجنة النشاط"];
+const WEEKS = ["الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الحادي عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر","السادس عشر","السابع عشر","الثامن عشر"];
+
+/* ============================================================
+   مكتبة المقترحات لكل مؤشر (قابلة للتعديل بعد التوليد)
+   [العنصر، وصف الاحتياج، المستهدف، إجراءات التحسين، أساليب وطرق التحسين، مدة الإنجاز، التنفيذ والمسؤولية]
+   {S} = جهة الدعم حسب مستوى المدرسة
+   ============================================================ */
+const LIB = {
+ "2-1-1-1":["التخطيط المتمايز وتلبية احتياجات الفئات المتنوعة","ضعف تلبية احتياجات الفئات المتنوعة من المتعلمين (المتأخرون دراسيًا، الموهوبون، ذوو الإعاقة) وقلة التمايز في التخطيط والتدريس","إعداد خطط علاجية وإثرائية لـ100% من الطلاب المحددين، وتطبيق التدريس المتمايز في 80% من الدروس المرصودة",
+   "حصر الطلاب ذوي الاحتياج من نتائج التشخيص ونظام نور؛ إعداد خطط فردية علاجية وإثرائية؛ تدريب المعلمين على التدريس المتمايز؛ تضمين أنشطة متدرجة الصعوبة في خطط الدروس؛ متابعة تقدم الطلاب بقياس قبلي وبعدي؛ مراجعة الخطط وتعديلها","ورشة تطبيقية؛ درس تطبيقي؛ خطط فردية؛ مجموعات تعلم مرنة؛ زيارات صفية؛ تحليل أعمال الطلاب","حصر وتخطيط: الأسبوعان 1-2؛ تنفيذ: الأسابيع 3-12؛ متابعة كل أسبوعين؛ قياس ختامي نهاية الفصل","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التحصيل الدراسي ومعلمو المواد ومعلم الموهوبين وصعوبات التعلم (إن وجد). المشاركة: الموجه الطلابي. الدعم: {S}."],
+ "2-1-1-2":["تنفيذ المناهج وتحقيق نواتج التعلم المستهدفة","تفاوت في تنفيذ المناهج وفق الخطة الدراسية وضعف ربط الدروس بنواتج التعلم المستهدفة","التزام 100% من المعلمين بخطط توزيع المناهج، وربط 90% من الدروس المرصودة بنواتج قابلة للقياس",
+   "مراجعة خطط توزيع المناهج وفق الخطة الدراسية المعتمدة؛ رصد التقدم في تنفيذ المناهج كل أسبوعين؛ معالجة التأخر بخطط تعويضية؛ ربط أهداف الدروس بنواتج التعلم؛ متابعة تفعيل المنصة التعليمية ومصادر التعلم؛ مناقشة النتائج في اجتماعات التخصص","سجل متابعة تنفيذ المناهج؛ اجتماعات تخصص؛ زيارات صفية؛ نماذج تخطيط استرشادية","مراجعة: الأسبوعان 1-2؛ متابعة كل أسبوعين حتى نهاية الفصل","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: رؤساء التخصصات ومعلمو المواد. المتابعة: لجنة التحصيل الدراسي. الدعم: {S}."],
+ "2-1-1-3":["تنويع إستراتيجيات التعليم والتعلم","الاعتماد على الإلقاء وقلة تنوع إستراتيجيات التدريس الملائمة لاحتياجات المتعلمين","تطبيق إستراتيجيتين نشطتين على الأقل في 80% من الدروس المرصودة",
+   "تنفيذ زيارات خط أساس؛ تحديد إستراتيجيتين ذواتي أولوية لكل تخصص؛ تقديم دروس تطبيقية نموذجية؛ تبادل الزيارات بين المعلمين؛ متابعة التطبيق بأداة ملاحظة موحدة؛ تقديم تغذية راجعة ومقارنة النتائج بخط الأساس","دروس تطبيقية؛ زيارات تبادلية؛ مجتمع تعلم مهني؛ تدريب مصغر؛ ملاحظة صفية قصيرة","الأسابيع 3-10؛ قياس قبلي وبعدي","المسؤول الأول: مدير المدرسة. التنفيذ: لجنة التحصيل الدراسي والمعلمون المتميزون. الدعم: {S}."],
+ "2-1-1-4":["توظيف التقنية الرقمية في دعم التعلم","ضعف دمج التقنية الرقمية والمنصات التعليمية في التدريس وتلبية احتياجات المتعلمين","توظيف التقنية بهدف تعلم واضح في 80% من الدروس المرصودة، وتفعيل 100% من المعلمين للمنصة التعليمية المعتمدة",
+   "حصر الأجهزة والموارد التقنية المتاحة ومعالجة الأعطال؛ تحديد احتياج المعلمين التقني؛ تنفيذ لقاءات تدريب قصيرة على المنصة التعليمية والأدوات الرقمية؛ إعداد بنك موارد رقمية لكل مادة؛ متابعة توظيف التقنية في الدروس والواجبات؛ قياس مشاركة الطلاب الرقمية شهريًا","تدريب مصغر؛ تعلم الأقران؛ دروس تطبيقية؛ بنك موارد رقمية؛ تقارير المنصة","حصر وتدريب: الأسابيع 1-3؛ التطبيق حتى نهاية الفصل؛ متابعة شهرية","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: منسق التحول الرقمي ومعلمو المواد. المتابعة: لجنة التحصيل الدراسي. الدعم: {S}."],
+ "2-1-1-5":["أنشطة التعلم التطبيقية المرتبطة بحياة المتعلمين","قلة الأنشطة التطبيقية والمشروعات التي تربط التعلم بحياة المتعلمين وواقعهم","تنفيذ نشاط تطبيقي أو مشروع واحد على الأقل في كل وحدة دراسية في 80% من المواد",
+   "تحديد مواضع التطبيق الحياتي في كل وحدة؛ تصميم مهام أداء ومشروعات قصيرة؛ تنفيذها وتقويمها بسلالم تقدير؛ عرض نماذج من أعمال الطلاب؛ مراجعة أثرها على تعلم الطلاب","التعلم القائم على المشروعات؛ مهام الأداء؛ سلالم التقدير؛ معرض أعمال الطلاب","فصل دراسي؛ نشاط لكل وحدة؛ مراجعة شهرية","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: معلمو المواد ورؤساء التخصصات. المشاركة: رائد النشاط. الدعم: {S}."],
+ "2-1-1-6":["المهارات القرائية والعددية الأساسية","ضعف المهارات القرائية والعددية الأساسية لدى فئة من المتعلمين","رفع متوسط إتقان المهارات الأساسية 20 نقطة مئوية عن القياس القبلي، وإعداد خطة دعم لـ100% من الطلاب المتعثرين",
+   "تطبيق اختبار تشخيصي في القراءة والحساب؛ تصنيف الطلاب حسب المهارة؛ تنفيذ برنامج علاجي في حصص الدعم والنشاط؛ تفعيل القراءة اليومية والتدريب العددي المتكرر؛ متابعة التقدم كل أسبوعين؛ إشراك الأسرة؛ إعادة القياس","اختبار تشخيصي؛ مجموعات علاجية؛ قراءة موجهة؛ تدريبات عددية قصيرة؛ منصات تعليمية؛ شراكة أسرية","تشخيص: الأسبوعان 1-2؛ علاج: الأسابيع 3-12؛ قياس بعدي نهاية الفصل","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: معلمو اللغة العربية والرياضيات ولجنة التحصيل الدراسي. المشاركة: الموجه الطلابي والأسرة. الدعم: {S}."],
+ "2-1-1-7":["مهارات التفكير والبحث والابتكار","قلة المهام التي تنمي مهارات التفكير العليا والبحث والابتكار لدى المتعلمين","تضمين مهمة تفكير عليا أو بحث في 80% من الوحدات، ومشاركة 50% من الطلاب في مشروع بحثي أو ابتكاري",
+   "تحديد مهارات التفكير المستهدفة لكل مادة؛ إعداد بنك أسئلة ومهام تفكير عليا؛ تدريب الطلاب على خطوات البحث وحل المشكلات؛ تنفيذ مشروعات بحثية قصيرة؛ تحكيم الأعمال وعرضها؛ قياس النمو بسلم تقدير","مهام حل المشكلات؛ بحث مصغر؛ تفكير ناقد؛ تحديات ابتكار؛ سلالم تقدير","فصل دراسي؛ متابعة كل أسبوعين؛ عرض ختامي","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: معلمو المواد ومعلم الموهوبين (إن وجد). المشاركة: رائد النشاط. الدعم: {S}."],
+ "2-1-1-8":["المهارات العاطفية والاجتماعية","الحاجة إلى تنمية مهارات التواصل والتعاون وضبط الانفعالات لدى المتعلمين","تنفيذ برنامج للمهارات العاطفية والاجتماعية يشمل 100% من الفصول، وتحسن مؤشرات السلوك الصفي عن خط الأساس",
+   "قياس المهارات الاجتماعية والعاطفية بأداة معتمدة؛ إعداد برنامج توجيهي جمعي؛ تضمين أنشطة تعاونية في الدروس؛ تنفيذ لقاءات توجيهية للفصول؛ متابعة الحالات الفردية؛ إعادة القياس","إرشاد جمعي؛ تعلم تعاوني؛ لعب أدوار؛ مواقف وقصص؛ تعزيز إيجابي","فصل دراسي؛ لقاء لكل فصل كل أسبوعين","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي والمعلمون. الدعم: {S}."],
+ "2-1-1-9":["دافعية المتعلمين للتعلم والاستمتاع به","ضعف دافعية المتعلمين للتعلم وانخفاض المشاركة الصفية","رفع نسبة المشاركة الصفية الفاعلة في الدروس المرصودة إلى 80%، وتحسن نتائج استبانة الدافعية عن خط الأساس",
+   "تطبيق استبانة الدافعية؛ تحديد أسباب ضعف الدافعية؛ تفعيل أساليب تحفيز وتعزيز صفية؛ توظيف التعلم باللعب والتحديات؛ تكريم المتقدمين والمتحسنين دوريًا؛ التواصل مع الأسر؛ إعادة القياس","التعلم باللعب؛ التحديات الصفية؛ لوحات الإنجاز؛ التعزيز الإيجابي؛ تكريم شهري","فصل دراسي؛ تكريم شهري؛ قياس قبلي وبعدي","المسؤول الأول: مدير المدرسة. التنفيذ: المعلمون والموجه الطلابي ورائد النشاط. الدعم: {S}."],
+ "2-2-1-1":["تقويم مستويات أداء المتعلمين","الاعتماد على الاختبارات وقلة تنوع أدوات التقويم التشخيصي والتكويني","استخدام أدوات تقويم متنوعة (تشخيصية وتكوينية) في 85% من الوحدات",
+   "بناء أدوات تشخيصية لكل مادة؛ إعداد بنك أدوات تقويم تكويني؛ تطبيقها بانتظام؛ تصنيف الطلاب وفق النتائج؛ تعديل التدريس بناءً عليها؛ مراجعة الأدوات في اجتماعات التخصص","ورشة بناء أدوات؛ بنك أدوات؛ سلالم تقدير؛ ملفات إنجاز","بناء: الأسابيع 1-4؛ تطبيق حتى نهاية الفصل؛ مراجعة كل أربعة أسابيع","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التحصيل الدراسي ومعلمو المواد. الدعم: {S}."],
+ "2-2-1-2":["تقويم نواتج التعلم المستهدفة","ضعف مواءمة أدوات التقويم مع نواتج التعلم المستهدفة في المناهج","مراجعة 100% من الاختبارات قبل تطبيقها وفق جدول مواصفات، وتطبيق مهام أداء في 80% من الوحدات",
+   "إعداد جداول مواصفات للاختبارات؛ مراجعة الاختبارات قبل تطبيقها؛ تضمين أسئلة تقيس مستويات معرفية متنوعة؛ تصميم مهام أداء مرتبطة بالنواتج؛ تحليل نتائج كل اختبار","جداول مواصفات؛ مراجعة الأقران للاختبارات؛ مهام أداء؛ تحليل مفردات","الأسابيع 2-12؛ قبل كل اختبار","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التحصيل الدراسي ورؤساء التخصصات. الدعم: {S}."],
+ "2-2-1-3":["تحليل نتائج التقويم وتوظيفها","قصور تحليل نتائج التقويم وتوظيفها في تحسين عمليات التعليم والتعلم","تحليل 100% من نتائج الاختبارات الفترية والنهائية، وربط كل فجوة ذات أولوية بإجراء علاجي خلال 10 أيام عمل",
+   "تجميع نتائج التقويم في نموذج موحد؛ تحليلها حسب الصف والمادة والمهارة؛ تحديد الفجوات وأسبابها؛ إعداد خطط علاجية وإثرائية؛ مناقشتها في اجتماع لجنة التحصيل الدراسي؛ متابعة أثرها في القياس التالي","لوحة بيانات؛ ورشة تحليل؛ اجتماع قرار؛ خطط علاجية","بعد كل فترة تقويم؛ تحديث شهري","المسؤول الأول: مدير المدرسة. التنفيذ: لجنة التحصيل الدراسي ومعلمو المواد. الدعم: {S}."],
+ "2-2-1-4":["التغذية الراجعة ومتابعة تقدم المتعلمين","ضعف التغذية الراجعة المقدمة للمتعلمين وأولياء أمورهم ومتابعة تقدمهم","تقديم تغذية راجعة لـ100% من الطلاب بعد كل تقويم، وإشعار أولياء أمور 100% من الطلاب المتعثرين",
+   "اعتماد نموذج تغذية راجعة محددة؛ تدريب المعلمين على التغذية الراجعة الفعالة؛ إرسال تقارير التقدم لأولياء الأمور عبر نظام نور والمنصة؛ عقد لقاءات مع أولياء أمور المتعثرين؛ متابعة تحسن الطلاب","نماذج تغذية راجعة؛ تقارير تقدم؛ لقاءات أولياء الأمور؛ رسائل نصية","فصل دراسي؛ بعد كل فترة تقويم","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: معلمو المواد. المشاركة: الموجه الطلابي. الدعم: {S}."],
+ "3-2-1-1":["تعزيز القيم والهوية الوطنية لدى المتعلمين","الحاجة إلى تعزيز اعتزاز المتعلمين بالقيم والهوية الوطنية","تنفيذ برنامج قيمي ووطني يشمل 100% من الطلاب، وتحسن نتائج استبانة الطلاب عن خط الأساس",
+   "تطبيق استبانة قبلية؛ إعداد برنامج قيمي ووطني فصلي؛ تفعيل الإذاعة المدرسية والمناسبات الوطنية؛ تنفيذ لقاءات توجيهية ومسابقات؛ دمج القيم في الأنشطة الصفية؛ قياس بعدي","إذاعة مدرسية؛ مسابقات؛ لقاءات توجيهية؛ مبادرات طلابية؛ مناسبات وطنية","فصل دراسي؛ برنامج شهري","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي ورائد النشاط والمعلمون. الدعم: {S}."],
+ "3-2-1-2":["الاتجاهات الإيجابية نحو الذات والآخرين","الحاجة إلى تعزيز ثقة المتعلمين بأنفسهم واتجاهاتهم الإيجابية نحو الآخرين","شمول 100% من الفصول ببرنامج توجيهي، وتحسن نتائج مقياس الاتجاهات عن خط الأساس",
+   "قياس الاتجاهات بأداة معتمدة؛ تنفيذ برنامج توجيه جمعي في تقدير الذات والتعامل مع الآخرين؛ إسناد أدوار ومسؤوليات للطلاب؛ تعزيز السلوك الإيجابي؛ متابعة الحالات الفردية؛ إعادة القياس","إرشاد جمعي وفردي؛ أدوار قيادية؛ تعزيز إيجابي؛ قصص نجاح","فصل دراسي؛ لقاءات كل أسبوعين","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي والمعلمون. الدعم: {S}."],
+ "3-2-1-3":["الممارسات الصحية السليمة","ضعف التزام المتعلمين بالممارسات الصحية السليمة (الغذاء، النشاط البدني، النظافة الشخصية)","تنفيذ برنامج توعية صحية يشمل 100% من الطلاب، وتحسن مؤشرات الممارسات الصحية عن خط الأساس",
+   "رصد الممارسات الصحية بأداة مسحية؛ إعداد برنامج توعوي صحي؛ تفعيل حصص التربية البدنية والأنشطة الحركية؛ متابعة المقصف المدرسي؛ الشراكة مع المركز الصحي؛ إعادة القياس","توعية صحية؛ شراكة مع المركز الصحي؛ أنشطة رياضية؛ مسابقات","فصل دراسي؛ نشاط شهري","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي ومعلم التربية البدنية والمعلمون. الشراكة: المركز الصحي. الدعم: {S}."],
+ "3-2-1-4":["المشاركة المجتمعية والأعمال التطوعية","انخفاض مشاركة المتعلمين في الأنشطة المجتمعية والأعمال التطوعية","مشاركة 60% من الطلاب في فرصة تطوعية موثقة",
+   "حصر الفرص التطوعية؛ تكوين فرق تطوع طلابية؛ تنفيذ مبادرات داخل المدرسة وخارجها؛ توثيق الساعات التطوعية؛ تكريم المتطوعين","فرق تطوعية؛ مبادرات مجتمعية؛ شراكات؛ توثيق الساعات","فصل دراسي؛ مبادرة شهرية","المسؤول الأول: رائد النشاط. التنفيذ: الموجه الطلابي والمعلمون والطلاب. الشراكة: جهات المجتمع المحلي. الدعم: {S}."],
+ "3-2-1-5":["الالتزام بقواعد السلوك والانضباط المدرسي","ارتفاع المخالفات السلوكية والغياب والتأخر الصباحي","خفض المخالفات السلوكية والغياب غير المبرر 20% عن خط الأساس، ومعالجة 90% من الحالات ذات الأولوية",
+   "توعية الطلاب وأولياء الأمور بقواعد السلوك والمواظبة وأخذ التعهدات؛ تحليل بيانات المخالفات والغياب في نظام نور؛ تطبيق الإجراءات وفق القواعد؛ تنفيذ برامج تعزيز السلوك الإيجابي؛ دراسة الحالات المتكررة وعرضها على لجنة التوجيه الطلابي؛ متابعة المؤشرات شهريًا","توعية؛ تحليل بيانات؛ دراسة حالة؛ تعزيز إيجابي؛ تواصل أسري؛ لجنة التوجيه الطلابي","فصل دراسي؛ متابعة أسبوعية ومراجعة شهرية","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي ولجنة التوجيه الطلابي والمعلمون. الدعم: {S}."],
+ "3-2-1-6":["الاستقلالية والتعلم الذاتي","ضعف قدرة المتعلمين على البحث والتعلم الذاتي وتحمل مسؤولية تعلمهم","تنفيذ مهمة تعلم ذاتي واحدة على الأقل لكل وحدة، وتحسن مؤشر الاستقلالية عن خط الأساس",
+   "تدريب الطلاب على مهارات التعلم الذاتي وإدارة الوقت؛ تصميم مهام بحث ذاتي؛ تفعيل المنصة التعليمية ومصادر التعلم؛ إعداد ملفات إنجاز طلابية؛ متابعة الأعمال وتقويمها","تعلم ذاتي؛ مشروعات بحثية؛ ملفات إنجاز؛ صف مقلوب؛ منصات تعليمية","فصل دراسي؛ متابعة كل أسبوعين","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: معلمو المواد والموجه الطلابي. الدعم: {S}."],
+ "3-2-1-7":["الاعتزاز بالثقافة واحترام التنوع الثقافي","الحاجة إلى تعزيز اعتزاز المتعلمين بثقافتهم واحترامهم للتنوع الثقافي","تنفيذ برنامج ثقافي يشمل 100% من الطلاب",
+   "تنفيذ أنشطة تعرّف بالثقافة الوطنية والتراث؛ عقد لقاءات حوارية حول احترام الآخر؛ تنظيم مسابقات ثقافية؛ تفعيل المناسبات الوطنية؛ قياس الأثر","حوارات؛ معارض تراثية؛ مسابقات؛ إذاعة مدرسية","فصل دراسي؛ نشاط شهري","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي ورائد النشاط. الدعم: {S}."],
+ "1-2-1-1":["تعزيز القيم الإسلامية والهوية الوطنية في المدرسة","الحاجة إلى برامج مدرسية منظمة لتعزيز القيم الإسلامية والهوية الوطنية ومتابعتها","تنفيذ خطة قيمية ووطنية معتمدة ومتابعة 100% من برامجها",
+   "إعداد خطة مدرسية للقيم والهوية الوطنية؛ توزيع المهام على المعلمين واللجان؛ تفعيل الاصطفاف الصباحي والإذاعة ونشيد العلم؛ دمج القيم في الدروس والأنشطة؛ توثيق البرامج وقياس أثرها","خطة قيمية؛ إذاعة مدرسية؛ مناسبات وطنية؛ دمج القيم في الدروس","فصل دراسي؛ متابعة شهرية","المسؤول الأول: مدير المدرسة. التنفيذ: وكيل شؤون الطلاب والموجه الطلابي ورائد النشاط. الدعم: {S}."],
+ "1-2-1-2":["قيم مهنة التعليم وأخلاقياتها","الحاجة إلى تعزيز التزام منسوبي المدرسة بقيم مهنة التعليم وأخلاقياتها ومتابعة ذلك","اطلاع 100% من المنسوبين على ميثاق أخلاقيات مهنة التعليم والتوقيع عليه",
+   "عرض ميثاق أخلاقيات مهنة التعليم في اجتماع عام؛ أخذ توقيعات المنسوبين؛ تكريم النماذج المتميزة؛ متابعة الالتزام ومعالجة الملاحظات وفق الأنظمة","اجتماعات؛ ميثاق مكتوب؛ تكريم؛ متابعة","الأسبوعان الأولان؛ متابعة فصلية","المسؤول الأول: مدير المدرسة. التنفيذ: الوكلاء. الدعم: {S}."],
+ "1-2-1-3":["إجراءات دعم الانضباط المدرسي","ضعف تطبيق إجراءات محددة لدعم الانضباط المدرسي ومتابعة الالتزام بها","تطبيق 100% من إجراءات قواعد السلوك والمواظبة وتوثيقها في نظام نور",
+   "تحديث إجراءات الانضباط وفق قواعد السلوك والمواظبة؛ توعية المنسوبين والطلاب وأولياء الأمور بها؛ توزيع المناوبة والإشراف اليومي؛ رصد المخالفات والغياب في نظام نور؛ متابعة تطبيق الإجراءات شهريًا","قواعد السلوك والمواظبة؛ جدول المناوبة والإشراف؛ نظام نور؛ تقارير شهرية","الأسبوع الأول؛ متابعة أسبوعية","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي ولجنة التوجيه الطلابي. الدعم: {S}."],
+ "1-2-1-4":["برامج دعم السلوك الإيجابي","قلة البرامج التربوية الداعمة للسلوك الإيجابي لدى المتعلمين، ومنهم ذوو الإعاقة والموهوبون، ومتابعتها","تنفيذ برنامجين توجيهيين على الأقل في الفصل الدراسي، وشمول 100% من الفئات المستهدفة",
+   "تحديد الاحتياجات السلوكية من بيانات نظام نور والملاحظة؛ إعداد برامج وقائية وعلاجية للسلوك الإيجابي؛ تنفيذ برامج التعزيز (الطالب المثالي، لوحة الشرف)؛ مراعاة ذوي الإعاقة والموهوبين؛ قياس أثر البرامج قبليًا وبعديًا","برامج وقائية؛ تعزيز إيجابي؛ إرشاد جمعي؛ قياس قبلي وبعدي","فصل دراسي؛ تقويم بعد كل برنامج","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي ورائد النشاط والمعلمون. الدعم: {S}."],
+ "1-2-1-5":["اكتشاف المواهب وتهيئة المتعلمين للمستقبل","قلة البرامج الإثرائية لتطوير مواهب المتعلمين وتهيئتهم للمستقبل ومتابعتها","حصر مواهب 100% من الطلاب، ومشاركة 70% منهم في برنامج إثرائي أو إرشاد مهني",
+   "حصر ميول الطلاب ومواهبهم؛ تنفيذ برامج الإرشاد التعليمي والمهني؛ إعداد ملفات مسار للصفوف المستهدفة؛ ترشيح الموهوبين للبرامج الإثرائية؛ متابعة مشاركتهم وتوثيقها","مقاييس الميول؛ إرشاد مهني؛ برامج إثرائية؛ أندية؛ زيارات مهنية","فصل دراسي؛ متابعة شهرية","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي ورائد النشاط ومعلم الموهوبين (إن وجد). الدعم: {S}."],
+ "1-3-1-1":["العلاقات الإيجابية والتعاون في المجتمع المدرسي","الحاجة إلى تعزيز العلاقات الإيجابية والتعاون بين الطلاب والمعلمين وبقية منسوبي المدرسة","تنفيذ مبادرتين للتواصل والتعاون في الفصل، وتحسن نتائج استبانة المناخ المدرسي عن خط الأساس",
+   "تطبيق استبانة المناخ المدرسي؛ تنفيذ لقاءات ومبادرات تواصل بين المنسوبين والطلاب؛ تفعيل العمل التعاوني بين الفرق؛ تكريم المبادرات الإيجابية؛ قياس بعدي","لقاءات؛ مبادرات؛ فرق عمل؛ تكريم؛ استبانات","فصل دراسي؛ مبادرة شهرية","المسؤول الأول: مدير المدرسة. التنفيذ: وكيل شؤون الطلاب والموجه الطلابي ورائد النشاط. الدعم: {S}."],
+ "1-3-1-2":["مشاركة الأسرة في تعلم الأبناء والتحضير لمستقبلهم","ضعف مشاركة الأسرة في متابعة تعلم أبنائها والتخطيط لمستقبلهم","رفع حضور أولياء الأمور في اللقاءات إلى 60%، والتواصل المنتظم مع 100% من أسر الطلاب المتعثرين",
+   "تفعيل مجلس المعلمين وأولياء الأمور؛ إعداد خطة تواصل مع الأسرة (لقاءات، رسائل، تقارير)؛ تنفيذ لقاءات توعوية في متابعة التعلم والتوجيه المهني؛ إشراك الأسر في المناسبات والبرامج؛ قياس رضا الأسر ومشاركتها","مجلس أولياء الأمور؛ لقاءات توعوية؛ رسائل نصية؛ تقارير تقدم؛ استبانات","فصل دراسي؛ لقاء شهري","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي ولجنة شراكة المدرسة مع الأسرة والمجتمع. الدعم: {S}."],
+ "1-3-1-3":["الشراكة المجتمعية لدعم التعلم","محدودية الشراكات المجتمعية الداعمة للتعلم والتأثير الإيجابي في المجتمع","عقد شراكتين فاعلتين على الأقل وتنفيذ برنامج مشترك موثق",
+   "حصر الجهات المجتمعية المحتملة؛ التواصل وعقد الشراكات وفق الأنظمة؛ تنفيذ برامج مشتركة؛ توثيق الأثر ونشره؛ تكريم الشركاء","شراكات؛ زيارات؛ برامج مشتركة؛ توثيق","فصل دراسي","المسؤول الأول: مدير المدرسة. التنفيذ: لجنة شراكة المدرسة مع الأسرة والمجتمع ورائد النشاط. الدعم: {S}."],
+ "1-4-1-4":["دعم الحصول على الرخصة المهنية","وجود منسوبين لم يحصلوا على الرخصة المهنية أو لم يستوفوا متطلبات الرتب","تسجيل وتهيئة 100% من المستهدفين للرخصة المهنية ومتابعة نتائجهم",
+   "حصر المنسوبين غير الحاصلين على الرخصة أو الرتب المستهدفة؛ تعريفهم بالمتطلبات والمواعيد؛ تنفيذ لقاءات تهيئة وتبادل خبرات؛ توفير مصادر تدريبية؛ متابعة التسجيل والنتائج","حصر؛ لقاءات تهيئة؛ تعلم الأقران؛ مصادر تدريبية؛ متابعة","حصر: الأسبوعان الأولان؛ متابعة حتى مواعيد الاختبار","المسؤول الأول: مدير المدرسة. التنفيذ: وكيل الشؤون التعليمية ومنسقو التخصصات. الدعم: {S}."],
+ "1-4-1-5":["تأسيس منظومة التطوير المهني المرتبطة بنتائج التقويم","حاجة المدرسة إلى تنظيم التطوير المهني وربطه بنتائج التقويم وتحليل احتياجات المنسوبين","إعداد خطة تطوير فردية لـ100% من المعلمين، وتطبيق 80% منهم ممارسة تطويرية واحدة على الأقل، وتفعيل مجتمع تعلم مهني شهري في كل تخصص",
+   "تحليل الاحتياجات المهنية وربطها بأولويات الخطة؛ إعداد خطط تطوير فردية؛ تشكيل مجتمعات تعلم مهنية؛ تنفيذ تدريب مصغر ودروس تطبيقية؛ تفعيل تعلم الأقران والزيارات المتبادلة؛ متابعة التطبيق داخل الصف؛ تحليل الشواهد وتقديم التغذية الراجعة","التأمل الذاتي؛ التدريب المصغر؛ التوجيه الفردي؛ مجتمعات التعلم المهنية؛ تعلم الأقران؛ الزيارات الصفية المتبادلة","تحليل الاحتياج خلال الأسبوعين الأولين؛ التنفيذ حتى نهاية الفصل؛ متابعة شهرية وقياس ختامي","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التميز ومنسقو التخصصات والمعلمون. المتابعة: مدير المدرسة. الدعم: {S}."],
+ "1-4-1-6":["التقويم الذاتي المستمر وفق معايير الهيئة","عدم انتظام تطبيق التقويم الذاتي المبني على المعايير المعتمدة من هيئة تقويم التعليم والتدريب","تطبيق التقويم الذاتي دوريًا وتحديث شواهد 100% من المؤشرات",
+   "تشكيل فرق التقويم الذاتي وتوزيع المعايير؛ تدريب الفرق على أدلة الهيئة؛ جمع الشواهد وتحديثها؛ تنفيذ تقويم ذاتي دوري؛ تحليل النتائج وتحديث خطة التحسين","فرق عمل؛ أدلة الهيئة؛ ملف شواهد رقمي؛ ورش عمل","تقويم ذاتي كل فصل؛ تحديث الشواهد شهريًا","المسؤول الأول: مدير المدرسة. التنفيذ: لجنة التميز. الدعم: {S}."]
+};
+/* صياغة خاصة بمجال الأنشطة المدرسية للمؤشرات المشتركة */
+const LIB_ACT = {
+ "1-2-1-4":["الأنشطة الطلابية الداعمة للسلوك الإيجابي","قلة الأنشطة الطلابية الصفية وغير الصفية الداعمة للسلوك الإيجابي، ومنها ما يناسب ذوي الإعاقة والموهوبين","ربط 80% من الأنشطة المنفذة بقيمة سلوكية أو حاجة موثقة، ومشاركة 70% من الطلاب في نشاط واحد على الأقل",
+   "حصر الأنشطة الحالية؛ ربط كل نشاط بقيمة سلوكية أو حاجة طلابية؛ إعداد خطة فصلية متوازنة؛ إتاحة أدوار متنوعة للطلاب بمن فيهم ذوو الإعاقة والموهوبون؛ قياس المشاركة والأثر؛ إيقاف الأنشطة منخفضة الأثر وتطوير الناجح منها","مسابقات؛ إذاعة هادفة؛ أندية طلابية؛ تعلم خدمي؛ تعزيز إيجابي","فصل دراسي؛ تقويم بعد كل برنامج","المسؤول الأول: رائد النشاط. التنفيذ: لجنة النشاط والمعلمون والطلاب. المشاركة: الموجه الطلابي. الدعم: {S}."],
+ "1-2-1-5":["البرامج والأنشطة الإثرائية","قلة البرامج والأنشطة الإثرائية التي تطور مواهب المتعلمين وتهيئهم للمستقبل","حصر ميول 100% من الطلاب، ومشاركة 70% منهم في نشاط إثرائي نوعي",
+   "حصر الميول والمواهب والمشاركة؛ تصميم أندية ومسارات إثرائية؛ ربط كل نشاط بحاجة أو ناتج؛ إسناد أدوار قيادية للطلاب؛ المشاركة في المسابقات؛ توثيق المشاركات وقياس الأثر","أندية موهبة؛ مسابقات؛ مشروعات؛ تعلم خدمي؛ شراكات","فصل دراسي؛ تقويم بعد كل برنامج ومراجعة شهرية","المسؤول الأول: رائد النشاط. التنفيذ: لجنة النشاط والمعلمون والطلاب ومعلم الموهوبين (إن وجد). الدعم: {S}."],
+ "1-3-1-1":["الأنشطة الجماعية وبناء العلاقات الإيجابية","قلة الأنشطة الجماعية التي تعزز العلاقات الإيجابية والتعاون في المجتمع المدرسي","تنفيذ نشاطين جماعيين على الأقل في الفصل بمشاركة الطلاب والمعلمين",
+   "تخطيط أنشطة جماعية مشتركة بين الطلاب والمعلمين؛ تكوين فرق عمل طلابية؛ تنفيذ الفعاليات والمناسبات؛ تكريم الفرق المتميزة؛ قياس رضا المشاركين","فعاليات مشتركة؛ فرق عمل؛ مسابقات بين الفصول؛ تكريم","فصل دراسي؛ نشاط شهري","المسؤول الأول: رائد النشاط. التنفيذ: لجنة النشاط والمعلمون والطلاب. الدعم: {S}."],
+ "1-3-1-2":["إشراك الأسرة في البرامج والأنشطة","ضعف مشاركة الأسر في البرامج والأنشطة المدرسية","مشاركة الأسر في برنامجين على الأقل في الفصل الدراسي",
+   "دعوة الأسر للمشاركة في الفعاليات والمعارض؛ تنفيذ أنشطة مشتركة بين الطلاب وأسرهم؛ عرض نتاجات الطلاب لأولياء الأمور؛ قياس مشاركة الأسر ورضاهم","يوم مفتوح؛ معارض؛ أنشطة أسرية؛ استبانات","فصل دراسي","المسؤول الأول: رائد النشاط. التنفيذ: لجنة النشاط ولجنة شراكة المدرسة مع الأسرة والمجتمع. الدعم: {S}."],
+ "1-3-1-3":["الشراكة المجتمعية في الأنشطة الطلابية","محدودية الشراكات المجتمعية الداعمة للأنشطة الطلابية","عقد شراكة واحدة على الأقل وتنفيذ نشاط مشترك موثق",
+   "حصر الجهات المجتمعية ذات العلاقة؛ التنسيق لتنفيذ أنشطة وبرامج مشتركة؛ تنفيذ زيارات ميدانية هادفة؛ توثيق الأثر ونشره؛ تكريم الشركاء","شراكات؛ زيارات ميدانية؛ برامج مشتركة؛ توثيق","فصل دراسي","المسؤول الأول: رائد النشاط. التنفيذ: لجنة النشاط ولجنة شراكة المدرسة مع الأسرة والمجتمع. الدعم: {S}."]
+};
+/* مقترحات مؤشرات نواتج التعلم (نافس والثانوية) */
+function libOut(id){
+  const sub={"3-1-1-1":["القراءة","read"],"3-1-1-2":["الرياضيات","math"],"3-1-1-3":["العلوم","sci"],"3-1-1-4":["القراءة","read"],"3-1-1-5":["الرياضيات","math"],"3-1-1-6":["العلوم","sci"]}[id];
+  const teachers={read:"معلمو اللغة العربية",math:"معلمو الرياضيات",sci:"معلمو العلوم"};
+  if(id==="SEC-T"||id==="SEC-Q"){
+    const t=id==="SEC-T"?"الاختبار التحصيلي":"اختبار القدرات العامة";
+    return [`نتائج ${t}`,`انخفاض نتائج المتعلمين في ${t} للمرحلة الثانوية`,`رفع متوسط نتائج الطلاب في ${t} عن العام السابق، وتحسين ترتيب المدرسة على مستوى إدارة التعليم`,
+      `تحليل نتائج الأعوام السابقة حسب المجالات؛ تحديد المهارات الأضعف؛ تنفيذ برنامج تهيئة وتدريب مكثف للطلاب المستهدفين؛ تطبيق اختبارات محاكية دورية؛ تحليل نتائجها ومتابعة التقدم؛ إشراك أولياء الأمور في المتابعة`,
+      "تحليل بيانات؛ اختبارات محاكية؛ مجموعات تدريب؛ منصات تعليمية؛ شراكة أسرية","تحليل: الأسبوعان الأولان؛ تهيئة حتى موعد الاختبار؛ محاكاة شهرية",
+      "المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التحصيل الدراسي ومعلمو المواد المعنية. المشاركة: الموجه الطلابي. الدعم: {S}."];
+  }
+  const [nm,k]=sub; const subs=NAFS.find(n=>n.id===k).subs.join("، ");
+  if(["3-1-1-4","3-1-1-5","3-1-1-6"].indexOf(id)>-1)
+    return [`التقدم في نتائج ${nm} في الاختبارات الوطنية`,`عدم تحقيق تقدم كافٍ في نتائج ${nm} قياسًا على أداء المدرسة السابق في الاختبارات الوطنية`,`تحقيق تقدم موجب في نسبة المجتازين للحد الأدنى للإتقان في ${nm} مقارنة بالعام السابق`,
+      `مقارنة نتائج المدرسة في ${nm} بالأعوام السابقة ومتوسط الإدارة والمملكة؛ تحديد المجالات الفرعية المتراجعة (${subs})؛ تحليل أسباب التراجع؛ تنفيذ تدخلات علاجية مركزة؛ تطبيق اختبارات محاكية دورية؛ متابعة التقدم واتخاذ قرارات تصحيحية`,
+      "تحليل بطاقة نافس؛ مقارنة زمنية؛ اختبارات محاكية؛ مجموعات علاجية؛ اجتماعات قرار","تحليل: الأسبوعان الأولان؛ تنفيذ حتى موعد الاختبار؛ متابعة شهرية",
+      `المسؤول الأول: مدير المدرسة. التنفيذ: لجنة التحصيل الدراسي وفريق الاختبارات الوطنية و${teachers[k]}. الدعم: {S}.`];
+  return [`نتائج ${nm} في الاختبارات الوطنية (نافس)`,`انخفاض نتائج المتعلمين في مجال ${nm} وفق الاختبارات الوطنية`,`رفع نسبة المجتازين للحد الأدنى للإتقان في ${nm} 10 نقاط مئوية، ومعالجة المجالات الفرعية الأضعف`,
+    `تحليل بطاقة نافس في ${nm} حسب المجالات الفرعية (${subs})؛ تشخيص مهارات الطلاب المستهدفين؛ تنفيذ برنامج علاجي مركز على المجالات الأضعف؛ تضمين أسئلة بنمط الاختبارات الوطنية في الدروس والتقويم؛ تطبيق اختبارات محاكية دورية؛ تحليل نتائجها وتعديل التدخل؛ إشراك الأسرة`,
+    "تحليل بطاقة نافس؛ اختبارات تشخيصية ومحاكية؛ مجموعات علاجية؛ منصات تعليمية؛ تعلم الأقران","تحليل وتشخيص: الأسبوعان 1-2؛ تنفيذ حتى موعد الاختبار؛ محاكاة شهرية",
+    `المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التحصيل الدراسي وفريق الاختبارات الوطنية و${teachers[k]}. الدعم: {S}.`];
+}
+function libFor(id,dom){
+  if(dom==="act" && LIB_ACT[id]) return LIB_ACT[id];
+  if(LIB[id]) return LIB[id];
+  return libOut(id);
+}
+
+/* ============================================================
+   صفوف استرشادية من استمارات المدرسة (1) المعتمدة حسب مستوى المدرسة
+   [المجال، العنصر، وصف الاحتياج، الإجراءات، الأساليب، المدة، التنفيذ والمسؤولية]
+   ============================================================ */
+const SAMPLES = {
+ st:{name:"الانطلاق", rows:[
+  ["التدريس","تخطيط الوحدات والدروس وتصميم أنشطة التعلم","تفاوت في التخطيط وعدم وضوح نواتج التعلم. يُثبت خط الأساس بتحليل عينة من الخطط. المستهدف: استيفاء 90% من الخطط لمعايير الربط بين النواتج والأنشطة والتقويم.","اعتماد بطاقة تحليل موحدة؛ فحص عينة قبلية من الخطط؛ تدريب المعلمين على صياغة نواتج تعلم قابلة للقياس وتصميم أنشطة تراعي الفروق؛ مراجعة أسبوعية لعينة من الخطط؛ تطبيق عينة بعدية ومقارنة النتائج.","ورشة تطبيقية؛ نموذج استرشادي؛ تعلم الأقران؛ مراجعة خطط؛ تغذية راجعة فردية.","الأسابيع 1-6؛ متابعة شهرية حتى نهاية الفصل.","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التحصيل ورؤساء التخصصات. الدعم: مقدم خدمة دعم التميز المدرسي."],
+  ["التدريس","تنفيذ التدريس بطرائق نشطة تراعي الفروق وتدمج التقنية","الاعتماد على الإلقاء وضعف تنوع الاستراتيجيات وإدارة الصف. المستهدف: تحقق مؤشرات التعلم النشط ومراعاة الفروق في 80% من الدروس المرصودة، مع بيئة صفية آمنة وجاذبة.","تنفيذ زيارات خط أساس؛ تحديد ممارستين ذواتي أولوية لكل تخصص؛ تقديم دروس تطبيقية؛ تبادل الزيارات؛ متابعة دمج التقنية وإدارة الوقت والسلوك الصفي؛ تقديم تغذية راجعة ومقارنة النتائج بالأساس.","دروس تطبيقية؛ زيارات تبادلية؛ ملاحظة صفية قصيرة؛ مجتمع تعلم مهني؛ تدريب مصغر.","الأسابيع 3-10؛ قياس قبلي وبعدي.","المسؤول الأول: مدير المدرسة. التنفيذ: لجنة التحصيل والمعلمون المتميزون. الدعم: مقدم خدمة دعم التميز."],
+  ["التدريس","تقويم التعلم والتغذية الراجعة وجودة الاختبارات","الاعتماد على الاختبارات وقلة تنوع أدوات التقويم وضعف التغذية الراجعة. المستهدف: استخدام تقويم تكويني موثق في 80% من الدروس المرصودة، ومراجعة 100% من الاختبارات قبل التطبيق.","بناء أدوات تقويم تكويني مشتركة؛ تطبيقها بانتظام؛ تقديم تغذية راجعة محددة؛ مراجعة الاختبارات وفق جدول مواصفات؛ تحليل الأخطاء؛ مناقشة النتائج في مجتمعات التعلم المهنية؛ تعديل التدريس بناء على البيانات.","ورشة بناء أدوات؛ تحليل أعمال طلاب؛ زيارات صفية؛ مراجعة اختبارات؛ حلقات نقاش.","الأسابيع 2-12؛ مراجعة كل أربعة أسابيع.","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التحصيل ومعلمو المواد. الدعم: مقدم خدمة دعم التميز والمشرف التخصصي عند الحاجة."],
+  ["نواتج التعلم","دراسة نتائج تعلم الطلاب وتحليلها وتحديد الفجوات","قصور تحليل النتائج وعدم وضوح الفجوات. المستهدف: تحليل 100% من مصادر النتائج المتاحة، وتحديد الفجوات ذات الأولوية، وربط كل فجوة بإجراء علاجي ومسؤول وزمن.","تجميع نتائج التقويم والاختبارات الوطنية والتشخيصية؛ تحليلها حسب الصف والمهارة والفئة؛ تحديد ثلاث فجوات كبرى؛ تحليل الأسباب؛ إسناد تدخل لكل فجوة؛ متابعة شهرية للاتجاهات واتخاذ قرارات تصحيحية.","لوحة بيانات؛ ورشة تحليل؛ لقاءات تخصصية؛ اختبارات تشخيصية ومحاكية هادفة.","تحليل أولي خلال أسبوعين؛ تحديث شهري.","المسؤول الأول: مدير المدرسة. التنفيذ: لجنة التحصيل وفريق الاختبارات الوطنية. الدعم: مقدم خدمة دعم التميز."],
+  ["نواتج التعلم","تحسين المهارات الأساسية ودعم الطلاب ذوي الاحتياج وإثراء الموهوبين","فجوات في المهارات الأساسية ووجود طلاب متعثرين. المستهدف: رفع متوسط إتقان المهارات ذات الأولوية 20 نقطة مئوية عن القياس القبلي، وإعداد خطة دعم لـ100% من الطلاب ذوي الاحتياج.","تطبيق تشخيص قبلي؛ تصنيف الطلاب حسب المهارة؛ تصميم مجموعات دعم وخطط فردية للحالات الأشد؛ تنفيذ حصص علاج وإثراء؛ متابعة قصيرة متكررة؛ التواصل مع الأسر؛ إعادة القياس وتعديل التدخل.","تدريس علاجي؛ تعلم متمايز؛ خطط دعم فردية؛ إثراء؛ منصات تعليمية؛ شراكة أسرية.","فصل دراسي؛ متابعة كل أسبوعين.","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: معلمو المواد ولجنة التحصيل بالشراكة مع الموجه الطلابي والأسرة. الدعم: مقدم خدمة دعم التميز."],
+  ["التوجيه الطلابي","الدافعية والانضباط والأمان النفسي والاجتماعي والشراكة مع الأسرة","ضعف الدافعية وارتفاع الغياب ووجود سلوكيات سلبية. المستهدف: خفض الغياب غير المبرر والمخالفات 20% عن خط الأساس، ومعالجة 90% من الحالات ذات الأولوية.","تحليل بيانات الغياب والتأخر والمخالفات؛ تحديد الطلاب والفصول الأعلى احتياجًا؛ تنفيذ تدخلات متدرجة؛ متابعة يومية والتواصل المبكر مع الأسر؛ تفعيل مسار آمن للإبلاغ عن التنمر؛ قياس الدافعية والمناخ المدرسي ومراجعة الأثر شهريًا.","تدخلات وقائية؛ إرشاد فردي وجماعي؛ تعزيز إيجابي؛ شراكة أسرية؛ تحليل سجلات.","فصل دراسي؛ متابعة أسبوعية ومراجعة شهرية.","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي ولجنة التوجيه والمعلمون. بالشراكة مع الأسرة. الدعم: مقدم خدمة دعم التميز."],
+  ["الأنشطة المدرسية","البرامج والأنشطة الصفية وغير الصفية المرتبطة بالتعلم والهوية","ضعف انتظام الأنشطة وارتباطها بالمنهج والهوية. المستهدف: ارتباط 80% من الأنشطة المنفذة بهدف تعليمي أو حاجة موثقة، ومشاركة 70% من الطلاب في نشاط نوعي واحد على الأقل.","حصر الأنشطة الحالية؛ ربط كل نشاط بهدف تعليمي أو حاجة طلابية؛ إعداد خطة فصلية متوازنة؛ إتاحة أدوار متنوعة للطلاب؛ دمج الهوية الوطنية والقيم؛ قياس المشاركة والأثر؛ إيقاف الأنشطة منخفضة الأثر وتطوير الناجح منها.","مشروعات ومسابقات؛ إذاعة هادفة؛ معارض؛ أندية طلابية؛ تعلم خدمي؛ شراكات مجتمعية.","فصل دراسي؛ تقويم بعد كل برنامج.","المسؤول الأول: رائد النشاط. التنفيذ: لجنة النشاط والمعلمون والطلاب بالشراكة مع الأسرة والمجتمع. الدعم: مقدم خدمة دعم التميز."],
+  ["التطوير المستمر","تأسيس منظومة التطوير المستمر الفردي والفريقي والمدرسي والتفاعل مع التربويين والمجتمع","حاجة المدرسة إلى تنظيم التطوير المهني وربطه بأولويات التدريس ونواتج التعلم. يُثبت خط الأساس بتحليل الاحتياجات المهنية وبطاقات الملاحظة الصفية. المستهدف: إعداد خطة تطوير فردية لـ100% من المعلمين، وتطبيق 80% منهم ممارسة تطويرية واحدة على الأقل، وتفعيل مجتمع تعلم مهني شهري في كل تخصص.","تحليل الاحتياجات المهنية وربطها بأولويات الخطة؛ إعداد خطط تطوير فردية؛ تشكيل مجتمعات تعلم مهنية؛ تنفيذ تدريب مصغر ودروس تطبيقية؛ تفعيل تعلم الأقران والزيارات المتبادلة؛ متابعة التطبيق داخل الصف؛ تحليل الشواهد وتقديم التغذية الراجعة؛ تعديل برامج التطوير وفق النتائج.","التأمل الذاتي؛ التدريب المصغر؛ التوجيه الفردي؛ مجتمعات التعلم المهنية؛ تعلم الأقران؛ الدروس التطبيقية؛ الزيارات الصفية المتبادلة.","تحليل الاحتياج خلال الأسبوعين الأولين؛ التنفيذ من الأسبوع الثالث حتى نهاية الفصل؛ متابعة شهرية وقياس ختامي.","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التميز المدرسي ومنسقو التخصصات والمعلمون. المتابعة: مدير المدرسة. الدعم: مقدم خدمة دعم التميز المدرسي وفق حاجة المدرسة والتكليف."]],
+  recs:"تركيز جهود التحسين على الاحتياجات الأكثر أثرًا في التدريس ونواتج التعلم، ومتابعة التنفيذ شهريًا وفق شواهد واضحة. وتخصيص وقت منتظم لمجتمعات التعلم المهنية والزيارات المتبادلة، والاستفادة من خدمات دعم التميز المدرسي في الأولويات التي تتطلب دعمًا تخصصيًا."},
+ pr:{name:"التقدم", rows:[
+  ["التدريس","التخطيط المتمايز والتدريس.","تفاوت محتمل في اتساق التخطيط مع الفروق الفردية ونواتج التعلم. يُثبت من تحليل الخطط والمشاهدة. المستهدف المبدئي: استيفاء 90% من الخطط المعايير المعتمدة.","تحليل عينة قبلية من الخطط والمشاهدات؛ تحديد معايير التخطيط المتمايز؛ بناء نماذج مرتبطة بنواتج قابلة للقياس؛ تخطيط مشترك؛ فحص عينات دورية؛ تعديل التخطيط وفق أعمال الطلاب ونتائج التقويم التكويني.","تحليل خطط؛ ورشة تطبيقية؛ تخطيط مشترك؛ تعلم أقران؛ تغذية راجعة.","الأسابيع 1-6؛ مراجعة كل 4 أسابيع حتى نهاية الفصل.","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: رؤساء التخصصات والمعلمون. لجنة التحصيل. دعم استشاري: عند الطلب."],
+  ["التدريس","تنفيذ التدريس والتقنية ذات القيمة التعليمية.","الحاجة إلى رفع اتساق التدريس النشط والاستجابة للفروق دون جعل التقنية غاية. يُثبت بالملاحظة الصفية. المستهدف: تحقق المعايير في 85% من الدروس المرصودة.","تحديد ممارستين عاليتي الأثر لكل تخصص؛ تنفيذ دروس نموذجية وتبادل زيارات؛ تفعيل التعلم النشط والمشروعات عند ملاءمتها؛ تجربة تقنية مرتبطة بهدف تعلم؛ تحليل مشاركة الطلاب وأعمالهم؛ تعديل الممارسة.","دروس تطبيقية؛ زيارات تبادلية؛ ملاحظة قصيرة؛ مشروع/صف مقلوب؛ تقنية هادفة.","الأسابيع 3-12؛ قياس قبلي وبعدي ومتابعة شهرية.","المسؤول الأول: مدير المدرسة. التنفيذ: رؤساء التخصصات والمعلمون المتميزون. لجنة التحصيل. دعم تخصصي: عند الحاجة."],
+  ["التدريس","جودة التقويم والتغذية الراجعة.","الحاجة إلى ضمان صدق وتنوع التقويم وتحويل نتائجه إلى قرارات تدريس. يُثبت من عينات الأدوات. المستهدف: مراجعة 100% من الاختبارات وتطبيق أدوات متنوعة في 85% من الوحدات.","بناء مواصفات جودة موحدة؛ إعداد أدوات تكوينية ومهام أداء وسلالم تقدير؛ مراجعة الاختبارات قبل تطبيقها؛ تضمين أسئلة تفكير متقدم بحسب المادة والمرحلة؛ تحليل الأخطاء؛ تقديم تغذية راجعة؛ تعديل التدريس.","بنك أدوات؛ سلالم تقدير؛ مهام أداء؛ تحليل أعمال؛ مراجعة أقران للاختبارات.","الأسابيع 2-12؛ مراجعة كل 4 أسابيع وقبل الاختبارات.","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: لجنة التحصيل ومعلمو المواد. المراجعة: رؤساء التخصصات. الدعم: عند الطلب."],
+  ["نواتج التعلم","تحليل النواتج والاختبارات الوطنية.","الحاجة إلى توحيد تحليل بيانات التعلم وربطها بالتدخلات. يُثبت من آخر النتائج. المستهدف: تحليل 100% من المصادر المتاحة وربط كل فجوة ذات أولوية بتدخل موثق خلال 10 أيام عمل.","تجميع نتائج التقويم الداخلي والوطني؛ التحقق من جودة البيانات؛ تحليلها حسب المهارة والصف والفئة؛ تحديد الفجوات والأسباب؛ إسناد تدخل ومسؤول وزمن؛ محاكاة محدودة للتشخيص؛ مراجعة الاتجاهات واتخاذ قرار تصحيحي.","لوحة بيانات؛ تحليل مهاري؛ اختبار تشخيصي؛ اجتماع قرار؛ محاكاة هادفة.","تحليل تأسيسي خلال أسبوعين؛ تحديث شهري وبعد كل قياس.","المسؤول الأول: مدير المدرسة. التنفيذ: لجنة التحصيل وفريق الاختبارات الوطنية. الدعم عند الطلب."],
+  ["نواتج التعلم","تقليص الفجوات وتنمية مهارات التفكير العليا.","تفاوت محتمل في المهارات العليا ووجود فجوات بين الصفوف/الفئات. يُثبت بقياس قبلي. المستهدف: خفض الفجوة ذات الأولوية 20% نسبيًا ورفع متوسط سلم التفكير مستوى.","تشخيص المهارات والتفكير المتقدم؛ تصنيف الاحتياج؛ تصميم دعم وإثراء؛ إدراج مهام تحليل واستدلال وحل مشكلات؛ متابعة أعمال الطلاب بسلم تقدير؛ مقارنة القياس القبلي والبعدي؛ معالجة الفجوات بين الصفوف والفئات.","تعلم متمايز؛ دعم وإثراء؛ مهام بحث وحل مشكلات؛ مشاريع؛ ملفات تعلم.","فصل دراسي؛ متابعة كل أسبوعين وقياس ختامي.","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: معلمو المواد ولجنة التحصيل. الشراكة: الأسرة والموجه الطلابي. الدعم: عند الحاجة."],
+  ["التوجيه الطلابي","الإرشاد والهوية والشراكة الأسرية.","الحاجة إلى تكامل المسار الأكاديمي والمهني والهوية. يُثبت من الاستبانات والسجلات. المستهدف: ملف مسار لـ100% من الفئة المستهدفة ومعالجة 90% من الحالات ذات الأولوية ضمن المدة المعتمدة.","قياس الاحتياج؛ إعداد ملفات مسار للصفوف المستهدفة؛ برامج هوية واحترام التنوع؛ رصد مؤشرات الغياب والسلوك وفق أدوات معتمدة؛ تدخل وقائي؛ إحالة الحالات حسب الصلاحيات؛ متابعة مشاركة الأسرة وأثرها.","إرشاد أكاديمي ومهني؛ دعم وقائي؛ قيادة طلابية؛ تواصل أسري؛ إحالة مختصة.","فصل دراسي؛ متابعة أسبوعية ومراجعة شهرية.","المسؤول الأول: وكيل شؤون الطلاب. التنفيذ: الموجه الطلابي والمعلمون. الشراكة: الأسرة والتوجيه الطلابي."],
+  ["الأنشطة المدرسية","الموهبة والأنشطة والتعلم.","الحاجة إلى رفع عدالة المشاركة وتحويل النشاط والتطوع إلى تعلم وأثر. يُثبت بالحصر القبلي. المستهدف: ارتباط 85% من الأنشطة بحاجة/ناتج ومشاركة 75% من الطلاب في نشاط نوعي.","حصر الميول والمواهب والمشاركة؛ ربط كل نشاط بحاجة أو ناتج؛ تصميم مسارات إثراء وتعلم خدمي؛ إسناد أدوار قيادية للطلاب؛ توثيق الساعات؛ قياس أثر البرنامج؛ تطوير الفعال وإيقاف منخفض الأثر.","أندية موهبة ومستقبل؛ تعلم؛ تطوع؛ مسابقات؛ مشاريع وشراكات.","فصل دراسي؛ تقويم بعد كل برنامج ومراجعة شهرية.","المسؤول الأول: رائد النشاط. التنفيذ: لجنة النشاط والطلاب والمعلمون. الشراكة: الأسرة والنشاط الطلابي."],
+  ["التطوير المستمر","تطوير الممارسات المهنية القائمة على البيانات والبحث الإجرائي والتعلم التعاوني.","حاجة المدرسة إلى الانتقال من المشاركة في البرامج المهنية إلى قياس أثرها في الممارسة الصفية ونواتج التعلم. المستهدف: إنجاز 90% من المعلمين دورة تطوير مهني موثقة، وتطبيق 85% منهم الممارسة المستهدفة، وتحسين مؤشر الممارسة المختار بما لا يقل عن 15% مقارنة بخط الأساس، وتنفيذ بحث إجرائي أو بحث الدرس واحد على الأقل كل فصل.","تحليل مؤشرات التدريس والتعلم؛ تحديد الاحتياجات وفق الأدوار والرتب المهنية؛ بناء خطط تطوير متمايزة؛ تنفيذ مجتمعات تعلم قائمة على تحليل البيانات؛ تطبيق البحث الإجرائي وبحث الدرس؛ تبادل الزيارات والتوجيه بين الأقران؛ تحليل أثر التطوير في أعمال الطلاب؛ توثيق الممارسات الناجحة وتعميمها داخل المدرسة.","البحث الإجرائي؛ بحث الدرس؛ التوجيه وتدريب الأقران؛ مجتمعات التعلم المهنية؛ اجتماعات تحليل البيانات؛ الزيارات المتبادلة؛ ملف الإنجاز المهني.","التخطيط وتحليل الاحتياج خلال الشهر الأول؛ التطبيق خلال الفصل الدراسي؛ مراجعة شهرية؛ قياس الأثر في نهاية الفصل.","المسؤول الأول: وكيل الشؤون التعليمية. التنفيذ: قادة ومنسقو التخصصات ومجتمعات التعلم المهنية. المتابعة: لجنة التميز المدرسي ومدير المدرسة. الدعم الاستشاري: مقدم خدمة دعم التميز أو المشرف التخصصي عند الطلب."]],
+  recs:"استمرار التحسين القائم على البيانات، وربط كل نشاط تطويري بمؤشر ممارسة أو نتيجة تعلم قابلة للقياس، مع تعميم الممارسات المثبتة الأثر. وتوسيع تطبيق البحث الإجرائي وبحث الدرس، وإنشاء ملف شواهد رقمي لمتابعة أثر التطوير المهني."},
+ ex:{name:"التميز", rows:[
+  ["التدريس","النموذج المدرسي للتدريس عالي الجودة.","فرصة: تحويل الممارسات المتقدمة من خبرات فردية إلى نموذج مدرسي مستدام. يُثبت باستقرار الأداء. المستهدف: تحقق ≥90% من معايير النموذج عبر دورتين متتاليتين.","استخلاص خصائص الممارسة عالية الأثر؛ صياغة نموذج تدريس مدرسي؛ معايرته عبر التخصصات؛ تطبيقه ومقارنة الأثر؛ تعديل النموذج؛ تثبيت الأدلة والنماذج؛ تدريب معلمين جدد.","بحث إجرائي؛ توثيق ممارسة؛ مشاهدة أقران؛ نقل معرفة.","مرحلة 1: توثيق (4 أسابيع). مرحلة 2: تطبيق (8 أسابيع). مرحلة 3: تثبيت ونقل (دورتان).","المسؤول: مدير المدرسة. المتابعة: وكيل الشؤون التعليمية. الفريق: رؤساء التخصصات ومعلمون خبراء. المراجعة: لجنة التميز. استشارة خارجية: عند الطلب."],
+  ["التدريس","ابتكار رقمي مسؤول في التعلم.","فرصة: استخدام مسؤول للذكاء الاصطناعي/الواقع المعزز في مشكلة محددة. المستهدف: إكمال تجربة موثقة بلا مخالفة خصوصية وبأثر تربوي إيجابي قابل للتفسير.","تحديد مشكلة تعلم؛ صياغة فرضية؛ فحص الخصوصية والنزاهة والإتاحة؛ اختيار أداة معتمدة؛ تجربة مع فئة محدودة؛ مراجعة للمخرجات؛ قياس الأثر والتكلفة؛ قرار تعميم أو تعديل أو إيقاف.","تصميم تجريبي مبسط؛ اختبار قابلية الاستخدام؛ ملاحظة؛ قياس قبلي/بعدي؛ مراجعة أخلاقية.","تصميم وموافقة: 3 أسابيع. تجربة محدودة: 6-8 أسابيع. قرار: أسبوعان.","المسؤول: مدير المدرسة. المتابعة: منسق التحول الرقمي. شريك تربوي: معلم المادة. الحوكمة: لجنة التميز/البيانات. استشارة: عند الطلب."],
+  ["نواتج التعلم","تحليلات تعلم وتدخل مبكر.","فرصة: الحفاظ على الأداء المرتفع ومعالجة الفجوات المتبقية مبكرًا. المستهدف: تغطية 100% من الفئة المحددة وخفض الفجوة المتبقية 15% نسبيًا دون أثر سلبي.","تحديد مؤشرات بسيطة موثوقة؛ التحقق من جودة البيانات؛ بناء تنبيه مبكر؛ تصميم تدخلات شخصية؛ مقارنة أثر التدخل؛ حذف البيانات غير اللازمة؛ تثبيت الإجراء إذا استقر الأثر.","تحليلات تعلم؛ مؤشرات إنذار مبكر؛ تدخل شخصي؛ تحقق من جودة البيانات.","تصميم: 4 أسابيع. تشغيل: فصل دراسي. تحقق من الاستدامة: دورتان.","المسؤول: مدير المدرسة. المتابعة: منسق القياس. التنفيذ: لجنة التحصيل والمعلمون. المراجعة: لجنة البيانات. دعم تحليلي: عند الطلب."],
+  ["نواتج التعلم","البحث والابتكار الطلابي.","فرصة: نقل التفكير المتقدم من مهام صفية إلى إنتاج طلابي أصيل. المستهدف: إكمال 70% من الفئة المستهدفة مشروعًا يحقق معيار الجودة، مع نمو موثق في سلم التفكير.","تحديد تحديات مرتبطة بالمجتمع/التخصص؛ تدريب الطلاب على السؤال والدليل والأخلاقيات؛ فرق بحث وابتكار؛ تحكيم مرحلي بسلم تقدير؛ تطوير النماذج؛ عرض النتائج؛ توثيق تعلم التحسين؛ إتاحة فرص عادلة للمشاركة.","بحث طلابي؛ تصميم هندسي؛ تحديات واقعية؛ تحكيم؛ عرض ونشر.","دورة ابتكار فصلية؛ مراجعة عند كل مرحلة.","المسؤول: وكيل الشؤون التعليمية. القادة: منسق الموهبة ورؤساء التخصصات. التنفيذ: المعلمون والطلاب."],
+  ["التوجيه الطلابي","قيادة الطلاب وتصميم تجربة مدرسية مزدهرة.","فرصة: تحويل الطلاب من مستفيدين إلى شركاء في تحسين خبرتهم. المستهدف: مشاركة 80% من الفئة في التصميم/التنفيذ وتحسن المؤشر المختار عن خط الأساس.","استبيان الطلاب؛ تحديد تحدٍ في المسار/الهوية؛ تصميم حل مع الطلاب؛ تنفيذ أدوار قيادية؛ ملفات مسار متقدمة؛ رصد آمن للمؤشرات وإحالة حسب الصلاحيات؛ قياس المشاركة والأثر؛ تثبيت الممارسة الناجحة.","تصميم تشاركي؛ قيادة طلابية؛ إرشاد مهني متقدم؛ قياس؛ إحالة مختصة.","تصميم تشاركي: 4 أسابيع. تطبيق: فصل دراسي. استدامة: دورتان.","المسؤول: وكيل شؤون الطلاب. المتابعة: الموجه الطلابي. التنفيذ: مجلس الطلاب والمعلمون. الشراكة: الأسرة والجهات المختصة."],
+  ["الأنشطة المدرسية","ابتكار مجتمعي وتعلم قابل للنشر.","فرصة: تحويل الشراكات والتطوع إلى ابتكار مجتمعي قابل للنشر. المستهدف: مشروع واحد مكتمل الأثر، وشريك يحقق التزامه، ونشر موثق لمدرسة واحدة على الأقل.","اختيار تحدٍ مجتمعي موثق؛ اتفاق أدوار ومؤشرات مع الشريك؛ تصميم مشروع يقوده الطلاب؛ قياس أثر الطلاب والمجتمع؛ توثيق النموذج والتكلفة؛ تحسينه؛ تقديم حزمة خبرة/استشارة لمدرسة أخرى بالتنسيق مع إدارة التعليم.","تعلم؛ شراكة قائمة على الأثر؛ بيت خبرة؛ توثيق ونقل معرفة.","تصميم: 4 أسابيع. تنفيذ: فصل دراسي. نشر وتحقق: الدورة التالية.","المسؤول: مدير المدرسة. المتابعة: رائد النشاط. التنفيذ: الطلاب والمعلمون والشريك. التنسيق الخارجي: إدارة التعليم عند نقل الخبرة."],
+  ["التطوير المستمر","استدامة الخبرة المهنية والابتكار المؤسسي ونقل المعرفة داخل المدرسة وخارجها","فرصة المدرسة في تحويل الممارسات المتميزة من خبرات فردية إلى نماذج مؤسسية مستدامة وقابلة للنقل. المستهدف: توثيق ممارستين مهنيتين عاليتي الأثر، واستدامة تحقق معاييرهما بنسبة لا تقل عن 90% عبر دورتين متتاليتين، وإنتاج حزمة معرفة أو ابتكار مهني، ونقل ممارسة موثقة إلى مدرسة أخرى بالتنسيق مع إدارة التعليم.","حصر الخبرات والكفاءات المهنية؛ اختيار الممارسات عالية الأثر؛ بناء نموذج مدرسي موثق؛ اختبار النموذج وتحكيمه؛ قياس استدامة أثره عبر دورتين؛ إعداد مدربين وقيادات بديلة؛ إنشاء حافظة للمعرفة المدرسية؛ نشر البحوث والممارسات المتميزة؛ تقديم الخبرة والاستشارة لمدارس أخرى بالتنسيق الرسمي؛ مراجعة النموذج وتطويره.","بيت خبرة مدرسي؛ البحث الإجرائي المتقدم؛ المقارنة المرجعية؛ الشبكات المهنية؛ التوجيه المهني؛ مجتمعات التعلم؛ التحكيم؛ توثيق ونقل المعرفة.","حصر وتصميم خلال أربعة أسابيع؛ تجربة وتحقق خلال فصل دراسي؛ قياس الاستدامة عبر دورتين؛ نقل الخبرة بعد ثبوت الأثر.","المسؤول: مدير المدرسة. المتابعة: وكيل الشؤون التعليمية. التنفيذ: لجنة التميز والمعلمون الخبراء وقادة التخصصات. التنسيق الخارجي: إدارة التعليم عند نقل الخبرة. الدعم الاستشاري: عند الطلب."]],
+  recs:"تقنين الممارسات المتميزة وتوثيقها، وبناء قيادات بديلة تضمن استدامتها، مع المحافظة على جودة الأداء والحوكمة. وإنشاء مختبر للابتكار المدرسي، وتوسيع الشراكات المهنية، ونقل الممارسات المثبتة الأثر إلى مدارس أخرى بالتنسيق مع إدارة التعليم."}
+};
+
+/* ===================== الحالة والتخزين ===================== */
+function blank(){
+  return {
+    v:1,
+    school:{admin:"",hdr:"الشؤون التعليمية\nإدارة أداء التعليم - قسم الإشراف التربوي",sector:"",name:"",principal:"",stage:"",gender:"",
+            ministryNo:"",building:"",buildingInd:"",period:"",adminInd:"",sharedSchool:"",year:"1448"},
+    staff:{}, teachers:DEFAULT_SPECS.map(s=>({spec:s,actual:"",quota:""})), students:{},
+    evalType:"", evalVals:{},
+    nafs:{vals:{}}, sec:{},
+    ind:{},
+    swot:{s:[],w:[],o:[],t:[]},
+    prio:[], domLevel:{},
+    team:[],
+    plan:{rows:[], recs:""},
+    exec:[],
+    step:0
+  };
+}
+function load(){
+  let d=null; try{ d=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ d=null; }
+  const b=blank();
+  if(!d||typeof d!=="object") return b;
+  /* دمج آمن مع البيانات السابقة: أي حقل ناقص يأخذ قيمته الافتراضية */
+  for(const k in b){ if(d[k]===undefined||d[k]===null) d[k]=b[k]; }
+  for(const k in b.school){ if(d.school[k]===undefined) d.school[k]=b.school[k]; }
+  for(const k of ["s","w","o","t"]){ if(!Array.isArray(d.swot[k])) d.swot[k]=[]; }
+  if(!d.plan||typeof d.plan!=="object") d.plan=b.plan;
+  if(!Array.isArray(d.plan.rows)) d.plan.rows=[];
+  if(typeof d.plan.recs!=="string") d.plan.recs="";
+  if(!d.nafs||typeof d.nafs!=="object") d.nafs={vals:{}};
+  if(!d.nafs.vals) d.nafs.vals={};
+  ["prio","team","exec","teachers"].forEach(k=>{ if(!Array.isArray(d[k])) d[k]=b[k]; });
+  /* توحيد مسمى «عال» كما في النموذج */
+  d.prio.forEach(p=>{ if(p.level==="عالٍ") p.level="عال"; });
+  for(const k in d.domLevel){ if(d.domLevel[k]==="عالٍ") d.domLevel[k]="عال"; }
+  if(!(d.step>=0 && d.step<9)) d.step=0;
+  return d;
+}
+let S = load();
+let saveT=null;
+function save(){
+  clearTimeout(saveT);
+  saveT=setTimeout(()=>{ try{ S.updated=new Date().toISOString(); localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ alert("تعذر الحفظ في المتصفح: "+e.message); } renderBackupWarn(); markSteps(); },250);
+}
+
+/* ===================== أدوات مساعدة ===================== */
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4); }
+function num(v){
+  if(v==null) return null;
+  let s=String(v).trim().replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[٫,]/g,".").replace(/[%٪\s]/g,"");
+  if(s==="") return null; const n=parseFloat(s); return isFinite(n)?n:null;
+}
+function pctOk(v){ const n=num(v); return n!==null && n>=0 && n<=100; }
+function fmt(n){ if(n==null) return ""; return (Math.round(n*100)/100).toString(); }
+function level(p){ const n=num(p); if(n===null||n<0||n>100) return null; if(n>=90) return "ex"; if(n>=75) return "pr"; if(n>=50) return "st"; return "pp"; }
+const LV_NAME={ex:"التميز",pr:"التقدم",st:"الانطلاق",pp:"التهيئة"};
+const LV_SHORT={ex:"تميز",pr:"تقدم",st:"انطلاق",pp:"تهيئة"};
+function lvBadge(p){ const l=level(p); return l?`<span class="lv ${l}">${LV_NAME[l]}</span>`:`<span class="lv na">—</span>`; }
+function getPath(p){ return p.split(".").reduce((o,k)=>o==null?undefined:o[k],S); }
+function setPath(p,v){ const ks=p.split("."); let o=S; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null||typeof o[ks[i]]!=="object") o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=v; }
+function inp(path,ph,extra){ const v=getPath(path); return `<input data-k="${path}" value="${esc(v==null?"":v)}" placeholder="${esc(ph||"")}" ${extra||""}>`; }
+function sel(path,opts,ph){ const v=getPath(path)||""; return `<select data-k="${path}"><option value="">${esc(ph||"— اختر —")}</option>${opts.map(o=>`<option${o===v?" selected":""}>${esc(o)}</option>`).join("")}</select>`; }
+function ta(path,ph,h){ const v=getPath(path); return `<textarea data-k="${path}" placeholder="${esc(ph||"")}"${h?` style="min-height:${h}px"`:""}>${esc(v==null?"":v)}</textarea>`; }
+function field(label,html){ return `<div><label class="lb">${label}</label>${html}</div>`; }
+function stageGrades(){ return GRADES[S.school.stage] || []; }
+function allItems(){
+  const seen={}, out=[];
+  SUP.forEach(d=>d.groups.forEach(g=>g.items.forEach(it=>{
+    const id=it[2]||it[0]; if(seen[id]) return; seen[id]=1;
+    out.push({id, code:it[0], text:it[1], dom:d.id});
+  })));
+  return out;
+}
+function domById(id){ return SUP.find(d=>d.id===id); }
+function domName(did){ const d=domById(did); return d?d.name:""; }
+function schoolLv(){ return level(S.evalVals.overall); }
+function supportText(){ const l=schoolLv(); return (l==="ex"||l==="pr")?"المشرف التربوي عند الطلب":"مقدم خدمة دعم التميز المدرسي"; }
+function teachersWord(){ return S.school.gender==="بنات"?"والمعلمات":"والمعلمين"; }
+
+/* ===================== الخطوات ===================== */
+const STEPS = [
+  {t:"البيانات الأساسية", r:viewBasic},
+  {t:"الإحصائيات", r:viewStats},
+  {t:"التقويم المدرسي ونافس", r:viewResults},
+  {t:"تحليل المؤشرات", r:viewIndicators},
+  {t:"التحليل الرباعي", r:viewSwot},
+  {t:"الأولويات والفريق", r:viewPriorities},
+  {t:"استمارة (1) بناء الخطة", r:viewPlan},
+  {t:"استمارة (2) التنفيذ", r:viewExec},
+  {t:"المراجعة والطباعة", r:viewPrint}
+];
+function stepDone(i){
+  switch(i){
+    case 0: return !!(S.school.name && S.school.stage && S.school.principal);
+    case 1: return Object.values(S.staff).some(v=>v!=="" && v!=null);
+    case 2: return EVAL_ROWS.some(r=>pctOk(S.evalVals[r[0]]));
+    case 3: return Object.values(S.ind).some(pctOk);
+    case 4: return S.swot.s.length+S.swot.w.length>0;
+    case 5: return S.prio.length>0;
+    case 6: return S.plan.rows.length>0;
+    case 7: return S.exec.length>0;
+    default: return false;
+  }
+}
+function markSteps(){
+  document.querySelectorAll(".step").forEach((b,i)=>{ b.classList.toggle("done", stepDone(i)); b.classList.toggle("active", i===S.step); });
+}
+function renderSteps(){
+  document.getElementById("steps").innerHTML = STEPS.map((s,i)=>`<button class="step" data-step="${i}"><span class="n">${i+1}</span>${s.t}</button>`).join("");
+  markSteps();
+}
+function go(i){ S.step=Math.max(0,Math.min(STEPS.length-1,i)); save(); render(); window.scrollTo({top:0,behavior:"smooth"}); }
+function navBtns(){
+  return `<div class="navbtns">${S.step>0?`<button class="btn light" data-go="${S.step-1}">→ السابق</button>`:"<span></span>"}${S.step<STEPS.length-1?`<button class="btn primary" data-go="${S.step+1}">التالي ←</button>`:""}</div>`;
+}
+function render(){ markSteps(); document.getElementById("view").innerHTML = STEPS[S.step].r() + navBtns(); document.querySelectorAll("[data-live]").forEach(updateLive); }
+
+/* ===================== 1) البيانات الأساسية ===================== */
+function viewBasic(){
+  const s="school.";
+  return `<div class="card"><h2>بيانات الترويسة</h2>
+    <p class="hint">تظهر في أعلى النماذج المطبوعة بجوار شعار الوزارة. اكتب اسم الإدارة كما هو معتمد لديكم.</p>
+    <div class="g g2">
+      ${field("إدارة التعليم",inp(s+"admin","مثال: الإدارة العامة للتعليم بالمنطقة الشرقية"))}
+      ${field("القطاع",inp(s+"sector","مثال: بقيق"))}
+    </div>
+    <div class="g g2" style="margin-top:12px">
+      ${field("سطور إضافية في الترويسة (سطر لكل جهة)",ta(s+"hdr","",60))}
+      ${field("العام الدراسي (هـ)",inp(s+"year","1448"))}
+    </div></div>
+  <div class="card"><h2>1- البيانات الأساسية للمدرسة</h2>
+    <div class="g g3">
+      ${field("اسم المدرسة (يكتب كما هو في نظام نور)",inp(s+"name"))}
+      ${field("اسم مدير/ة المدرسة",inp(s+"principal"))}
+      ${field("الرقم الوزاري",inp(s+"ministryNo"))}
+      ${field("المرحلة",sel(s+"stage",["ابتدائي","متوسط","ثانوي"]))}
+      ${field("جنس المدرسة",sel(s+"gender",["بنين","بنات"]))}
+      ${field("الفترة",sel(s+"period",["صباحي","مسائي"]))}
+      ${field("نوع المبنى",sel(s+"building",["حكومي","مستأجر","أرامكو"]))}
+      ${field("استقلالية المبنى",sel(s+"buildingInd",["مستقل","مشترك"]))}
+      ${field("استقلالية الإدارة",sel(s+"adminInd",["مستقلة","مشتركة"]))}
+      ${field("اسم المدرسة المشتركة في الإدارة",inp(s+"sharedSchool","إن وُجدت"))}
+    </div></div>`;
+}
+
+/* ===================== 2) الإحصائيات ===================== */
+function viewStats(){
+  const grades=stageGrades();
+  let h=`<div class="card"><h2>أ- إحصائية التشكيلات المدرسية</h2><div class="g g6">
+    ${STAFF_COLS.map(c=>field(c[1],inp("staff."+c[0],"العدد",'inputmode="numeric"'))).join("")}</div></div>`;
+  h+=`<div class="card"><div class="row between"><h2 style="margin:0">ب- إحصائية المعلمين</h2><button class="btn light sm" data-act="addSpec">+ إضافة تخصص</button></div>
+    <p class="hint" style="margin-top:8px">العجز يُحسب تلقائيًا (الملاك − الموجود الفعلي). *تراعى المرحلة: احذف التخصص غير الموجود أو أضف ما يلزم.</p>
+    <div class="scroll"><table class="tbl"><thead><tr><th>التخصص</th><th class="num">الموجود الفعلي</th><th class="num">الملاك</th><th class="num">العجز</th><th></th></tr></thead><tbody>
+    ${S.teachers.map((t,i)=>`<tr><td>${inp(`teachers.${i}.spec`)}</td><td>${inp(`teachers.${i}.actual`,"",'inputmode="numeric" class="num"')}</td>
+      <td>${inp(`teachers.${i}.quota`,"",'inputmode="numeric" class="num"')}</td><td class="num"><b data-live="deficit" data-i="${i}"></b></td>
+      <td class="num"><button class="btn danger" data-act="delSpec" data-i="${i}">حذف</button></td></tr>`).join("")}
+    </tbody></table></div></div>`;
+  h+=`<div class="card"><h2>جـ- إحصائية الطلاب</h2>`;
+  if(!grades.length) h+=`<p class="note">اختر المرحلة في «البيانات الأساسية» لتظهر الصفوف.</p>`;
+  else h+=`<div class="scroll"><table class="tbl"><thead><tr><th>الوصف</th><th class="num">العدد الإجمالي</th>${grades.map(g=>`<th class="num">${esc(g)}</th>`).join("")}</tr></thead><tbody>
+    <tr><td><b>الصفوف الدراسية (الفصول)</b></td><td class="num"><b data-live="stuTotal" data-f="c"></b></td>${grades.map(g=>`<td>${inp(`students.${g}.c`,"",'inputmode="numeric" class="num"')}</td>`).join("")}</tr>
+    <tr><td><b>الطلاب</b></td><td class="num"><b data-live="stuTotal" data-f="s"></b></td>${grades.map(g=>`<td>${inp(`students.${g}.s`,"",'inputmode="numeric" class="num"')}</td>`).join("")}</tr>
+    </tbody></table></div>`;
+  return h+`</div>`;
+}
+function deficit(t){ const a=num(t.actual), q=num(t.quota); if(a===null||q===null) return ""; return fmt(q-a); }
+function stuTotal(f){ let sum=0,any=false; stageGrades().forEach(g=>{ const n=num(((S.students[g]||{})[f])); if(n!==null){sum+=n;any=true;} }); return any?fmt(sum):""; }
+
+/* ===================== 3) التقويم المدرسي ونافس ===================== */
+function yearsBack(){ const y=parseInt(num(S.school.year))||1448; return [y-3,y-2,y-1]; }
+function viewResults(){
+  const yrs=yearsBack();
+  return `<div class="card"><h2>3- ملخص نتائج أداء المدرسة وفق آخر تقرير للتقويم المدرسي</h2>
+    <div class="g g3" style="margin-bottom:12px">${field("نوع التقرير",sel("evalType",["ذاتي","خارجي"]))}</div>
+    <div class="legend"><span class="lv ex">التميز 90 فأكثر</span><span class="lv pr">التقدم 75 إلى أقل من 90</span><span class="lv st">الانطلاق 50 إلى أقل من 75</span><span class="lv pp">التهيئة أقل من 50</span></div>
+    <div class="scroll"><table class="tbl"><thead><tr><th>الوصف</th><th class="num" style="width:150px">نسبة الأداء (رقماً)</th><th class="num" style="width:130px">مستوى المدرسة</th></tr></thead><tbody>
+    ${EVAL_ROWS.map(r=>`<tr><td><b>${r[1]}</b></td><td>${inp("evalVals."+r[0],"%",'inputmode="decimal" class="num"')}</td><td class="num" data-live="lv" data-p="evalVals.${r[0]}"></td></tr>`).join("")}
+    </tbody></table></div></div>
+  <div class="card"><h2>4- نتائج المدرسة في الاختبارات الوطنية "نافس" للمرحلة الابتدائية والمتوسطة</h2>
+    <p class="hint">من بطاقة نافس للمدرسة: نسبة الطلبة الذين اجتازوا الحد الأدنى للإتقان. *يراعى الصف والمرحلة. اتركه فارغًا للمرحلة الثانوية.</p>
+    <div class="scroll"><table class="tbl"><thead><tr><th>المجال</th><th class="num" style="width:120px">المستوى العام</th><th>المستوى التفصيلي للمجالات</th></tr></thead><tbody>
+    ${NAFS.map(n=>`<tr><td><b>${n.name}</b></td><td>${inp(`nafs.vals.${n.id}.g`,"%",'inputmode="decimal" class="num"')}</td>
+      <td><div class="g g4">${n.subs.map((s,j)=>field(s,inp(`nafs.vals.${n.id}.s${j}`,"%",'inputmode="decimal" class="num"'))).join("")}</div></td></tr>`).join("")}
+    </tbody></table></div></div>
+  <div class="card"><h2>5- نتائج المدرسة في اختبارات القدرات والتحصيلي للمرحلة الثانوية</h2>
+    <p class="hint">للمرحلة الثانوية فقط، ويُطبع الجدول فارغًا لغيرها كما في النموذج.</p>
+    <div class="scroll"><table class="tbl"><thead><tr><th>الاختبار</th>${yrs.map(y=>`<th class="num">النسبة للعام ${y}هـ</th>`).join("")}<th class="num">الترتيب على مستوى إدارة التعليم</th><th class="num">الترتيب على مستوى المملكة</th></tr></thead><tbody>
+    ${[["q","القدرات العامة"],["t","التحصيلي"]].map(r=>`<tr><td><b>${r[1]}</b></td>${[0,1,2].map(k=>`<td>${inp(`sec.${r[0]}.y${k}`,"",'class="num"')}</td>`).join("")}<td>${inp(`sec.${r[0]}.ra`,"",'class="num"')}</td><td>${inp(`sec.${r[0]}.rk`,"",'class="num"')}</td></tr>`).join("")}
+    </tbody></table></div></div>`;
+}
+
+/* ===================== 4) تحليل المؤشرات ===================== */
+function viewIndicators(){
+  let h=`<div class="card"><h2>6- تحليل واقع مجالات الممارسات الإشرافية</h2>
+    <p class="hint">أدخل نسبة كل مؤشر من آخر تقرير للتقويم المدرسي. المؤشر المشترك بين مجالين يُدخل مرة واحدة ويظهر في المجالين. اترك المؤشر غير المقوَّم فارغًا.</p>
+    <div class="legend"><span class="lv ex">التميز</span><span class="lv pr">التقدم</span><span style="font-size:12.5px;margin-inline-end:8px">= نقطة قوة</span><span class="lv st">الانطلاق</span><span class="lv pp">التهيئة</span><span style="font-size:12.5px">= نقطة ضعف</span></div>
+    <div data-live="indSum"></div></div>`;
+  SUP.forEach(d=>{
+    h+=`<div class="card"><h2>${d.title}</h2><p class="hint">الإطار الموجه: ${d.frame.map(esc).join("، ")}</p>`;
+    d.groups.forEach(g=>{
+      h+=`<div class="grp">${esc(g.area)} — ${esc(g.std)}</div>`;
+      g.items.forEach(it=>{ const id=it[2]||it[0];
+        h+=`<div class="ind"><span class="code">${esc(it[0])}</span><span class="tx">${esc(it[1])}${it[2]?' <span class="tag">المرحلة الثانوية</span>':""}</span>
+          <input data-k="ind.${id}" value="${esc(S.ind[id]||"")}" placeholder="%" inputmode="decimal">
+          <span data-live="lv" data-p="ind.${id}"></span></div>`; });
+    });
+    h+=`</div>`;
+  });
+  return h;
+}
+function indSummary(){
+  const it=allItems().filter(x=>pctOk(S.ind[x.id]));
+  if(!it.length) return `<p class="note" style="margin:0">لم تُدخل نسب المؤشرات بعد.</p>`;
+  const st=it.filter(x=>num(S.ind[x.id])>=75).length;
+  return `<div class="row"><span class="lv na" style="background:#5c7180">مؤشرات مُدخلة: ${it.length}</span><span class="lv ex">نقاط قوة: ${st}</span><span class="lv st">نقاط ضعف: ${it.length-st}</span></div>`;
+}
+
+/* ===================== 5) التحليل الرباعي ===================== */
+function listBox(key,title,cls,sug){
+  const arr=S.swot[key];
+  return `<div class="listbox ${cls}"><div class="row between"><h3>${title} <small class="hint">(${arr.length})</small></h3><button class="btn light sm" data-act="swotAdd" data-k="${key}">+ بند</button></div>
+    ${sug?`<details><summary class="hint" style="cursor:pointer">أمثلة من مثال تحليل الواقع المرفق بالنموذج (اضغط للإضافة)</summary><div class="chips">${sug.map((s,i)=>`<button class="chip" data-act="swotSug" data-k="${key}" data-i="${i}">${esc(s)}</button>`).join("")}</div></details>`:""}
+    ${arr.map((t,i)=>`<div class="li"><textarea data-k="swot.${key}.${i}">${esc(t)}</textarea><button class="btn danger" data-act="swotDel" data-k="${key}" data-i="${i}">✕</button></div>`).join("")||`<p class="hint">لا توجد بنود.</p>`}
+  </div>`;
+}
+function viewSwot(){
+  return `<div class="card"><h2>6- تحليل واقع مجالات الممارسات الإشرافية بالمدرسة</h2>
+    <p class="hint">نقاط القوة والضعف عوامل داخلية تُستخرج من المؤشرات، والفرص والتهديدات عوامل خارجية.</p>
+    <div class="row" style="margin-bottom:12px"><button class="btn gold" data-act="swotGen">توليد نقاط القوة والضعف من المؤشرات</button>
+    <span class="hint" style="margin:0">يضيف المؤشرات غير المضافة فقط ولا يحذف ما كتبته.</span></div>
+    <div class="sw">${listBox("s","نقاط القوة (عوامل داخلية — إيجابي)","s")}${listBox("w","نقاط الضعف (عوامل داخلية — سلبي)","w")}
+    ${listBox("o","الفرص (عوامل خارجية — إيجابي)","o",SUG_O)}${listBox("t","التهديدات (عوامل خارجية — سلبي)","t",SUG_T)}</div></div>`;
+}
+function swotGen(){
+  const items=allItems().filter(x=>pctOk(S.ind[x.id]));
+  if(!items.length){ alert("أدخل نسب المؤشرات أولًا في خطوة «تحليل المؤشرات»."); return; }
+  let added=0;
+  items.forEach(x=>{
+    const p=num(S.ind[x.id]), key=p>=75?"s":"w", other=key==="s"?"w":"s";
+    const has=a=>a.some(t=>t.indexOf(x.text)===0);
+    if(has(S.swot[key])) return;
+    S.swot[other]=S.swot[other].filter(t=>t.indexOf(x.text)!==0);
+    S.swot[key].push(`${x.text} (${fmt(p)}%).`); added++;
+  });
+  save(); render(); toast(added?`أُضيف ${added} بندًا`:"لا توجد مؤشرات جديدة لإضافتها");
+}
+
+/* ===================== 6) الأولويات وفريق التحليل ===================== */
+function suggestLevel(p,did,opp){
+  if(opp) return "منخفض";
+  if(p<50) return "عال";
+  if((did==="teach"||did==="out") && p<75) return "عال";
+  if(p<65) return "عال";
+  return "متوسط";
+}
+const RANK={"عال":3,"متوسط":2,"منخفض":1};
+function viewPriorities(){
+  let h=`<div class="card"><h2>7- أولويات التحسين في مجالات الممارسات الإشرافية بناء على نقاط الضعف</h2>
+    <div class="note"><b>يحدد مستوى الأولويات حسب المعايير التالية</b> (المعايير مقترحة ويمكن إضافة معايير أخرى):<ol style="margin:4px 0 0">${PRIO_CRITERIA.map(c=>`<li>${c}</li>`).join("")}</ol></div>
+    <div class="sugg">التوليد يُنشئ أولوية لكل مؤشر ضعيف في مجاله مع مبرر جاهز ومستوى أولوية مقترح. المجال الذي ليس فيه نقطة ضعف يُقترح له أدنى مؤشراته «فرصة تحسين» حتى تكون الخطة شاملة للمجالات. جميعها قابلة للتعديل.</div>
+    <div class="row"><button class="btn gold" data-act="prioGen">توليد الأولويات المقترحة</button></div></div>`;
+  PRIO_ORDER.forEach(did=>{
+    const d=domById(did), rows=S.prio.filter(p=>p.dom===did);
+    h+=`<div class="card"><div class="row between"><h2 style="margin:0">${d.name}</h2>
+      <div class="row"><label class="lb" style="margin:0">مستوى أولوية المجال بشكل عام</label><div style="width:120px">${sel("domLevel."+did,PRIO_LEVELS)}</div>
+      <button class="btn light sm" data-act="prioAdd" data-d="${did}">+ أولوية</button></div></div>`;
+    if(!rows.length) h+=`<p class="hint" style="margin-top:10px">لا توجد أولويات في هذا المجال.</p>`;
+    rows.forEach(p=>{ const i=S.prio.indexOf(p);
+      h+=`<div class="pitem" style="margin-top:10px"><div class="g" style="grid-template-columns:1fr 140px auto;align-items:end">
+        ${field(`أولوية التحسين${p.opp?' <span class="tag opp">فرصة تحسين</span>':""}`,inp(`prio.${i}.text`))}
+        ${field("مستوى الأولوية",sel(`prio.${i}.level`,PRIO_LEVELS))}
+        <button class="btn danger" data-act="prioDel" data-i="${i}">حذف</button></div>
+        <div style="margin-top:8px">${field("المبررات",ta(`prio.${i}.just`))}</div></div>`;
+    });
+    h+=`</div>`;
+  });
+  h+=`<div class="card"><div class="row between"><h2 style="margin:0">8- فريق تحليل واقع المدرسة</h2>
+    <div class="row"><button class="btn light sm" data-act="teamAdd" data-r="ex">+ عضو لجنة التميز</button><button class="btn light sm" data-act="teamAdd" data-r="sp">+ مقدم خدمة دعم التميز</button></div></div>
+    <p class="hint" style="margin-top:8px">*بمشاركة من اللجان المدرسية ذات العلاقة ${teachersWord()}. **تدون أسماء أعضاء لجنة التميز بالمدرسة حسب العدد الفعلي لأعضاء اللجنة. ***مقدم خدمة دعم التميز المدرسي في المدارس في مستويي التهيئة والانطلاق فقط.</p>
+    ${S.team.length?`<div class="scroll"><table class="tbl"><thead><tr><th>الصفة</th><th>الاسم</th><th></th></tr></thead><tbody>
+    ${S.team.map((m,i)=>`<tr><td>${m.r==="sp"?"مقدم خدمة دعم التميز المدرسي":"لجنة التميز بالمدرسة"}</td><td>${inp(`team.${i}.name`)}</td><td class="num"><button class="btn danger" data-act="teamDel" data-i="${i}">حذف</button></td></tr>`).join("")}
+    </tbody></table></div>`:`<p class="hint">لم يُضف أعضاء بعد.</p>`}</div>`;
+  return h;
+}
+function justText(code,text,p,opp){
+  const l=level(p);
+  if(opp) return `حقق المؤشر (${code}) الخاص بـ(${text}) نسبة ${fmt(p)}% (مستوى ${LV_NAME[l]})، وتبقى فجوة تبلغ ${fmt(100-p)}% تمثل فرصة للارتقاء بالأداء إلى مستوى التميز.`;
+  return `سجل المؤشر (${code}) الخاص بـ(${text}) نسبة ${fmt(p)}% (مستوى ${LV_NAME[l]})، مما يشير إلى فجوة أداء تبلغ ${fmt(100-p)}%، ويتطلب ذلك إجراءات تحسين تنقله إلى مستوى التقدم.`;
+}
+function prioGen(){
+  if(!allItems().some(x=>pctOk(S.ind[x.id]))){ alert("أدخل نسب المؤشرات أولًا في خطوة «تحليل المؤشرات»."); return; }
+  let added=0;
+  PRIO_ORDER.forEach(did=>{
+    const d=domById(did), cand=[];
+    d.groups.forEach(g=>g.items.forEach(it=>{ const id=it[2]||it[0], p=num(S.ind[id]); if(p!==null&&p>=0&&p<=100) cand.push({id,code:it[0],text:it[1],p}); }));
+    let picks=cand.filter(c=>c.p<75).sort((a,b)=>a.p-b.p).map(c=>({...c,opp:false}));
+    if(!picks.length){ const low=cand.filter(c=>c.p<100).sort((a,b)=>a.p-b.p)[0]; if(low) picks=[{...low,opp:true}]; }
+    picks.forEach(c=>{
+      if(S.prio.some(x=>x.dom===did && x.ind===c.id)) return;
+      S.prio.push({id:uid(), dom:did, ind:c.id, opp:c.opp, text:c.text, level:suggestLevel(c.p,did,c.opp), just:justText(c.code,c.text,c.p,c.opp)});
+      added++;
+    });
+    const rs=S.prio.filter(x=>x.dom===did && x.level);
+    if(rs.length && !S.domLevel[did]) S.domLevel[did]=rs.reduce((a,x)=>RANK[x.level]>RANK[a]?x.level:a,"منخفض");
+  });
+  save(); render(); toast(added?`أُضيفت ${added} أولوية مقترحة — راجعها وعدّل ما يلزم`:"لا توجد أولويات جديدة");
+}
+
+/* ===================== 7) استمارة (1) ===================== */
+function sampleKey(){ const l=schoolLv(); return l==="ex"?"ex":l==="pr"?"pr":"st"; }
+function viewPlan(){
+  const sk=sampleKey();
+  let h=`<div class="card"><h2>استمارة المدرسة (1) بناء خطة التحسين في مجالات الممارسات الإشرافية</h2>
+    <div class="row" style="margin-bottom:8px"><span>مستوى الأداء العام (آخر تقرير): ${lvBadge(S.evalVals.overall)}</span><span>مستوى نواتج التعلم: ${lvBadge(S.evalVals.out)}</span></div>
+    <div class="sugg"><b>خطة جاهزة قابلة للتعديل:</b> «توليد الخطة المقترحة» يكتب لكل أولوية العنصر ووصف الاحتياج والمستهدف وإجراءات التحسين والأساليب ومدة الإنجاز والمسؤولية. وأي مجال ليس له أولوية تُضاف له صفوف من النموذج الاسترشادي لمستوى «${SAMPLES[sk].name}». راجع الصياغة وعدّلها بما يناسب مدرستك قبل الاعتماد.</div>
+    <div class="row"><button class="btn gold" data-act="planGen">توليد الخطة المقترحة</button>
+      <label class="lb" style="margin:0">أو أدرج صفوف النموذج الاسترشادي لمستوى:</label>
+      <select id="smpLevel" style="width:auto"><option value="st"${sk==="st"?" selected":""}>الانطلاق</option><option value="pr"${sk==="pr"?" selected":""}>التقدم</option><option value="ex"${sk==="ex"?" selected":""}>التميز</option></select>
+      <button class="btn light" data-act="planSample">إدراج</button>
+      <button class="btn light" data-act="planAdd">+ صف فارغ</button>
+      ${S.plan.rows.length?`<button class="btn danger" data-act="planClear" style="padding:9px 12px">حذف كل الصفوف</button>`:""}</div></div>`;
+  S.plan.rows.forEach((r,i)=>{
+    h+=`<div class="card"><div class="row between"><h3 style="margin:0">إجراء ${i+1}${r.src==="sample"?' <span class="tag opp">من النموذج الاسترشادي</span>':r.src==="lib"?' <span class="tag">مقترح</span>':""}</h3><div class="row">
+      ${i>0?`<button class="btn light sm" data-act="planUp" data-i="${i}">▲</button>`:""}${i<S.plan.rows.length-1?`<button class="btn light sm" data-act="planDown" data-i="${i}">▼</button>`:""}
+      <button class="btn danger" data-act="planDel" data-i="${i}">حذف</button></div></div>
+      <div class="g g2" style="margin-top:10px">
+        ${field("المجال",sel(`plan.rows.${i}.dom`,DOMAIN_NAMES))}
+        ${field("العنصر / المكون / العملية المراد تحسينها",inp(`plan.rows.${i}.el`))}
+        ${field("وصف الاحتياج",ta(`plan.rows.${i}.need`,"",90))}
+        ${field("إجراءات التحسين",ta(`plan.rows.${i}.act`,"",90))}
+        ${field("أساليب وطرق التحسين",ta(`plan.rows.${i}.meth`))}
+        ${field("مدة الإنجاز",ta(`plan.rows.${i}.dur`,"",70))}
+      </div>
+      <div style="margin-top:12px">${field("التنفيذ والمسؤولية",ta(`plan.rows.${i}.resp`,"المسؤول الأول: ... التنفيذ: ... الدعم: ...",60))}</div></div>`;
+  });
+  h+=`<div class="card"><div class="row between"><h2 style="margin:0">ثالثاً: التوصيات والمقترحات</h2><button class="btn light sm" data-act="recsSug">اقتراح توصيات</button></div>
+    <p class="hint" style="margin-top:8px">من المهم أن تكون مرتبطة بمجالات الممارسات الإشرافية، ومناسبة لاحتياجات المدرسة وفق تقرير التقويم المدرسي.</p>
+    ${ta("plan.recs","",110)}</div>`;
+  return h;
+}
+function libRow(p){
+  const L=libFor(p.ind,p.dom), pv=num(S.ind[p.ind]), Sx=supportText();
+  const lv=level(pv);
+  const tgtLv = p.opp ? "90% فأكثر (مستوى التميز)" : "75% فأكثر (مستوى التقدم)";
+  const need = `${p.opp?"فرصة: الارتقاء بـ":""}${p.opp?L[0]:L[1]}${pv!==null?`، إذ سجل المؤشر (${codeOf(p.ind)}) نسبة ${fmt(pv)}% (${LV_NAME[lv]})`:""}. المستهدف: ${L[2]}، ورفع نسبة المؤشر إلى ${tgtLv} في التقويم القادم.`;
+  return {id:uid(), fromPrio:p.id, src:"lib", dom:domName(p.dom), el:L[0], need, act:L[3]+".", meth:L[4]+".", dur:L[5]+".", resp:L[6].replace("{S}",Sx)};
+}
+function codeOf(id){ const x=allItems().find(i=>i.id===id); return x?x.code:id; }
+function sampleRows(key,domFilter){
+  return SAMPLES[key].rows.filter(r=>!domFilter||r[0]===domFilter).map(r=>({id:uid(),src:"sample",dom:r[0],el:r[1],need:r[2],act:r[3],meth:r[4],dur:r[5],resp:r[6]}));
+}
+function sortPlan(){
+  const order=PRIO_ORDER.map(domName);
+  S.plan.rows.sort((a,b)=>{ const ia=order.indexOf(a.dom), ib=order.indexOf(b.dom); return (ia<0?99:ia)-(ib<0?99:ib); });
+}
+function planGen(){
+  let added=0;
+  const sk=sampleKey();
+  PRIO_ORDER.forEach(did=>{
+    const ps=S.prio.filter(p=>p.dom===did);
+    if(ps.length){
+      ps.forEach(p=>{
+        if(S.plan.rows.some(r=>r.fromPrio===p.id)) return;
+        if(!p.ind){ S.plan.rows.push({id:uid(),fromPrio:p.id,src:"",dom:domName(did),el:p.text,need:p.just,act:"",meth:"",dur:"",resp:""}); added++; return; }
+        S.plan.rows.push(libRow(p)); added++;
+      });
+    } else if(!S.plan.rows.some(r=>r.dom===domName(did))){
+      sampleRows(sk,domName(did)).forEach(r=>{ S.plan.rows.push(r); added++; });
+    }
+  });
+  if(!S.plan.recs.trim()) S.plan.recs=SAMPLES[sk].recs;
+  sortPlan();
+  save(); render(); toast(added?`أُضيف ${added} صفًا مقترحًا — راجع الصياغة وعدّلها`:"الخطة تحتوي جميع الأولويات مسبقًا");
+}
+
+/* ===================== 8) استمارة (2) ===================== */
+function viewExec(){
+  const els=[...new Set(S.plan.rows.map(r=>r.el).filter(Boolean))];
+  let h=`<div class="card"><h2>استمارة رقم (2) تنفيذ خطة التحسين في مجالات الممارسات الإشرافية</h2>
+    <p class="hint">استمارة لكل أسبوع دراسي توثّق الإجراءات المنفذة فيه. «تعبئة مقترحة من الخطة» تضيف لكل إجراء في استمارة (1) خطوة التنفيذ المناسبة لترتيب الأسبوع، مع اللجنة المسؤولة.</p>
+    <datalist id="dlEls">${els.map(e=>`<option value="${esc(e)}">`).join("")}</datalist>
+    <datalist id="dlCom">${COMMITTEES.map(e=>`<option value="${esc(e)}">`).join("")}</datalist>
+    <button class="btn gold" data-act="weekAdd">+ أسبوع جديد</button></div>`;
+  S.exec.forEach((w,wi)=>{
+    h+=`<div class="card"><div class="row between"><h2 style="margin:0">الأسبوع ${esc(w.week||"—")}</h2>
+      <div class="row"><button class="btn light sm" data-act="weekFill" data-i="${wi}">تعبئة مقترحة من الخطة</button><button class="btn light sm" data-act="printWeek" data-i="${wi}">🖨️ طباعة هذا الأسبوع</button><button class="btn danger" data-act="weekDel" data-i="${wi}">حذف الأسبوع</button></div></div>
+      <div class="g g3" style="margin-top:10px">${field("الأسبوع الدراسي",sel(`exec.${wi}.week`,WEEKS))}${field("من (هـ)",inp(`exec.${wi}.from`,"مثال: 1448/04/16"))}${field("إلى (هـ)",inp(`exec.${wi}.to`,"مثال: 1448/04/22"))}</div>
+      <div class="scroll" style="margin-top:12px"><table class="tbl"><thead><tr><th style="min-width:130px">المجال</th><th style="min-width:170px">العنصر / المكون / العملية المراد تحسينها</th><th style="min-width:220px">الإجراءات المنفذة</th><th style="min-width:110px">زمن التنفيذ</th><th style="min-width:150px">لجان المدرسة</th><th style="min-width:130px">المشرف التربوي</th><th></th></tr></thead><tbody>
+      ${(w.rows||[]).map((r,ri)=>`<tr><td>${sel(`exec.${wi}.rows.${ri}.dom`,DOMAIN_NAMES)}</td><td>${inp(`exec.${wi}.rows.${ri}.el`,"",'list="dlEls"')}</td>
+        <td>${ta(`exec.${wi}.rows.${ri}.done`)}</td><td>${inp(`exec.${wi}.rows.${ri}.time`)}</td>
+        <td>${inp(`exec.${wi}.rows.${ri}.com`,"",'list="dlCom"')}</td><td>${inp(`exec.${wi}.rows.${ri}.sup`)}</td>
+        <td class="num"><button class="btn danger" data-act="exRowDel" data-i="${wi}" data-j="${ri}">✕</button></td></tr>`).join("")}
+      </tbody></table></div>
+      <button class="btn light sm" style="margin-top:8px" data-act="exRowAdd" data-i="${wi}">+ إجراء منفذ</button>
+      <div style="margin-top:12px">${field("التوصيات والمقترحات",ta(`exec.${wi}.recs`))}</div></div>`;
+  });
+  return h;
+}
+function committeeOf(resp){
+  const m=(resp||"").match(/لجنة [^.،؛:]+?(?=\s(?:و|بالشراكة|ورؤساء|ومعلمو|والمعلمون)|[.،؛:]|$)/);
+  return m?m[0].trim():"لجنة التميز";
+}
+function weekFill(wi){
+  if(!S.plan.rows.length){ alert("لا توجد صفوف في استمارة (1). أنشئ الخطة أولًا."); return; }
+  const w=S.exec[wi], k=Math.max(0,WEEKS.indexOf(w.week));
+  w.rows=(w.rows||[]).filter(r=>r.dom||r.el||r.done);
+  S.plan.rows.forEach(r=>{
+    const steps=(r.act||"").replace(/\.$/,"").split("؛").map(x=>x.trim()).filter(Boolean);
+    if(!steps.length) return;
+    const st=steps[Math.min(k,steps.length-1)];
+    if(w.rows.some(x=>x.el===r.el && x.done===st)) return;
+    w.rows.push({dom:r.dom, el:r.el, done:st, time:"خلال الأسبوع", com:committeeOf(r.resp), sup:""});
+  });
+  save(); render(); toast("أُضيفت إجراءات مقترحة — احذف ما لم يُنفذ وعدّل الصياغة");
+}
+
+/* ===================== 9) المراجعة والطباعة ===================== */
+function checks(){
+  const s=S.school;
+  const basic=!!(s.name&&s.stage&&s.gender&&s.ministryNo&&s.building&&s.buildingInd&&s.adminInd&&s.principal&&s.sector);
+  const doms=new Set(S.plan.rows.map(r=>r.dom).filter(Boolean));
+  const full=S.plan.rows.length>0 && S.plan.rows.every(r=>r.dom&&r.el&&r.act&&r.meth&&r.dur&&r.resp);
+  return [
+    [basic,"البيانات الأساسية في الاستمارة كاملة وواضحة"],
+    [doms.size>=DOMAIN_NAMES.length,`الخطة شاملة للمجالات الإشرافية المستهدفة (المغطى: ${doms.size} من ${DOMAIN_NAMES.length})`],
+    [full,"إجراءات التحسين مترابطة، مزمنة، محدد مسؤولية التنفيذ بشكل واضح، والأساليب فعالة التنفيذ"],
+    [!!S.plan.recs.trim(),"التوصيات والمقترحات مناسبة، تلبي احتياجات المدرسة وفق تقرير التقويم المدرسي"]
+  ];
+}
+function viewPrint(){
+  const ws=S.exec.map((w,i)=>`<label class="row" style="font-weight:700"><input type="checkbox" class="pw" value="${i}" checked style="width:auto"> الأسبوع ${esc(w.week||"—")} ${w.from?`(${esc(w.from)} - ${esc(w.to)})`:""}</label>`).join("");
+  return `<div class="card"><h2>رابعًا: تعليمات عامة — مطابقة الخطة للمعايير</h2>
+    <ul class="check" style="list-style:none;padding:0;margin:0">${checks().map(c=>`<li><span class="${c[0]?"ok":"no"}">${c[0]?"✔":"✖"}</span> ${c[1]}</li>`).join("")}</ul>
+    <p class="hint" style="margin-top:10px">ترفع الملفات (تحليل واقع المدرسة، استمارة بناء خطة التحسين، نماذج من استمارات تنفيذ خطة التحسين) عند طلبها في صيغة PDF مدمجة وواضحة — اختر «حفظ بصيغة PDF» من نافذة الطباعة.</p></div>
+  <div class="card"><h2>الطباعة (A4 أفقي)</h2>
+    <div class="g g2">
+      <label class="row" style="font-weight:700"><input type="checkbox" id="pCover" checked style="width:auto"> صفحة الغلاف</label>
+      <label class="row" style="font-weight:700"><input type="checkbox" id="pAnalysis" checked style="width:auto"> أولاً: تحليل واقع المدرسة</label>
+      <label class="row" style="font-weight:700"><input type="checkbox" id="pPlan" checked style="width:auto"> ثانيًا: استمارة المدرسة (1) بناء خطة التحسين</label>
+    </div>
+    <h3>ثالثًا: استمارات رقم (2) تنفيذ خطة التحسين</h3>
+    ${ws||`<p class="hint">لا توجد أسابيع تنفيذ.</p>`}
+    <label class="row" style="font-weight:700"><input type="checkbox" id="pExecBlank" style="width:auto"> إضافة استمارة (2) فارغة للتعبئة اليدوية</label>
+    <div class="row" style="margin-top:14px"><button class="btn primary" data-act="doPrint">🖨️ طباعة / حفظ PDF</button></div></div>
+  <div class="card"><h2>إدارة البيانات</h2>
+    <p class="hint">بياناتك محفوظة في متصفح هذا الجهاز فقط. صدّر نسخة احتياطية بانتظام.</p>
+    <div class="row"><button class="btn gold" data-act="backup">💾 النسخ الاحتياطي ونقل البيانات</button><button class="btn danger" data-act="reset" style="padding:9px 14px">مسح جميع بيانات الأداة</button></div></div>`;
+}
+
+/* ===================== بناء الطباعة (مطابق للنموذج الإشرافي) ===================== */
+function P(v){ return esc(v==null?"":v); }
+function hdr(){
+  const s=S.school, lines=["المملكة العربية السعودية","وزارة التعليم"];
+  if(s.admin) lines.push(s.admin);
+  (s.hdr||"").split("\n").map(x=>x.trim()).filter(Boolean).forEach(x=>lines.push(x));
+  return `<div class="ph"><div class="r">${lines.map(esc).join("<br>")}</div><div class="m"><img src="${LOGO}" alt="وزارة التعليم"></div><div class="l">${s.name?`${esc(s.name)}<br>`:""}العام الدراسي ${P(s.year)}هـ</div></div>`;
+}
+function cb(on,label){ return `<span class="cb"><i>${on?"✓":""}</i>${esc(label)}</span>`; }
+function cbs(val,opts){ return opts.map(o=>cb(val===o,o)).join(""); }
+function pct(v){ const l=level(v); return pctOk(v)?`<span class="pct ${l}">${fmt(num(v))} %</span>`:""; }
+function fnote(t){ return `<div class="fn">${t}</div>`; }
+function basicTable(){
+  const s=S.school;
+  return `<table class="avoid"><tr><td class="lbl">اسم المدرسة</td><td>${P(s.name)}</td><td class="lbl">المرحلة</td><td>${P(s.stage)}</td><td class="lbl">جنس المدرسة</td><td>${cbs(s.gender,["بنين","بنات"])}</td></tr>
+  <tr><td class="lbl">الرقم الوزاري</td><td>${P(s.ministryNo)}</td><td class="lbl">نوع المبنى</td><td>${cbs(s.building,["حكومي","مستأجر"])}</td><td class="lbl">استقلالية المبنى</td><td>${cbs(s.buildingInd,["مستقل","مشترك"])}</td></tr>
+  <tr><td class="lbl">الفترة</td><td>${cbs(s.period,["صباحي","مسائي"])}</td><td class="lbl">استقلالية الإدارة</td><td>${cbs(s.adminInd,["مستقلة","مشتركة"])}</td><td class="lbl">اسم المدرسة المشتركة في الإدارة</td><td>${P(s.sharedSchool)}</td></tr></table>`;
+}
+function sectorCell(){
+  const s=S.school.sector||"";
+  const eastern=/الشرقية/.test(S.school.admin||"") || EASTERN_SECTORS.indexOf(s)>-1;
+  return eastern?cbs(s,EASTERN_SECTORS):(s?cb(true,s):"");
+}
+function formBasic(){
+  const s=S.school, lo=schoolLv(), lt=level(S.evalVals.out), L=["تميز","تقدم","انطلاق","تهيئة","لم تصنف بعد"];
+  return `<h3>البيانات الأساسية:</h3><table class="avoid">
+  <tr><td class="lbl">القطاع</td><td colspan="5">${sectorCell()}</td></tr>
+  <tr><td class="lbl">المدرسة</td><td>${P(s.name)}</td><td class="lbl">المرحلة</td><td>${cbs(s.stage,["ابتدائي","متوسط","ثانوي"])}</td><td class="lbl">الجنس</td><td>${cbs(s.gender,["بنين","بنات"])}</td></tr>
+  <tr><td class="lbl">الرقم الوزاري</td><td>${P(s.ministryNo)}</td><td class="lbl">نوع المبنى</td><td>${cbs(s.building,["حكومي","مستأجر","أرامكو"])}</td><td class="lbl">استقلالية المبنى</td><td>${cbs(s.buildingInd,["مستقل","مشترك"])}</td></tr>
+  <tr><td class="lbl">استقلالية الإدارة</td><td>${cbs(s.adminInd,["مستقلة","مشتركة"])}</td><td class="lbl" colspan="2">اسم المدرسة المشتركة في الإدارة</td><td colspan="2">${P(s.sharedSchool)}</td></tr>
+  <tr><td class="lbl" colspan="2">مستوى الأداء العام للمدرسة في التقويم المدرسي (آخر تقرير):</td><td colspan="4">${cbs(lo?LV_SHORT[lo]:"لم تصنف بعد",L)}</td></tr>
+  <tr><td class="lbl" colspan="2">مستوى للمدرسة في نواتج التعلم في التقويم المدرسي (آخر تقرير):</td><td colspan="4">${cbs(lt?LV_SHORT[lt]:"لم تصنف بعد",L)}</td></tr></table>`;
+}
+function sigLine(){ return `<div class="sig"><span>مدير/ة المدرسة: ${P(S.school.principal)||"...................................."}</span><span>التوقيع: ............................</span><span>ختم المدرسة:</span></div>`; }
+
+function printCover(){
+  return `<section class="pg">${hdr()}<div class="cover">
+    <div class="t">تحليل واقع المدرسة وبناء خطة التحسين وتنفيذها<br>في مجالات الممارسات الإشرافية ونماذج التنفيذ</div>
+    <div class="f">اسم المدرسة <small>(يكتب كما هو في نظام نور)</small></div><div class="v">${P(S.school.name)||"&nbsp;"}</div>
+    <div class="f">اسم مدير المدرسة</div><div class="v">${P(S.school.principal)||"&nbsp;"}</div></div></section>`;
+}
+function indRowsHtml(d){
+  const groups=d.groups;
+  const total=groups.reduce((a,g)=>a+g.items.length,0);
+  let rows="", first=true;
+  groups.forEach((g,gi)=>{
+    const samePrev = gi>0 && groups[gi-1].area===g.area;
+    let areaSpan=0; if(!samePrev){ for(let k=gi;k<groups.length&&groups[k].area===g.area;k++) areaSpan+=groups[k].items.length; }
+    g.items.forEach((it,ii)=>{
+      const id=it[2]||it[0], v=S.ind[id], strong=pctOk(v)&&num(v)>=75, weak=pctOk(v)&&num(v)<75;
+      rows+=`<tr>`;
+      if(first){ rows+=`<td rowspan="${total}" class="c">${esc(d.name)}</td><td rowspan="${total}" class="c">${d.frame.map(f=>"-"+esc(f)).join("<br><br>")}</td>`; first=false; }
+      if(ii===0 && !samePrev) rows+=`<td rowspan="${areaSpan}" class="c">${esc(g.area)}</td>`;
+      if(ii===0) rows+=`<td rowspan="${g.items.length}" class="c">${esc(g.std)}</td>`;
+      rows+=`<td class="c" style="direction:ltr;white-space:nowrap">${esc(it[0])}</td><td class="c">${esc(it[1])}</td><td class="c">${strong?pct(v):""}</td><td class="c">${weak?pct(v):""}</td></tr>`;
+    });
+  });
+  return rows;
+}
+function printAnalysis(){
+  const grades=stageGrades();
+  let h=`<section class="pg">${hdr()}<h1>أولاً: تحليل واقع المدرسة</h1><h2>1- البيانات الأساسية للمدرسة</h2>${basicTable()}
+  <h2>2- إحصائيات عامة <span style="font-size:8.5pt;color:#1f6fd1;font-weight:400">(يمكن إضافة أيّة بيانات وإحصائيات متوفرة)</span></h2><h3>أ-إحصائية التشكيلات المدرسية</h3>
+  <table class="avoid"><tr><th>الوصف</th>${STAFF_COLS.map(c=>`<th>${c[1]}</th>`).join("")}</tr><tr><td class="gy">العدد</td>${STAFF_COLS.map(c=>`<td class="c">${P(S.staff[c[0]])}</td>`).join("")}</tr></table>
+  <h3>ب- إحصائية المعلمين*</h3>
+  <table class="avoid"><tr><th>التخصص</th>${S.teachers.map(t=>`<th>${P(t.spec)}</th>`).join("")}</tr>
+  <tr><td class="gy">الموجود الفعلي</td>${S.teachers.map(t=>`<td class="c">${P(t.actual)}</td>`).join("")}</tr>
+  <tr><td class="gy">الملاك</td>${S.teachers.map(t=>`<td class="c">${P(t.quota)}</td>`).join("")}</tr>
+  <tr><td class="gy">العجز</td>${S.teachers.map(t=>`<td class="c">${P(deficit(t))}</td>`).join("")}</tr></table>${fnote("*تراعى المرحلة")}
+  <h3>جـ- إحصائية الطلاب*</h3>
+  <table class="avoid"><tr><th rowspan="2">الوصف</th><th rowspan="2">العدد الإجمالي</th><th colspan="${Math.max(grades.length,3)}">العدد التفصيلي*</th></tr>
+  <tr>${grades.length?grades.map(g=>`<th>${esc(g)}</th>`).join(""):"<th></th><th></th><th></th>"}</tr>
+  <tr><td class="gy">الصفوف الدراسية</td><td class="c">${stuTotal("c")}</td>${grades.length?grades.map(g=>`<td class="c">${P((S.students[g]||{}).c)}</td>`).join(""):"<td></td><td></td><td></td>"}</tr>
+  <tr><td class="gy">الطلاب</td><td class="c">${stuTotal("s")}</td>${grades.length?grades.map(g=>`<td class="c">${P((S.students[g]||{}).s)}</td>`).join(""):"<td></td><td></td><td></td>"}</tr></table>${fnote("*تراعى المرحلة")}</section>`;
+
+  const yrs=yearsBack();
+  h+=`<section class="pg">${hdr()}<h2>3- ملخص نتائج أداء المدرسة وفق آخر تقرير للتقويم المدرسي ( ${cb(S.evalType==="ذاتي","ذاتي")}/ ${cb(S.evalType==="خارجي","خارجي")})</h2>
+  <table class="avoid"><tr><th rowspan="2" class="gy">الوصف</th><th rowspan="2" class="gy">نسبة الأداء (رقماً)</th><th colspan="4" class="gy">مستوى المدرسة</th></tr>
+  <tr><th style="background:var(--lv-ex)">التميز</th><th style="background:var(--lv-pr)">التقدم</th><th style="background:var(--lv-st)">الانطلاق</th><th style="background:var(--lv-pp)">التهيئة</th></tr>
+  ${EVAL_ROWS.map(r=>{ const l=level(S.evalVals[r[0]]); return `<tr><td class="gy">${r[1]}</td><td class="c">${pct(S.evalVals[r[0]])}</td>${["ex","pr","st","pp"].map(k=>`<td class="c">${l===k?"✓":""}</td>`).join("")}</tr>`; }).join("")}</table>
+  <h2>4- نتائج المدرسة في الاختبارات الوطنية "نافس" للمرحلة الابتدائية والمتوسطة*</h2>
+  <table class="avoid"><tr><th>المجال</th><th>المستوى العام</th><th colspan="4">المستوى التفصيلي للمجالات</th></tr>
+  ${NAFS.map(n=>{ const v=S.nafs.vals[n.id]||{}; const cells=n.subs.map((s,j)=>`<td class="c" colspan="${n.subs.length===4?1:n.subs.length===3?(j===2?2:1):2}">${s}<br>(${pctOk(v["s"+j])?pct(v["s"+j]):"........."})</td>`).join("");
+    return `<tr><td class="gy">${n.name}</td><td class="c">${pct(v.g)}</td>${cells}</tr>`; }).join("")}</table>${fnote("*يراعى الصف والمرحلة")}
+  <h2>5- نتائج المدرسة في اختبارات القدرات والتحصيلي للمرحلة الثانوية</h2>
+  <table class="avoid"><tr><th>الاختبار</th>${yrs.map(y=>`<th>النسبة للعام ${y}هـ</th>`).join("")}<th>الترتيب على مستوى إدارة التعليم</th><th>الترتيب على مستوى المملكة</th></tr>
+  ${[["q","القدرات العامة"],["t","التحصيلي"]].map(r=>{ const v=S.sec[r[0]]||{}; return `<tr><td class="gy">${r[1]}</td>${[0,1,2].map(k=>`<td class="c">${P(v["y"+k])}</td>`).join("")}<td class="c">${P(v.ra)}</td><td class="c">${P(v.rk)}</td></tr>`; }).join("")}</table></section>`;
+
+  SUP.forEach((d,di)=>{
+    h+=`<section class="pg">${hdr()}${di===0?`<h2>6- تحليل واقع مجالات الممارسات الإشرافية</h2>`:""}
+    <table class="it"><thead><tr><th colspan="8" style="font-size:10.5pt">${esc(d.title)}</th></tr>
+    <tr><th colspan="2" class="gy">مجالات الممارسات الإشرافية</th><th colspan="4" class="gy">مجالات التقويم المدرسي</th><th colspan="2" class="gy">نسبة المؤشر</th></tr>
+    <tr><th class="gy" style="width:7%">المجال</th><th class="gy" style="width:10%">الإطار الموجه</th><th class="gy" style="width:8%">المجال</th><th class="gy" style="width:9%">المعيار</th><th class="gy" colspan="2">المؤشر</th><th class="gy" style="width:8%">نقطة القوة*</th><th class="gy" style="width:8%">نقطة ضعف*</th></tr></thead>
+    <tbody>${indRowsHtml(d)}</tbody></table>
+    <div class="foot">*نقطة القوة = التميز والتقدم</div><div class="foot">*نقطة الضعف= الانطلاق والتهيئة</div></section>`;
+  });
+
+  const L=a=>a.length?`<ul class="b">${a.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:"<br><br><br>";
+  h+=`<section class="pg">${hdr()}<h2>6- تحليل واقع مجالات الممارسات الإشرافية بالمدرسة:</h2>
+  <table class="swot">
+  <tr><td class="side" style="background:#fff;border:0"></td><th colspan="2" style="background:#1f5fa8">عوامل داخلية</th><td class="side" style="background:#fff;border:0"></td></tr>
+  <tr><td class="side" rowspan="4" style="background:#3cb44b">إيجابي</td><th style="background:#e6f4ea;color:#111">نقاط القوة</th><th style="background:#e1effa;color:#111">نقاط الضعف</th><td class="side" rowspan="4" style="background:#e02020">سلبي</td></tr>
+  <tr><td style="width:46%">${L(S.swot.s)}</td><td style="width:46%">${L(S.swot.w)}</td></tr>
+  <tr><th style="background:#fdf5d0;color:#111">الفرص</th><th style="background:#fbe3e3;color:#111">التهديدات</th></tr>
+  <tr><td>${L(S.swot.o)}</td><td>${L(S.swot.t)}</td></tr>
+  <tr><td class="side" style="background:#fff;border:0"></td><th colspan="2" style="background:#a0661a">عوامل خارجية</th><td class="side" style="background:#fff;border:0"></td></tr></table></section>`;
+
+  h+=`<section class="pg">${hdr()}<h2>7- أولويات التحسين في مجالات الممارسات الإشرافية بناء على نقاط الضعف</h2>
+  <p style="margin:0 0 4px;color:#1f6fd1;font-size:9.5pt">يحدد مستوى الأولويات حسب المعايير التالية: ( المعايير مقترحة ويمكن إضافة معايير أخرى)</p>
+  <table class="avoid" style="width:62%;margin-inline:auto">${PRIO_CRITERIA.map((c,i)=>`<tr><td class="c" style="background:#f2f2f2">${i+1}- ${c}</td></tr>`).join("")}</table>
+  <table><thead><tr><th style="width:10%">المجال</th><th style="width:24%">أولويات التحسين*</th><th style="width:10%">مستوى الأولوية</th><th>المبررات</th><th style="width:11%">مستوى أولوية المجال بشكل عام</th></tr></thead><tbody>
+  ${PRIO_ORDER.map(did=>{ const rows=S.prio.filter(p=>p.dom===did), dl=S.domLevel[did]||"";
+    if(!rows.length) return `<tr><td class="gy">${esc(domName(did))}</td><td></td><td>${PRIO_LEVELS.map(o=>cb(false,o)+"<br>").join("")}</td><td></td><td class="c">${P(dl)}</td></tr>`;
+    return rows.map((p,i)=>`<tr>${i===0?`<td rowspan="${rows.length}" class="gy">${esc(domName(did))}</td>`:""}<td>${i+1}- ${P(p.text)}</td>
+      <td>${PRIO_LEVELS.map(o=>cb(p.level===o,o)+"<br>").join("")}</td><td>${P(p.just)}</td>${i===0?`<td rowspan="${rows.length}" class="c"><b>${P(dl)}</b></td>`:""}</tr>`).join(""); }).join("")}</tbody></table>
+  <div class="foot">*عدد الأولويات في الجدول افتراضي، ويختلف من مدرسة إلى أخرى تبعًا لاختلاف واقعها واحتياجاتها</div>
+
+  <div class="avoid"><h2>8- فريق تحليل واقع المدرسة *</h2>
+  <table style="width:75%"><tr><th style="width:8%">م</th><th style="width:40%">الصفة</th><th>الاسم</th></tr>
+  ${(()=>{ const ex=S.team.filter(m=>m.r!=="sp"), sp=S.team.filter(m=>m.r==="sp"); let r="";
+    const exR=ex.length?ex:[{name:""},{name:""},{name:""},{name:""}];
+    exR.forEach((m,i)=>{ r+=`<tr>${i===0?`<td rowspan="${exR.length}" class="c">1</td><td rowspan="${exR.length}">لجنة التميز بالمدرسة**</td>`:""}<td>${P(m.name)}</td></tr>`; });
+    const spR=sp.length?sp:[{name:""}];
+    spR.forEach((m,i)=>{ r+=`<tr>${i===0?`<td rowspan="${spR.length}" class="c">2</td><td rowspan="${spR.length}">مقدم خدمة دعم التميز المدرسي***</td>`:""}<td>${P(m.name)}</td></tr>`; });
+    return r; })()}</table>
+  <div class="fn">*بمشاركة من اللجان المدرسية ذات العلاقة ${teachersWord()}<br>** تدون أسماء أعضاء لجنة التميز بالمدرسة حسب العدد الفعلي لأعضاء اللجنة<br>*** في المدارس في مستويي التهيئة والانطلاق فقط</div></div></section>`;
+  return h;
+}
+function printPlan(){
+  const lo=schoolLv();
+  const rows=S.plan.rows.length?S.plan.rows:[{},{},{}];
+  return `<section class="pg">${hdr()}<h1>ثانيًا: استمارة المدرسة (1) بناء خطة التحسين في مجالات الممارسات الإشرافية${lo?` (مدارس مستوى ${LV_NAME[lo]})`:""}</h1>
+  ${formBasic()}<h3>إجراءات خطة التحسين في مجالات الممارسات الإشرافية</h3>
+  <table><thead><tr><th style="width:8%">المجال</th><th style="width:12%">العنصر / المكون / العملية المراد تحسينها</th><th style="width:17%">وصف الاحتياج</th><th style="width:21%">إجراءات التحسين</th><th style="width:13%">أساليب وطرق التحسين</th><th style="width:10%">مدة الإنجاز</th><th>التنفيذ والمسؤولية</th></tr></thead>
+  <tbody>${rows.map(r=>`<tr><td class="c" style="background:#e8f4f3"><b>${P(r.dom)}</b></td><td class="c">${P(r.el)}</td><td>${P(r.need)}</td><td>${P(r.act)}</td><td>${P(r.meth)}</td><td>${P(r.dur)}</td><td>${P(r.resp)}</td></tr>`).join("")}</tbody></table>
+  <div class="avoid"><h3>ثالثاً: التوصيات والمقترحات:</h3><div class="recs">${P(S.plan.recs)}</div>${sigLine()}</div></section>`;
+}
+function printWeek(w){
+  w=w||{rows:[]};
+  const rows=(w.rows&&w.rows.length)?w.rows:[{},{},{},{}];
+  return `<section class="pg">${hdr()}<h1>ثالثًا: استمارة رقم (2) تنفيذ خطة التحسين في مجالات الممارسات الإشرافية</h1>
+  ${formBasic()}<h3>إجراءات تنفيذ خطة التحسين في مجالات الممارسات الإشرافية:</h3>
+  <table><thead><tr><th colspan="2" class="gy">الأسبوع</th><td colspan="4" class="c"><b>${P(w.week)||"(........)"}</b> من (${P(w.from)||"........"}) إلى (${P(w.to)||"........"})</td></tr>
+  <tr><th rowspan="2" style="width:11%">المجال</th><th rowspan="2" style="width:17%">العنصر / المكون / العملية المراد تحسينها</th><th rowspan="2">الإجراءات المنفذة</th><th rowspan="2" style="width:11%">زمن التنفيذ</th><th colspan="2">مقدم خدمات دعم التميز المدرسي ( المسؤولية ـ التنفيذ)</th></tr>
+  <tr><th style="width:14%">لجان المدرسة</th><th style="width:12%">المشرف التربوي</th></tr></thead>
+  <tbody>${rows.map(r=>`<tr><td class="c" style="background:#e8f4f3"><b>${P(r.dom)}</b></td><td class="c">${P(r.el)}</td><td>${P(r.done)}</td><td class="c">${P(r.time)}</td><td class="c">${P(r.com)}</td><td class="c">${P(r.sup)}</td></tr>`).join("")}</tbody></table>
+  <div class="avoid"><h3>ثالثاً: التوصيات والمقترحات:</h3><div class="recs">${P(w.recs)}</div>${sigLine()}</div></section>`;
+}
+function doPrint(parts){
+  const html=parts.join("");
+  if(!html){ alert("اختر جزءًا واحدًا على الأقل للطباعة."); return; }
+  document.getElementById("printArea").innerHTML=html;
+  document.body.classList.add("printing");
+  setTimeout(()=>{ window.print(); },80);
+}
+window.addEventListener("afterprint",()=>{ document.body.classList.remove("printing"); document.getElementById("printArea").innerHTML=""; });
+function printSelected(){
+  const parts=[], on=id=>{ const e=document.getElementById(id); return e&&e.checked; };
+  if(on("pCover")) parts.push(printCover());
+  if(on("pAnalysis")) parts.push(printAnalysis());
+  if(on("pPlan")) parts.push(printPlan());
+  document.querySelectorAll(".pw:checked").forEach(c=>parts.push(printWeek(S.exec[+c.value])));
+  if(on("pExecBlank")) parts.push(printWeek(null));
+  doPrint(parts);
+}
+
+/* ===================== النسخ الاحتياطي ===================== */
+function hasData(){
+  return !!(S.school.name || Object.values(S.ind).some(v=>v!=="" && v!=null) || S.plan.rows.length || S.exec.length || S.prio.length);
+}
+function renderBackupWarn(){
+  const box=document.getElementById("backupWarn"); if(!box) return;
+  let last=null; try{ last=localStorage.getItem("portal_lastBackup_improvement")||localStorage.getItem("portal_lastBackup_all"); }catch(e){}
+  const stale = hasData() && (!last || (Date.now()-new Date(last).getTime())/86400000>=14);
+  box.innerHTML = stale?`<div class="warnbar">⚠️ ${last?"مضى أكثر من 14 يومًا على آخر نسخة احتياطية.":"لم تصدّر نسخة احتياطية لهذه الأداة بعد."} البيانات محفوظة في متصفح هذا الجهاز فقط.<button class="btn gold sm" data-act="backup">تصدير نسخة الآن</button></div>`:"";
+}
+function toast(m){ const t=document.getElementById("pnToast"); if(t){ t.textContent=m; t.classList.add("show"); clearTimeout(toast._h); toast._h=setTimeout(()=>t.classList.remove("show"),3200); } }
+
+/* ===================== التحديث اللحظي ===================== */
+function updateLive(el){
+  const k=el.getAttribute("data-live");
+  if(k==="lv") el.innerHTML=lvBadge(getPath(el.getAttribute("data-p")));
+  else if(k==="deficit"){ const t=S.teachers[+el.getAttribute("data-i")]; el.textContent=t?deficit(t):""; }
+  else if(k==="stuTotal") el.textContent=stuTotal(el.getAttribute("data-f"));
+  else if(k==="indSum") el.innerHTML=indSummary();
+}
+
+/* ===================== الأحداث ===================== */
+const view=document.getElementById("app");
+function onField(e){
+  const t=e.target, k=t.getAttribute && t.getAttribute("data-k"); if(!k) return;
+  setPath(k, t.value);
+  if(k.indexOf("ind.")===0||k.indexOf("evalVals.")===0){ const v=t.value; t.style.borderColor=(v.trim()!=="" && !pctOk(v))?"#c9302c":""; }
+  document.querySelectorAll("[data-live]").forEach(updateLive);
+  save();
+  if(e.type==="change" && (k==="school.stage"||k==="school.year"||/^exec\.\d+\.week$/.test(k))) render();
+}
+view.addEventListener("input",onField);
+view.addEventListener("change",onField);
+document.getElementById("steps").addEventListener("click",e=>{ const b=e.target.closest("[data-step]"); if(b) go(+b.getAttribute("data-step")); });
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]"); if(g){ go(+g.getAttribute("data-go")); return; }
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const a=b.getAttribute("data-act"), i=+b.getAttribute("data-i"), k=b.getAttribute("data-k");
+  switch(a){
+    case "addSpec": S.teachers.push({spec:"",actual:"",quota:""}); break;
+    case "delSpec": if(!confirm("حذف هذا التخصص؟")) return; S.teachers.splice(i,1); break;
+    case "swotAdd": S.swot[k].push(""); break;
+    case "swotDel": S.swot[k].splice(i,1); break;
+    case "swotSug": { const s=(k==="o"?SUG_O:SUG_T)[i]; if(S.swot[k].indexOf(s)>-1){ toast("مضاف مسبقًا"); return; } S.swot[k].push(s); break; }
+    case "swotGen": swotGen(); return;
+    case "prioGen": prioGen(); return;
+    case "prioAdd": S.prio.push({id:uid(),dom:b.getAttribute("data-d"),ind:"",text:"",level:"",just:""}); break;
+    case "prioDel": if(!confirm("حذف هذه الأولوية؟")) return; S.prio.splice(i,1); break;
+    case "teamAdd": S.team.push({r:b.getAttribute("data-r"),name:""}); break;
+    case "teamDel": S.team.splice(i,1); break;
+    case "planGen": planGen(); return;
+    case "planSample": { const lv=document.getElementById("smpLevel").value; const rs=sampleRows(lv); rs.forEach(r=>S.plan.rows.push(r)); sortPlan(); if(!S.plan.recs.trim()) S.plan.recs=SAMPLES[lv].recs; toast(`أُدرج ${rs.length} صفًا من النموذج الاسترشادي — عدّلها لتناسب مدرستك`); break; }
+    case "planAdd": S.plan.rows.push({id:uid(),src:"",dom:"",el:"",need:"",act:"",meth:"",dur:"",resp:""}); break;
+    case "planDel": if(!confirm("حذف هذا الإجراء؟")) return; S.plan.rows.splice(i,1); break;
+    case "planClear": if(!confirm("حذف جميع صفوف استمارة (1)؟")) return; S.plan.rows=[]; break;
+    case "planUp": { const r=S.plan.rows; [r[i-1],r[i]]=[r[i],r[i-1]]; break; }
+    case "planDown": { const r=S.plan.rows; [r[i+1],r[i]]=[r[i],r[i+1]]; break; }
+    case "recsSug": { const t=SAMPLES[sampleKey()].recs; if(S.plan.recs.trim() && !confirm("استبدال التوصيات الحالية بالمقترح؟")) return; S.plan.recs=t; break; }
+    case "weekAdd": { const nx=WEEKS[S.exec.length]||""; S.exec.push({id:uid(),week:nx,from:"",to:"",rows:[],recs:""}); break; }
+    case "weekDel": if(!confirm("حذف استمارة هذا الأسبوع بالكامل؟")) return; S.exec.splice(i,1); break;
+    case "weekFill": weekFill(i); return;
+    case "exRowAdd": S.exec[i].rows.push({dom:"",el:"",done:"",time:"",com:"",sup:""}); break;
+    case "exRowDel": S.exec[i].rows.splice(+b.getAttribute("data-j"),1); break;
+    case "printWeek": doPrint([printWeek(S.exec[i])]); return;
+    case "doPrint": printSelected(); return;
+    case "backup": if(window.PN) PN.open(); return;
+    case "reset":
+      if(!confirm("سيتم حذف جميع بيانات هذه الأداة من هذا الجهاز. هل صدّرت نسخة احتياطية؟")) return;
+      if(!confirm("تأكيد نهائي: حذف البيانات؟")) return;
+      localStorage.removeItem(KEY); S=blank(); render(); renderBackupWarn(); return;
+    default: return;
+  }
+  save(); render();
+});
+
+renderSteps(); render(); renderBackupWarn();
+</script>
+<!-- ===== PORTAL NAV & BACKUP v1 (شريط التنقل والنسخ الاحتياطي الموحّد) ===== -->
+<style>
+.pn-bar{position:relative;z-index:900;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:0;padding:8px 14px;background:#0b3d2e;color:#fff;direction:rtl;
+  font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-size:14px;line-height:1.4;
+  box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.pn-bar *{box-sizing:border-box;}
+.pn-home{display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-weight:800;
+  padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);}
+.pn-home:hover,.pn-home:focus-visible{background:rgba(255,255,255,.22);outline:none;}
+.pn-home svg,.pn-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;}
+.pn-sec{display:flex;align-items:center;gap:6px;flex:1;min-width:200px;}
+.pn-sec label{opacity:.8;font-size:12.5px;white-space:nowrap;}
+.pn-sec select{flex:1;max-width:330px;font:inherit;font-size:13.5px;font-weight:700;color:#0b3d2e;background:#fff;
+  border:0;border-radius:8px;padding:6px 10px;cursor:pointer;}
+.pn-btn{position:relative;display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:800;color:#0b3d2e;
+  background:#f4c95d;border:0;border-radius:8px;padding:7px 13px;cursor:pointer;}
+.pn-btn:hover,.pn-btn:focus-visible{background:#ffd978;outline:2px solid #fff;outline-offset:1px;}
+.pn-btn .pn-dot{position:absolute;top:-4px;left:-4px;width:11px;height:11px;border-radius:50%;background:#d93a2b;border:2px solid #0b3d2e;display:none;}
+.pn-btn.warn .pn-dot{display:block;}
+@media (max-width:600px){ .pn-sec label{display:none;} .pn-btn .pn-t{display:none;} }
+
+.pn-ov{position:fixed;inset:0;z-index:9500;background:rgba(10,30,22,.55);display:none;align-items:flex-start;justify-content:center;
+  padding:5vh 12px;overflow:auto;direction:rtl;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;}
+.pn-ov.open{display:flex;}
+.pn-modal{background:#fff;color:#1b2a24;width:100%;max-width:620px;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.3);
+  font-size:14.5px;line-height:1.75;overflow:hidden;}
+.pn-mh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#0b3d2e;color:#fff;}
+.pn-mh h2{margin:0;font-size:17px;}
+.pn-x{background:none;border:0;color:#fff;font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:6px;}
+.pn-x:hover{background:rgba(255,255,255,.15);}
+.pn-mb{padding:16px 18px 18px;}
+.pn-steps{margin:0 0 14px;padding:10px 14px 10px 10px;background:#f2f8f5;border-radius:10px;border-inline-start:4px solid #178a5a;font-size:13.5px;}
+.pn-steps ol{margin:4px 0 0;padding-inline-start:20px;}
+.pn-box{border:1px solid #d7e6de;border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+.pn-box h3{margin:0 0 4px;font-size:15px;color:#0b3d2e;}
+.pn-meta{font-size:12.5px;color:#5d6b65;margin-bottom:8px;}
+.pn-meta b{color:#1b2a24;}
+.pn-sum{font-size:13px;margin:0 0 10px;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px;}
+.pn-sum li{background:#eef5f1;border-radius:20px;padding:2px 10px;}
+.pn-acts{display:flex;gap:8px;flex-wrap:wrap;}
+.pn-acts button,.pn-acts label{font:inherit;font-size:13.5px;font-weight:800;border-radius:8px;padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.pn-exp{background:#13704b;color:#fff;border:0;}
+.pn-exp:hover{background:#0f5c3f;}
+.pn-imp{background:#fff;color:#13704b;border:1.5px solid #13704b;}
+.pn-imp:hover{background:#f2f8f5;}
+.pn-imp input{display:none;}
+.pn-note{font-size:13px;color:#5d6b65;margin:0;}
+.pn-warn{font-size:13px;color:#a3312a;background:#fbeceb;border-radius:8px;padding:6px 10px;margin:0 0 10px;}
+.pn-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9800;background:#0b3d2e;color:#fff;
+  padding:11px 20px;border-radius:30px;font-family:'Tajawal',Tahoma,sans-serif;font-weight:700;font-size:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s;}
+.pn-toast.show{opacity:1;}
+@media print{ .pn-bar,.pn-ov,.pn-toast{display:none !important;} }
+</style>
+<script>
+(function(){
+  "use strict";
+  var PAGE = "improvement";
+  var APP = "school-tools-portal";
+  var SECTIONS = [
+    {id:"positive",   href:"positive.html",   title:"محلل السلوك المتميز", keys:[]},
+    {id:"attendance", href:"attendance.html", title:"محلل الغياب", keys:[]},
+    {id:"violations", href:"violations.html", title:"محلل المخالفات", keys:["VIOL_"]},
+    {id:"forms",      href:"behavior-attendance-forms.html", title:"نماذج السلوك والمواظبة", keys:["moe_"]},
+    {id:"grades",     href:"grades.html",     title:"تحليل النتائج", keys:[], disabled:true},
+    {id:"committees", href:"committees.html", title:"اللجان والتكليفات", keys:["SCV2"]},
+    {id:"jobs",       href:"job-description.html", title:"الوصف الوظيفي للتشكيلات المدرسية", keys:["JOBDESC_"]},
+    {id:"improvement", href:"improvement-plan.html", title:"تحليل الواقع وخطة التحسين", keys:["IMPPLAN_"]}
+  ];
+  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_","IMPPLAN_"];
+  var LABELS = {
+    moe_behavior_records_v1:"مخالفة سلوكية", moe_absence_records_v1:"سجل غياب",
+    moe_compensation_records_v1:"فرصة تعويض", moe_roster_v1:"طالب مستورد من نور",
+    JOBDESC_V1:"وصف وظيفي", JOBDESC_PRINTLOG_V1:"عملية طباعة"
+  };
+  var REMIND_DAYS = 14;
+  var cur = SECTIONS.filter(function(s){return s.id===PAGE;})[0] || null;
+
+  function $(id){ return document.getElementById(id); }
+  function ls(){ try{ return window.localStorage; }catch(e){ return null; } }
+  function matches(k, prefixes){ return prefixes.some(function(p){ return k===p || k.indexOf(p)===0; }); }
+  function keysFor(prefixes){
+    var s = ls(), out = []; if(!s) return out;
+    for(var i=0;i<s.length;i++){ var k = s.key(i); if(k && matches(k, prefixes)) out.push(k); }
+    return out.sort();
+  }
+  function fmtDate(iso){ try{ return new Date(iso).toLocaleString("ar-SA",{dateStyle:"medium",timeStyle:"short"}); }catch(e){ return iso; } }
+  function toast(msg){
+    var t = $("pnToast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toast._h); toast._h = setTimeout(function(){ t.classList.remove("show"); }, 3200);
+  }
+  function lastKey(scope){ return "portal_lastBackup_" + scope; }
+  function getLast(scope){ var s=ls(); return s ? s.getItem(lastKey(scope)) : null; }
+
+  /* ---- summary of what is stored ---- */
+  function summary(prefixes){
+    var s = ls(), items = [], keys = keysFor(prefixes);
+    keys.forEach(function(k){
+      var v = s.getItem(k), p = null;
+      try{ p = JSON.parse(v); }catch(e){}
+      if(k === "SCV2" && p && typeof p === "object"){
+        items.push((p.staff||[]).length + " منسوب");
+        items.push((p.comms||[]).length + " لجنة");
+        items.push((p.decs||[]).length + " قرار");
+        items.push((p.meets||[]).length + " اجتماع");
+      } else if(k === "VIOL_LAST_V1" && p && Array.isArray(p.arr)){
+        items.push("تحليل محفوظ: " + (p.total||0) + " مخالفة لـ " + p.arr.length + " طالبًا");
+      } else if(k === "IMPPLAN_V1" && p && typeof p === "object"){
+        items.push("تحليل واقع وخطة تحسين");
+        items.push(((p.plan && p.plan.rows) || []).length + " إجراء تحسين");
+        items.push((p.exec || []).length + " أسبوع تنفيذ");
+      } else if(Array.isArray(p) && LABELS[k]){
+        items.push(p.length + " " + LABELS[k]);
+      }
+    });
+    var meta = keys.filter(function(k){ return k.indexOf("moe_meta_")===0 && s.getItem(k); }).length;
+    if(meta) items.push("بيانات المدرسة");
+    var RECORD_KEYS = ["moe_behavior_records_v1","moe_absence_records_v1","moe_compensation_records_v1","JOBDESC_PRINTLOG_V1"];
+    var hasData = keys.some(function(k){
+      var p = null; try{ p = JSON.parse(s.getItem(k)); }catch(e){ return false; }
+      if(k === "VIOL_LAST_V1") return !!(p && Array.isArray(p.arr) && p.arr.length);
+      if(k === "SCV2") return !!(p && ["staff","comms","decs","meets"].some(function(x){ return (p[x]||[]).length; }));
+      if(k === "IMPPLAN_V1") return !!(p && typeof p === "object" && ((p.school && p.school.name) || (p.plan && p.plan.rows && p.plan.rows.length) || (p.exec && p.exec.length) || (p.prio && p.prio.length)));
+      return RECORD_KEYS.indexOf(k) > -1 && Array.isArray(p) && p.length > 0;
+    });
+    return {keys:keys, items:items, hasData:hasData};
+  }
+
+  /* ---- export ---- */
+  function doExport(scope){
+    var s = ls(); if(!s){ alert("المتصفح لا يسمح بالوصول للتخزين المحلي."); return; }
+    var prefixes = scope === "all" ? ALL_PREFIXES : cur.keys;
+    var keys = keysFor(prefixes);
+    if(keys.indexOf("SCV2") > -1){ // مزامنة تاريخ آخر نسخة مع تنبيه نظام اللجان
+      try{
+        if(PAGE === "committees" && typeof db === "object" && db && db.meta){
+          db.meta.lastExport = new Date().toISOString(); s.setItem("SCV2", JSON.stringify(db));
+          if(typeof renderDbWarn === "function") renderDbWarn();
+          if(typeof renderBackupInfo === "function") renderBackupInfo();
+        } else {
+          var sc = JSON.parse(s.getItem("SCV2")||"null");
+          if(sc && typeof sc === "object"){ sc.meta = sc.meta || {}; sc.meta.lastExport = new Date().toISOString(); s.setItem("SCV2", JSON.stringify(sc)); }
+        }
+      }catch(e){}
+    }
+    if(!keys.length){ toast("لا توجد بيانات محفوظة لتصديرها"); return; }
+    var data = {}; keys.forEach(function(k){ data[k] = s.getItem(k); });
+    var now = new Date();
+    var pack = {app:APP, v:1, scope:scope, title: scope==="all" ? "جميع الأقسام" : cur.title,
+                createdAt: now.toISOString(), keys:data};
+    var name = (scope==="all" ? "جميع-الأقسام" : cur.title.replace(/\s+/g,"-")) + "-نسخة-احتياطية-" + now.toISOString().slice(0,10) + ".json";
+    var blob = new Blob([JSON.stringify(pack)], {type:"application/json"});
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    s.setItem(lastKey(scope), now.toISOString());
+    if(scope === "all") SECTIONS.forEach(function(sec){ if(sec.keys.length) s.setItem(lastKey(sec.id), now.toISOString()); });
+    else s.setItem(lastKey(scope), now.toISOString());
+    render(); refreshDot();
+    toast("تم تنزيل النسخة الاحتياطية ✓ احفظها في بريدك أو OneDrive");
+  }
+
+  /* ---- import ---- */
+  function doImport(scope, file){
+    if(!file) return;
+    var r = new FileReader();
+    r.onload = function(){
+      var p; try{ p = JSON.parse(r.result); }catch(e){ alert("الملف ليس نسخة احتياطية صالحة (JSON)."); return; }
+      var s = ls(); if(!s) return;
+      var prefixes = scope === "all" ? ALL_PREFIXES : cur.keys;
+      var incoming = {};
+      if(p && p.app === APP && p.keys && typeof p.keys === "object"){
+        Object.keys(p.keys).forEach(function(k){ if(matches(k, prefixes) && typeof p.keys[k] === "string") incoming[k] = p.keys[k]; });
+      } else if(p && Array.isArray(p.staff) && Array.isArray(p.comms) && matches("SCV2", prefixes)){
+        incoming.SCV2 = JSON.stringify(p); // نسخة قديمة من نظام اللجان
+      } else {
+        alert("هذا الملف لا يطابق نسخ هذا الموقع، لم تتم الاستعادة."); return;
+      }
+      var n = Object.keys(incoming).length;
+      if(!n){ alert("الملف لا يحتوي بيانات خاصة بهذا القسم. جرّب الاستيراد من «النسخة الشاملة» أو من القسم الصحيح."); return; }
+      var when = p.createdAt ? "\nتاريخ النسخة: " + fmtDate(p.createdAt) : "";
+      if(!confirm("سيتم استبدال بيانات " + (scope==="all" ? "جميع الأقسام" : "هذا القسم") + " على هذا الجهاز ببيانات الملف." + when + "\n\nمتابعة؟")) return;
+      keysFor(prefixes).forEach(function(k){ s.removeItem(k); });
+      Object.keys(incoming).forEach(function(k){ s.setItem(k, incoming[k]); });
+      var stamp = p.createdAt || new Date().toISOString(); // البيانات مطابقة لهذه النسخة
+      s.setItem(lastKey(scope), stamp);
+      if(scope === "all") SECTIONS.forEach(function(sec){ if(sec.keys.length) s.setItem(lastKey(sec.id), stamp); });
+      alert("تمت الاستعادة بنجاح ✓ سيُعاد تحميل الصفحة لعرض البيانات.");
+      location.reload();
+    };
+    r.readAsText(file);
+  }
+
+  /* ---- UI ---- */
+  var icoHome = '<svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M3.5 11L12 4l8.5 7"/><path stroke-linejoin="round" d="M6 9.5V20h4.5v-5.5h3V20H18V9.5"/></svg>';
+  var icoSave = '<svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg>';
+
+  function box(scope, title, prefixes, extra){
+    var sm = summary(prefixes), last = getLast(scope);
+    return '<div class="pn-box"><h3>' + title + '</h3>' + (extra||"") +
+      '<div class="pn-meta">آخر نسخة احتياطية من هذا الجهاز: <b>' + (last ? fmtDate(last) : "لم تُنشأ بعد") + '</b></div>' +
+      (sm.items.length ? '<ul class="pn-sum">' + sm.items.map(function(x){return "<li>"+x+"</li>";}).join("") + '</ul>'
+                       : '<p class="pn-note" style="margin-bottom:10px">لا توجد بيانات محفوظة على هذا الجهاز حاليًا.</p>') +
+      '<div class="pn-acts"><button type="button" class="pn-exp" data-exp="' + scope + '">⬇️ تصدير نسخة</button>' +
+      '<label class="pn-imp">⬆️ استيراد نسخة<input type="file" accept=".json,application/json" data-imp="' + scope + '"></label></div></div>';
+  }
+
+  function render(){
+    var body = $("pnBody"); if(!body) return;
+    var html = '<div class="pn-steps"><b>لنقل بياناتك إلى جهاز آخر:</b><ol>' +
+      '<li>اضغط «تصدير نسخة» على هذا الجهاز، فيُنزَّل ملف بصيغة JSON.</li>' +
+      '<li>أرسل الملف لنفسك (البريد، OneDrive، واتساب…).</li>' +
+      '<li>افتح نفس القسم على الجهاز الآخر، ثم «استيراد نسخة» واختر الملف.</li></ol></div>';
+    if(cur && cur.keys.length){
+      var stale = isStale(cur.id, cur.keys);
+      html += box(cur.id, "نسخة هذا القسم: " + cur.title, cur.keys,
+        stale ? '<p class="pn-warn">⚠️ لديك بيانات بدون نسخة احتياطية حديثة. البيانات محفوظة في متصفح هذا الجهاز فقط، ومسح المتصفح يفقدها.</p>' : "");
+    } else if(cur){
+      html += '<div class="pn-box"><h3>' + cur.title + '</h3><p class="pn-note">هذا القسم لا يحفظ بيانات على الجهاز؛ فهو يحلل الملفات التي ترفعها مباشرة، لذلك لا يحتاج نسخة خاصة. لنقل بيانات الأقسام الأخرى استخدم النسخة الشاملة.</p></div>';
+    }
+    html += box("all", "نسخة شاملة لجميع الأقسام", ALL_PREFIXES,
+      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي، وتحليل الواقع وخطة التحسين — في ملف واحد.</p>');
+    body.innerHTML = html;
+  }
+
+  function isStale(scope, prefixes){
+    if(!summary(prefixes).hasData) return false;
+    var last = getLast(scope) || getLast("all");
+    if(!last) return true;
+    return (Date.now() - new Date(last).getTime()) / 86400000 >= REMIND_DAYS;
+  }
+  function refreshDot(){
+    var b = $("pnBackupBtn"); if(!b) return;
+    var warn = cur && cur.keys.length ? isStale(cur.id, cur.keys) : false;
+    b.classList.toggle("warn", !!warn);
+    b.title = warn ? "لا توجد نسخة احتياطية حديثة لبيانات هذا القسم" : "النسخ الاحتياطي ونقل البيانات";
+  }
+
+  function open(){ render(); $("pnOv").classList.add("open"); var x=$("pnOv").querySelector(".pn-x"); if(x) x.focus(); }
+  function close(){ $("pnOv").classList.remove("open"); }
+
+  function build(){
+    if(PAGE !== "home"){
+      var bar = document.createElement("nav");
+      bar.className = "pn-bar"; bar.setAttribute("aria-label","التنقل بين الأقسام");
+      var opts = SECTIONS.map(function(s){
+        return '<option value="' + s.href + '"' + (s.id===PAGE?" selected":"") + (s.disabled?" disabled":"") + '>' +
+          s.title + (s.disabled?" (مغلق للتطوير)":"") + '</option>';
+      }).join("");
+      bar.innerHTML = '<a class="pn-home" href="index.html">' + icoHome + '<span>الرئيسية</span></a>' +
+        '<div class="pn-sec"><label for="pnSel">الانتقال إلى:</label><select id="pnSel">' + opts + '</select></div>' +
+        '<button type="button" class="pn-btn" id="pnBackupBtn">' + icoSave + '<span class="pn-t">النسخ الاحتياطي</span><span class="pn-dot"></span></button>';
+      document.body.insertBefore(bar, document.body.firstChild);
+      $("pnSel").addEventListener("change", function(){ if(this.value) location.href = this.value; });
+      $("pnBackupBtn").addEventListener("click", open);
+    }
+    var ov = document.createElement("div");
+    ov.className = "pn-ov"; ov.id = "pnOv";
+    ov.innerHTML = '<div class="pn-modal" role="dialog" aria-modal="true" aria-labelledby="pnTitle">' +
+      '<div class="pn-mh"><h2 id="pnTitle">النسخ الاحتياطي ونقل البيانات</h2><button type="button" class="pn-x" aria-label="إغلاق">✕</button></div>' +
+      '<div class="pn-mb" id="pnBody"></div></div>';
+    document.body.appendChild(ov);
+    var t = document.createElement("div"); t.className = "pn-toast"; t.id = "pnToast"; document.body.appendChild(t);
+    ov.addEventListener("click", function(e){
+      if(e.target === ov || e.target.closest(".pn-x")) return close();
+      var ex = e.target.closest("[data-exp]"); if(ex) doExport(ex.getAttribute("data-exp"));
+    });
+    ov.addEventListener("change", function(e){
+      var inp = e.target.closest("[data-imp]"); if(inp){ doImport(inp.getAttribute("data-imp"), inp.files[0]); inp.value = ""; }
+    });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && ov.classList.contains("open")) close(); });
+    refreshDot();
+  }
+
+  window.PN = {open:open};
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", build); else build();
+})();
+</script>
+<!-- ===== /PORTAL NAV & BACKUP ===== -->
+</body>
+</html>
