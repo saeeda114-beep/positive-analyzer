@@ -123,7 +123,19 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);font-
 .pn-hint{font-size:11px;color:var(--mu);margin:-2px 0 8px;line-height:1.6;}
 .pn-filters label.pn-thr{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mu);}
 .pn-filters select:disabled{opacity:.5;}
-.pn-print{margin-inline-start:auto;}
+.pn-pbtns{display:flex;gap:6px;flex-wrap:wrap;margin-inline-start:auto;}
+.pn-dsec{border:1px solid var(--br);border-radius:10px;padding:12px 14px;margin-bottom:14px;background:#fff;}
+.pn-dsec h3{font-size:15px;color:var(--dk);margin-bottom:6px;}
+.pn-ds-school{border-color:var(--pu);border-width:2px;} .pn-ds-school h3{color:var(--pu);font-size:17px;}
+.pn-ds-grade{border-color:var(--tl);border-width:2px;background:#f7fbfc;} .pn-ds-grade h3{color:var(--tl);font-size:16px;}
+.pn-ds-class{margin-inline-start:18px;}
+.pn-kpis{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--mu);margin-bottom:10px;} .pn-kpis b{color:var(--dk);font-size:14px;}
+.pn-dgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:14px;align-items:start;}
+.pn-dtab td,.pn-dtab th{padding:5px 7px !important;}
+.pn-txt{font-size:13px;line-height:1.9;border-radius:8px;padding:6px 10px;outline:none;}
+.pn-txt:focus{background:#fffdf5;box-shadow:0 0 0 2px #f0dfb4;}
+.pn-txt p{margin:0 0 6px;} .pn-txt b{color:var(--dk);} .pn-txt ol{margin:0 0 4px;padding-inline-start:22px;}
+@media(max-width:900px){.pn-dgrid{grid-template-columns:1fr;} .pn-ds-class{margin-inline-start:0;}}
 .pn-note{font-size:11.5px;color:var(--mu);margin:8px 0;line-height:1.7;}
 .pn-empty{padding:24px;text-align:center;color:var(--mu);font-size:13px;}
 .pn-matrix td{font-weight:600;}
@@ -151,7 +163,15 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);font-
   body.print-pn #rptPN{display:block !important;}
   body.print-pn #rptPN .tc{display:block !important;page-break-before:always;break-before:page;}
   body.print-pn #rptPN #pn-sum{page-break-before:auto !important;break-before:auto !important;}
-  body.print-pn .pn-print, body.print-pn .pn-filters, body.print-pn .pn-tabs{display:none !important;}
+  body.print-pn .pn-pbtns, body.print-pn .pn-filters, body.print-pn .pn-tabs, body.print-pn .no-print{display:none !important;}
+  body.print-pn-desc #rptPN .tc:not(#pn-desc){display:none !important;}
+  body.print-pn-desc #rptPN #pn-desc{page-break-before:auto !important;break-before:auto !important;}
+  body.print-pn #rptPN .pn-ds-grade{page-break-before:always;break-before:page;}
+  body.print-pn #rptPN #pn-desc > section:first-of-type{page-break-before:auto !important;break-before:auto !important;}
+  body.print-pn #rptPN .pn-dsec{break-inside:avoid;page-break-inside:avoid;}
+  body.print-pn .pn-dgrid{grid-template-columns:1fr 1.15fr !important;}
+  body.print-pn .pn-txt{font-size:10.5px;line-height:1.7;}
+  body.print-pn .pn-dtab td, body.print-pn .pn-dtab th{font-size:9px !important;padding:2px 4px !important;}
   body.print-pn #rptPN .dtbl td, body.print-pn #rptPN .dtbl th{font-size:8px !important;padding:2px 3px !important;}
 }
 
@@ -1702,7 +1722,7 @@ function runPN(){
   el.innerHTML=`<div class="rpt">
     <div class="rpt-hdr" style="background:var(--pu)"><h2>🗓️ تحليل ${pnEsc(s0.period)} — ${PN.students.length} طالب</h2>
       <span class="meta">${pnEsc(meta)}</span>
-      <button class="ab abgold pn-print" onclick="pnPrint()">🖨️ طباعة التقرير</button></div>
+      <span class="pn-pbtns"><button class="ab abgold pn-print" onclick="pnPrint(true)">🖨️ طباعة التحليل الوصفي</button><button class="ab abg pn-print" onclick="pnPrint(false)">🖨️ طباعة التقرير كاملًا</button></span></div>
     <div class="rpt-body">
       <div class="sf2 pn-filters">
         <select id="pnGrade" onchange="PN.grade=this.value;PN.cls='';pnRender()"><option value="">كل الصفوف</option>${pnGrades().map(g=>`<option value="${pnEsc(g)}">${pnEsc(g)}</option>`).join('')}</select>
@@ -1711,13 +1731,14 @@ function runPN(){
       </div>
       <div class="tabs pn-tabs">
         <button class="tab on" onclick="pnTab('sum',this)">📊 الملخص</button>
+        <button class="tab" onclick="pnTab('desc',this)">📝 التحليل الوصفي</button>
         <button class="tab" onclick="pnTab('subj',this)">📚 المواد والفصول</button>
         <button class="tab" onclick="pnTab('top',this)">🏆 الأوائل</button>
         <button class="tab" onclick="pnTab('weak',this)">⚠️ المتعثرون</button>
         <button class="tab" onclick="pnTab('miss',this)">📝 غير المرصود</button>
         <button class="tab" onclick="pnTab('det',this)">📄 الكشف</button>
       </div>
-      <div id="pn-sum" class="tc on"></div><div id="pn-subj" class="tc"></div><div id="pn-top" class="tc"></div>
+      <div id="pn-sum" class="tc on"></div><div id="pn-desc" class="tc"></div><div id="pn-subj" class="tc"></div><div id="pn-top" class="tc"></div>
       <div id="pn-weak" class="tc"></div><div id="pn-miss" class="tc"></div><div id="pn-det" class="tc det-section"></div>
       <p class="pn-note">🔒 تُقرأ الملفات داخل المتصفح فقط ولا تُحفظ أو تُرسل لأي جهة. «المعدل الأكاديمي» يُحسب من المواد المرصودة باستثناء: ${[...ACAD_EXCL].join('، ')}. هذا إشعار فترة وليس نتيجة نهائية.</p>
     </div></div>`;
@@ -1739,6 +1760,7 @@ function pnRender(){
   cs.value=PN.cls; cs.disabled=!PN.grade;
   const L=pnSel();
   document.getElementById('pn-sum').innerHTML=pnSum(L);
+  document.getElementById('pn-desc').innerHTML=pnDesc(L);
   document.getElementById('pn-subj').innerHTML=pnSubj(L);
   document.getElementById('pn-top').innerHTML=pnTop(L);
   document.getElementById('pn-weak').innerHTML=pnWeak(L);
@@ -1841,11 +1863,100 @@ function pnCharts(){
   const st=pnSubjStats(L);
   PN_CH.sb=new Chart(c2,{type:'bar',data:{labels:st.map(x=>x.k.length>16?x.k.slice(0,15)+'…':x.k),datasets:[{data:st.map(x=>x.avg),backgroundColor:st.map(x=>x.avg===null?'#ccc':x.avg>=90?'#2e7d52':x.avg>=75?'#1d5c6e':x.avg>=60?'#c8973a':x.avg>=50?'#e67e22':'#c0392b')}]},options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0,max:100},y:{ticks:{autoSkip:false,font:{size:10}}}}}});
 }
-function pnPrint(){
-  document.body.classList.add('print-pn');
+
+/* ── التحليل الوصفي: المدرسة ← كل صف ← كل فصل (نص مولَّد من البيانات وقابل للتعديل) ── */
+function pnStats(L){
+  const lv={'ممتاز':0,'جيد جداً':0,'جيد':0,'مقبول':0,'ضعيف':0}; L.forEach(s=>{ if(s.acad!==null) lv[gradeLabel(s.acad)]++; });
+  let miss=0; L.forEach(s=>miss+=s.missing.length);
+  const ranked=L.filter(s=>s.acad!==null&&!s.missing.length).sort((a,b)=>b.acad-a.acad);
+  return {n:L.length, acad:pnAvg(L.map(s=>s.acad)), subj:pnSubjStats(L).filter(x=>x.avg!==null), lv, miss,
+    weak:L.filter(s=>pnWeakSubjs(s).length), multi:L.filter(s=>pnWeakSubjs(s).length>=3),
+    att:pnAvg(L.map(s=>s.att)), dist:pnAvg(L.map(s=>s.dist)), ranked};
+}
+function pnR(x){ return Math.round(x*10)/10; }
+function pnList(a){ return a.length<=1?a.join(''):a.slice(0,-1).join('، ')+' و'+a[a.length-1]; }
+function pnDiff(d){ d=pnR(d); return d>=3?`أعلى بـ ${d} نقطة`:d<=-3?`أدنى بـ ${Math.abs(d)} نقطة`:'مقارب'; }
+function pnDesc(L){
+  if(!L.length) return '<p class="pn-empty">لا يوجد طلاب في هذا الاختيار.</p>';
+  let h=`<p class="pn-note no-print">النص مولَّد آليًا من بيانات الإشعار ويمكنك تعديله بالكتابة عليه مباشرة قبل الطباعة (التعديل لا يُحفظ عند تغيير الفرز).</p>`;
+  const all=PN.students;
+  if(!PN.grade){
+    h+=pnSection(L,'المدرسة — جميع الصفوف',null,'',  'school', pnGrades().map(g=>({label:g,L:L.filter(s=>s.grade===g)})));
+    pnGrades().forEach(g=>{ const G=L.filter(s=>s.grade===g); if(!G.length) return;
+      h+=pnSection(G,g,L,'المدرسة','grade',pnClasses(G));
+      pnClasses(G).forEach(c=>{ h+=pnSection(c.L,`${g} — فصل ${c.label}`,G,'الصف','class',null); }); });
+  } else if(!PN.cls){
+    h+=pnSection(L,PN.grade,all,'المدرسة','grade',pnClasses(L));
+    pnClasses(L).forEach(c=>{ h+=pnSection(c.L,`${PN.grade} — فصل ${c.label}`,L,'الصف','class',null); });
+  } else {
+    h+=pnSection(L,`${PN.grade} — فصل ${PN.cls}`,all.filter(s=>s.grade===PN.grade),'الصف','class',null);
+  }
+  return h;
+}
+function pnClasses(G){ return [...new Set(G.map(s=>s.cls))].sort(pnClsSort).map(c=>({label:c,L:G.filter(s=>s.cls===c)})); }
+function pnSection(L,label,P,pLabel,kind,children){
+  const S=pnStats(L), PS=P?pnStats(P):null, n=S.n;
+  const pAvg=k=>{ if(!PS) return null; const x=PS.subj.find(y=>y.k===k); return x?x.avg:null; };
+  const acadSubj=S.subj.filter(x=>!ACAD_EXCL.has(x.k)).sort((a,b)=>b.avg-a.avg);
+  const bySub=S.subj.slice().sort((a,b)=>a.avg-b.avg);
+  const maxLv=Object.entries(S.lv).sort((a,b)=>b[1]-a[1])[0];
+  const pct=v=>n?Math.round(v/n*100):0;
+  /* الجدول الكمي */
+  let t=`<table class="stbl pn-dtab"><thead><tr><th>المادة</th><th>المتوسط</th><th>المستوى</th>${PS?`<th>مقارنة ب${pLabel}</th>`:''}<th>ممتاز</th><th>متعثر</th></tr></thead><tbody>
+    ${S.subj.map(x=>{ const pa=pAvg(x.k), d=pa===null?null:pnR(x.avg-pa); return `<tr><td>${pnEsc(x.k)}</td><td style="${pnHeat(x.avg)}"><b>${x.avg}%</b></td><td>${pnLevel(x.avg)}</td>${PS?`<td style="${d===null?'':d<=-5?'color:#c0392b;font-weight:800':d>=5?'color:#2e7d52;font-weight:800':''}">${d===null?'—':(d>0?'+':'')+d}</td>`:''}<td>${x.ex}</td><td>${x.weak?`<b style="color:#c0392b">${x.weak}</b>`:0}</td></tr>`; }).join('')}
+    <tr><td><b>المعدل الأكاديمي</b></td><td style="${pnHeat(S.acad)}"><b>${pnPct(S.acad)}</b></td><td>${pnLevel(S.acad)}</td>${PS?`<td><b>${PS.acad===null||S.acad===null?'—':((S.acad-PS.acad>0?'+':'')+pnR(S.acad-PS.acad))}</b></td>`:''}<td colspan="2">${n} طالب</td></tr></tbody></table>`;
+  /* النص الوصفي */
+  const P1=`بلغ عدد الطلاب (${n}) طالبًا${kind!=='class'&&children?` في ${children.length} ${kind==='school'?'صفوف':'فصول'}`:''}، ومتوسط المعدل الأكاديمي ${pnPct(S.acad)} بمستوى «${pnLevel(S.acad)}»${PS&&S.acad!==null&&PS.acad!==null?`، وهو ${pnDiff(S.acad-PS.acad)} ${pnDiff(S.acad-PS.acad)==='مقارب'?'لمتوسط':'من متوسط'} ${pLabel} (${PS.acad}%)`:''}. ويتركز أغلب الطلاب في مستوى «${maxLv[0]}» (${maxLv[1]} طالبًا بنسبة ${pct(maxLv[1])}%)، بينما بلغ عدد «الممتاز» ${S.lv['ممتاز']} (${pct(S.lv['ممتاز'])}%) و«المقبول والضعيف» ${S.lv['مقبول']+S.lv['ضعيف']} (${pct(S.lv['مقبول']+S.lv['ضعيف'])}%).`;
+  const strong=acadSubj.slice(0,3).filter(x=>x.avg>=75);
+  const P2=strong.length?`أعلى المواد الأساسية أداءً: ${pnList(strong.map(x=>`${x.k} (${x.avg}%)`))}${PS?pnRel(S,PS,pAvg,+1,pLabel):''}.`:`لا توجد مادة أساسية بمتوسط 75% فأكثر في هذه الفئة.${PS?pnRel(S,PS,pAvg,+1,pLabel):''}`;
+  const low=bySub.filter(x=>x.avg<85||x.weak).slice(0,3);
+  const P3=low.length?`أدنى المواد: ${pnList(low.map(x=>`${x.k} (${x.avg}%${x.weak?`، المتعثرون: ${x.weak}`:''})`))}${PS?pnRel(S,PS,pAvg,-1,pLabel):''}.`:`جميع المواد بمتوسط 85% فأكثر دون متعثرين.`;
+  const wsub=S.subj.filter(x=>x.weak).sort((a,b)=>b.weak-a.weak).slice(0,3);
+  const P4=S.weak.length?`بلغ عدد الطلاب المتعثرين (${S.weak.length}) طالبًا بنسبة ${pct(S.weak.length)}%، وهم من نزلت درجتهم عن ${PN.thr}% في مادة أو أكثر، وأكثر التعثر في ${pnList(wsub.map(x=>`${x.k} (${x.weak})`))}${S.multi.length?`، منهم (${S.multi.length}) متعثرون في ثلاث مواد فأكثر`:''}.`:`لا يوجد طلاب متعثرون دون ${PN.thr}% في أي مادة.`;
+  let P5='';
+  if(children&&children.length>1){
+    const cs=children.map(c=>({label:c.label,a:pnAvg(c.L.map(s=>s.acad))})).filter(c=>c.a!==null).sort((a,b)=>b.a-a.a);
+    if(cs.length>1){ const gap=pnR(cs[0].a-cs[cs.length-1].a), w=kind==='school'?'':'فصل ';
+      P5=`مقارنة ${kind==='school'?'الصفوف':'الفصول'}: الأعلى ${w}${cs[0].label} (${cs[0].a}%) والأدنى ${w}${cs[cs.length-1].label} (${cs[cs.length-1].a}%) بفارق ${gap} نقطة${gap>=5?' — تفاوت ملحوظ يستدعي دراسة أسبابه':' — تقارب في المستوى'}.`; }
+  }
+  const top=S.ranked.slice(0,kind==='class'?3:1);
+  const P6=top.length?`${top.length>1?'أعلى الطلاب':'أعلى طالب'}: ${pnList(top.map(s=>`${s.name} (${s.acad}%)`))}.`:'';
+  const P7=[S.miss?`عدد الدرجات غير المرصودة: (${S.miss}).`:'', S.att!==null&&S.att<98?`متوسط المواظبة ${S.att} من 100.`:'' ].filter(Boolean).join(' ');
+  /* التوصيات */
+  const rec=[];
+  if(S.weak.length) rec.push(`إعداد خطط علاجية للطلاب المتعثرين (${S.weak.length})${wsub.length?` بالتركيز على ${pnList(wsub.map(x=>x.k))}`:''}، وإشعار أولياء أمورهم ومتابعة تقدمهم قبل الفترة القادمة.`);
+  if(S.multi.length) rec.push(`إحالة الطلاب المتعثرين في ثلاث مواد فأكثر (${S.multi.length}) إلى الموجه الطلابي لدراسة حالاتهم.`);
+  const below=PS?S.subj.filter(x=>{ const pa=pAvg(x.k); return pa!==null&&x.avg-pa<=-5; }):[];
+  if(below.length) rec.push(`مناقشة نتائج ${pnList(below.map(x=>x.k))} مع معلميها لانخفاضها عن متوسط ${pLabel} بخمس نقاط فأكثر.`);
+  const lowA=acadSubj.filter(x=>x.avg<75);
+  if(lowA.length) rec.push(`تفعيل مجتمعات التعلم المهني لمعلمي ${pnList(lowA.map(x=>x.k))} لمراجعة استراتيجيات التدريس والتقويم.`);
+  if(P5.includes('تفاوت ملحوظ')) rec.push(`دراسة أسباب التفاوت بين ${kind==='school'?'الصفوف':'الفصول'} وتبادل الممارسات الناجحة بين المعلمين.`);
+  if(S.miss) rec.push(`استكمال رصد الدرجات غير المرصودة (${S.miss}) قبل اعتماد الإشعار.`);
+  if(S.ranked.length) rec.push(`تحفيز المتفوقين وتكريمهم، وإشراكهم في برامج إثرائية وتعلم الأقران.`);
+  const tag={school:'pn-ds-school',grade:'pn-ds-grade',class:'pn-ds-class'}[kind];
+  return `<section class="pn-dsec ${tag}"><h3>${kind==='school'?'🏫':kind==='grade'?'🎓':'👥'} ${pnEsc(label)}</h3>
+    <div class="pn-kpis"><span><b>${n}</b> طالب</span><span>المعدل <b>${pnPct(S.acad)}</b></span><span>متعثرون <b style="color:#c0392b">${S.weak.length}</b></span><span>ممتاز <b style="color:#2e7d52">${S.lv['ممتاز']}</b></span>${S.miss?`<span>غير مرصود <b style="color:#c8973a">${S.miss}</b></span>`:''}</div>
+    <div class="pn-dgrid"><div>${t}</div>
+    <div class="pn-txt" contenteditable="true">
+      <p><b>الوصف العام:</b> ${pnEsc(P1)}</p>
+      <p><b>مواطن القوة:</b> ${pnEsc(P2)}</p>
+      <p><b>فرص التحسين:</b> ${pnEsc(P3)} ${pnEsc(P4)}</p>
+      ${P5?`<p><b>المقارنة:</b> ${pnEsc(P5)}</p>`:''}
+      ${P6||P7?`<p><b>ملاحظات:</b> ${pnEsc(P6)} ${pnEsc(P7)}</p>`:''}
+      <p><b>التوصيات:</b></p><ol>${rec.map(r=>`<li>${pnEsc(r)}</li>`).join('')}</ol>
+    </div></div></section>`;
+}
+function pnRel(S,PS,pAvg,dir,pLabel){ /* مواد يتميز/يقصر فيها مقارنة بالمستوى الأعلى */
+  const xs=S.subj.map(x=>({k:x.k,d:pAvg(x.k)===null?null:pnR(x.avg-pAvg(x.k))})).filter(x=>x.d!==null&&(dir>0?x.d>=5:x.d<=-5)).sort((a,b)=>dir>0?b.d-a.d:a.d-b.d).slice(0,3);
+  if(!xs.length) return '';
+  return dir>0?`، ويتفوق على متوسط ${pLabel} في ${pnList(xs.map(x=>`${x.k} (+${x.d})`))}`:`، ويقل عن متوسط ${pLabel} في ${pnList(xs.map(x=>`${x.k} (${x.d})`))}`;
+}
+
+function pnPrint(descOnly){
+  document.body.classList.add('print-pn'); document.body.classList.toggle('print-pn-desc', !!descOnly);
   let st=document.getElementById('_pnstyle'); if(!st){ st=document.createElement('style'); st.id='_pnstyle'; document.head.appendChild(st); }
-  st.textContent='@media print{@page{size:A4 landscape;margin:7mm 6mm;}}';
-  const done=()=>{ document.body.classList.remove('print-pn'); st.textContent=''; window.removeEventListener('afterprint',done); };
+  st.textContent=descOnly?'@media print{@page{size:A4 portrait;margin:9mm 8mm;}}':'@media print{@page{size:A4 landscape;margin:7mm 6mm;}}';
+  const done=()=>{ document.body.classList.remove('print-pn','print-pn-desc'); st.textContent=''; window.removeEventListener('afterprint',done); };
   window.addEventListener('afterprint',done);
   pnCharts(); setTimeout(()=>window.print(),250);
 }
