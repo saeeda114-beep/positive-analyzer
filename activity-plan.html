@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خطة النشاط الطلابي وبطاقات التنفيذ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-900:#0a2733;--navy-800:#0f3d4c;--teal-700:#155a6c;--teal-600:#1d5c6e;--teal-500:#237e93;
+  --gold:#c99a45;--bg:#f3f6f8;--line:#dbe4ea;--muted:#5c7180;--ink:#16232b;--rd:#b3261e;
+  --shadow:0 2px 8px rgba(10,39,51,.06),0 10px 30px rgba(10,39,51,.06);
+  --form:#0e7c7b;--card-lbl:#d3e3e8;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;}
+button{font-family:inherit;}
+header.top{background:linear-gradient(135deg,var(--navy-900),var(--navy-800) 60%,var(--teal-700));color:#fff;padding:22px 24px;}
+header.top .in{max-width:1180px;margin:0 auto;}
+header.top h1{margin:0 0 4px;font-size:22px;font-weight:900;}
+header.top p{margin:0;font-size:13px;color:#cfe0e6;}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 40px;}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.step{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:800;font-size:13px;color:var(--navy-800);cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.step .n{width:22px;height:22px;border-radius:50%;background:#e6eef2;color:var(--navy-800);display:inline-flex;align-items:center;justify-content:center;font-size:12px;}
+.step.done .n{background:#13824a;color:#fff;}
+.step.active{background:var(--navy-800);color:#fff;border-color:var(--navy-800);}
+.step.active .n{background:var(--gold);color:#3a2a06;}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px;}
+.card h2{margin:0 0 12px;font-size:16.5px;color:var(--navy-800);border-inline-start:4px solid var(--gold);padding-inline-start:10px;}
+.card h3{margin:14px 0 8px;font-size:14.5px;color:var(--teal-600);}
+.hint{font-size:12.5px;color:var(--muted);margin:0 0 10px;}
+.note{background:#fff8e8;border-inline-start:4px solid var(--gold);border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px;}
+.sugg{background:#eef7f4;border-inline-start:4px solid #13824a;border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px;}
+.warnbar{background:#fbeceb;color:#8f2a22;border-radius:10px;padding:10px 14px;font-size:13.5px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+label.lb{display:block;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:4px;}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid #cfd9de;border-radius:8px;font-family:inherit;font-size:13.5px;background:#fff;color:var(--ink);}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--teal-500);outline-offset:0;border-color:var(--teal-500);}
+textarea{min-height:60px;resize:vertical;line-height:1.7;}
+.g{display:grid;gap:12px;}
+.g2{grid-template-columns:repeat(2,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:860px){.g3,.g4{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+.btn{border:0;border-radius:9px;padding:9px 16px;font-weight:800;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.btn.primary{background:var(--teal-600);color:#fff;} .btn.primary:hover{background:var(--teal-500);}
+.btn.gold{background:var(--gold);color:#3a2a06;} .btn.gold:hover{background:#dba94f;}
+.btn.light{background:#eef3f5;color:var(--navy-800);border:1px solid var(--line);}
+.btn.danger{background:#fdecea;color:var(--rd);border:1px solid #f4c7c2;padding:6px 10px;font-size:12.5px;}
+.btn.sm{padding:6px 11px;font-size:12.5px;}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.between{justify-content:space-between;}
+.navbtns{display:flex;justify-content:space-between;gap:10px;margin-top:6px;}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th,.tbl td{border:1px solid var(--line);padding:6px 7px;vertical-align:middle;text-align:right;}
+.tbl th{background:#eef4f6;color:var(--navy-800);font-weight:800;}
+.tbl td input,.tbl td select{padding:6px 7px;font-size:13px;}
+.scroll{overflow-x:auto;}
+.num{text-align:center !important;}
+.pill{display:inline-block;font-size:11.5px;font-weight:800;border-radius:20px;padding:1px 9px;background:#e8f3ef;color:#13704b;}
+.pill.warn{background:#fdecea;color:var(--rd);}
+.pill.blue{background:#eaf1fb;color:#1f5fa8;}
+.lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;}
+.libi{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:#fbfdfd;font-size:13px;}
+.libi b{font-weight:700;}
+.libi .s{font-size:11.5px;color:var(--muted);}
+.libi.added{border-color:#13824a;background:#f0f8f4;}
+.ent{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fbfdfd;}
+.ent.done{border-inline-start:5px solid #13824a;}
+details.dom{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px;}
+details.dom summary{cursor:pointer;font-weight:800;color:var(--navy-800);}
+.example{display:inline-block;border:1.5px solid var(--navy-800);border-radius:6px;padding:6px 10px;text-align:center;font-size:12.5px;line-height:1.5;background:#fff;min-width:150px;}
+.example .t{font-weight:800;}
+.example .p{color:#b3261e;font-weight:800;}
+.hidden{display:none !important;}
+
+/* ===================== PRINT ===================== */
+#printArea{display:none;}
+@media print{
+  @page{size:A4 portrait;margin:10mm;}
+  @page land{size:A4 landscape;margin:9mm 10mm;}
+  body{background:#fff;}
+  body.printing > *:not(#printArea){display:none !important;}
+  body.printing #printArea{display:block;}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #printArea .land{page:land;}
+}
+#printArea{font-family:'Tajawal',Arial,sans-serif;color:#111;font-size:11pt;line-height:1.5;}
+#printArea thead{display:table-header-group;}
+#printArea .pg{page-break-after:always;break-after:page;}
+#printArea .pg:last-child{page-break-after:auto;break-after:auto;}
+#printArea table{width:100%;border-collapse:collapse;}
+#printArea th,#printArea td{border:1px solid #333;padding:4px 6px;font-size:10pt;vertical-align:middle;text-align:right;}
+#printArea th{background:var(--form);color:#fff;font-weight:800;text-align:center;}
+#printArea td.c{text-align:center;}
+#printArea tr{break-inside:avoid;page-break-inside:avoid;}
+#printArea .ph{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--form);padding-bottom:4px;margin-bottom:8px;}
+#printArea .ph .r{font-size:9pt;font-weight:800;line-height:1.45;text-align:center;}
+#printArea .ph img{height:15mm;}
+#printArea .ph .l{font-size:9pt;text-align:left;line-height:1.45;}
+#printArea h1{font-size:16pt;text-align:center;color:var(--form);margin:4px 0 6px;}
+#printArea h2{font-size:12pt;color:var(--form);margin:8px 0 5px;}
+#printArea .goal{border:1.5px solid var(--form);border-radius:8px;padding:8px 12px;margin:6px 0 10px;background:#f2f9f8;}
+#printArea .doms{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+#printArea .doms div{border:1px solid #9cc;border-radius:8px;padding:6px 8px;font-size:9.5pt;}
+#printArea .doms b{display:block;color:var(--form);font-size:10.5pt;}
+#printArea .sig{display:flex;justify-content:space-between;margin-top:14px;font-weight:800;}
+/* بطاقة التنفيذ */
+#printArea .cardpg{max-width:180mm;margin:0 auto;}
+#printArea .cardhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+#printArea .cardhd img{height:16mm;}
+#printArea .cardhd h1{flex:1;margin:0;font-size:15pt;color:#111;}
+#printArea table.ec td{font-size:11pt;padding:7px 8px;height:11mm;}
+#printArea table.ec td.l{width:32%;font-weight:800;}
+#printArea table.ec tr:nth-child(even) td{background:var(--card-lbl);}
+#printArea table.ec td.sub{font-size:9.5pt;width:22%;text-align:center;}
+#printArea .cb{display:inline-block;white-space:nowrap;margin-inline-end:8px;}
+#printArea .cb i{display:inline-block;width:10px;height:10px;border:1.3px solid #222;border-radius:50%;margin-inline-end:4px;vertical-align:-1px;font-style:normal;font-size:8px;line-height:8px;text-align:center;font-weight:900;}
+#printArea .sigs{display:flex;justify-content:space-between;margin-top:12px;font-weight:700;line-height:2;}
+#printArea .fnote{font-size:9.5pt;margin-top:12px;}
+#printArea table.mx td,#printArea table.mx th{font-size:8.8pt;padding:2px 4px;text-align:center;}
+#printArea table.mx th{background:#dbe5f1;color:#111;}
+#printArea table.mx td.p{text-align:right;font-weight:700;}
+#printArea table.mx td.d{font-weight:900;font-size:10pt;}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <h1>خطة النشاط الطلابي وبطاقات التنفيذ</h1>
+  <p>خطة برامج النشاط الطلابي وإسنادها للمعلمين، وبطاقات تنفيذ البرامج والمسابقات، ونموذج ربط البرامج بالمستهدفات — وفق دليل الخطط الدراسية (الإصدار السادس) لعام 1448هـ.</p>
+</div></header>
+<div class="wrap" id="app">
+  <div id="backupWarn"></div>
+  <nav class="steps" id="steps"></nav>
+  <div id="view"></div>
+</div>
+<div id="printArea"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   المراجع: دليل الخطط الدراسية المعتمدة 1448هـ (الإصدار السادس) — برامج مجالات الأنشطة الطلابية
+   والأيام والمناسبات والفترات اللاصفية وعدد حصصها خلال العام الدراسي؛ بطاقة تنفيذ برنامج نشاط طلابي
+   وبطاقة تنفيذ مسابقة نشاط طلابي 1448؛ نموذج ربط برامج النشاط الطلابي بالمستهدفات 1448هـ.
+   ============================================================ */
+const KEY="ACTPLAN_V1";
+const LOGO="data:image/png;base64,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";
+/* المراحل في جداول الدليل: الصفوف الأولية، الصفوف العليا، المرحلة المتوسطة، المرحلة الثانوية */
+const GROUPS=["الصفوف الأولية","الصفوف العليا","المرحلة المتوسطة","المرحلة الثانوية"];
+/* مستهدفات البرنامج (أعمدة نموذج الربط) */
+const TARGETS=["يساهم في رضا الطلاب عن الحياة","يساهم في الانضباط المدرسي","يساهم في تحسين نواتج التعلم","يساهم في التعليم التطبيقي المرتبط بحياة المتعلمين","يساهم في دعم السلوك الايجابي","يساهم في الاعتزاز بالثقافة واحترام التنوع الثقافي","يساهم في زيادة جاذبية البيئة المدرسية"];
+const GENERAL_GOAL="بناء شخصية وقدرات الطلاب بما يسهم في تعزيز قيمهم واستكشاف ميولهم واهتماماتهم وتطوير مهارات جديدة وإبراز إبداعاتهم وابتكاراتهم ليكونوا على مستوى عالٍ من المهارة والمسؤولية معتزين بقيمهم السعودية منافسين محلياً وعالمياً";
+const DOMS=[
+  {id:"cit", name:"المواطنة والحياة", goal:"إبراز قيم الهوية الوطنية والمواطنة والانتماء، ودعم التطور الشخصي والاجتماعي"},
+  {id:"cul", name:"الثقافة والفنون", goal:"تعزيز المهارات والقدرات الثقافية والفنية لدى الطلبة"},
+  {id:"spo", name:"الرياضة والصحة", goal:"تعزيز الصحة العامة من خلال تحسين اللياقة البدنية المرتبطة بالصحة، وتنمية المهارات الرياضية والفردية"},
+  {id:"sci", name:"العلوم والتقنية", goal:"تمكين الطلاب من المهارات التقنية والعلمية، وبرامج STEAM"},
+  {id:"sco", name:"النشاط الكشفي", goal:"تعزيز القيم التربوية والاجتماعية، والمسؤولية والقيادة من خلال الأنشطة الكشفية"},
+  {id:"day", name:"الأيام والمناسبات", goal:"الاحتفال بالأيام والمناسبات الوطنية والفعاليات والمهرجانات المحلية والعالمية"},
+  {id:"per", name:"الفترات اللاصفية", goal:""}
+];
+/* [المجال، البرنامج، الحصص: أولية، عليا، متوسطة، ثانوية، [الاعتزاز بالثقافة، جاذبية البيئة]]
+   المستهدفات الخمسة الأولى مؤشرة لجميع البرامج في نموذج الربط. "*" = يتضمن ساعات إضافية خارج المدرسة */
+const LIB=[
+ ["cit","التطوع الطلابي",[4,4,5,6],[1,1]],["cit","مهارات طموحة",[6,4,3,2],[0,1]],["cit","نموذج الأمم المتحدة",[6,8,10,10],[0,1]],
+ ["cit","قيمنا حياة",[0,12,12,12],[1,1]],["cit","إرث وطموح",[4,4,6,8],[1,1]],["cit","ريادة الأعمال",[4,4,6,8],[1,1]],["cit","السيرة النبوية",[4,4,8,9],[0,0]],
+ ["cul","الفن السابع (السينما)",[8,8,8,8],[1,1]],["cul","الفنون البصرية والتشكيلية",[6,6,6,6],[1,1]],["cul","الأزياء السعودية",[4,4,6,6],[1,1]],
+ ["cul","الثقافة الإعلامية",[4,4,6,8],[1,0]],["cul","الفن التراثي المعاصر",[5,5,5,5],[1,1]],["cul","الفنون المسرحية",[8,8,8,8],[1,1]],
+ ["cul","الفنون الصوتية أو الفنون الموسيقية",[8,8,8,8],[1,0]],["cul","حكايات مرئية (أنمي استديو)",[6,6,11,11],[1,0]],
+ ["cul","مهارات اللغة والتواصل الثقافي",[5,4,6,8],[1,0]],["cul","الكتابة الإبداعية والأدبية",[4,5,8,10],[1,0]],["cul","الحرف والمهن",[4,4,8,8],[1,1]],["cul","الخط العربي",[4,4,6,6],[1,1]],
+ ["spo","منافسة المهارات الرياضية الجماعية",[6,8,8,8],[1,0]],["spo","منافسة المهارات الرياضية الفردية",[8,8,8,6],[1,0]],
+ ["spo","منافسة مهارات رياضات الدفاع عن النفس",[8,8,8,6],[1,0]],["spo","الرياضة والترفيه الإلكتروني",[8,8,6,8],[1,0]],
+ ["spo","الرياضات الذهنية",[6,8,8,8],[1,0]],["spo","الأولمبياد الرياضي",[6,8,8,8],[1,0]],["spo","الإسعافات الأولية",[3,4,4,4],[0,0]],
+ ["spo","اللياقة والصحة البدنية",[2,2,2,2],[0,0]],["spo","مهارات التحكيم الرياضي (أنا حكم)",[3,3,8,8],[1,0]],["spo","صحتي في بيئتي",[3,3,8,8],[1,1]],
+ ["sci","برنامج تطبيقات STEM",[3,5,7,7],[0,1]],["sci","التصميم والابتكار التقني",[2,5,7,7],[0,1]],["sci","الفضاء والاستكشاف العلمي",[3,5,7,9],[0,1]],
+ ["sci","الاستدامة وجودة الحياة",[3,4,7,9],[0,1]],["sci","الذكاء الاصطناعي",[10,10,10,10],[0,0]],["sci","إنترنت الأشياء",[3,4,7,9],[0,0]],
+ ["sci","الأمن السيبراني",[4,4,6,8],[0,1]],["sci","البحث العلمي",[4,4,6,8],[1,1]],["sci","حوكمة البيانات",[3,3,5,7],[0,1]],
+ ["sco","خيمتي الجميلة",[3,0,0,0],[1,1]],["sco","خشبة وحبل",[0,12,0,0],[0,1]],["sco","الملاحة على اليابس",[0,0,"3*",0],[0,1]],["sco","أغامر وأكتشف",[0,0,0,"5*"],[0,1]],
+ ["sco","براعم البيئة والمجتمع",[2,0,0,0],[1,1]],["sco","أشارك مجتمعي وأزرع شجرة",[0,3,0,0],[1,1]],["sco","مجتمعي وبيئتي مسؤوليتي",[0,0,6,0],[1,1]],
+ ["sco","سفير البيئة والمجتمع",[0,0,0,5],[1,1]],["sco","بصمتي الكشفية",[3,0,0,0],[1,1]],["sco","وطني في قلبي",[0,3,0,0],[1,1]],
+ ["sco","صناع التغيير",[0,0,3,0],[0,1]],["sco","سواعد الكشفية",[0,0,0,6],[1,1]],["sco","براعم النور",[2,0,0,0],[0,1]],["sco","كنوز الصغار",[0,2,0,0],[0,1]],
+ ["sco","بوصلة الاكتشاف",[3,0,0,0],[0,1]],["sco","خيمة التجارب المسلية",[0,6,0,0],[0,1]],["sco","مخيمي التقني",[0,0,10,0],[0,1]],
+ ["sco","واحة الإبداع الكشفي",[0,0,0,"4*"],[1,1]],["sco","عاداتي الصحية الكشفية",[2,0,0,0],[0,1]],["sco","طبقي الكشفي",[0,3,0,0],[0,1]],
+ ["sco","خطواتي الكشفية الصحية",[0,0,4,0],[0,1]],["sco","مهرجان الأفلام الكشفية الصحية",[0,0,0,8],[0,1]],["sco","مهاراتي وكشفيتي",[2,0,0,0],[1,1]],
+ ["sco","صافرة واصطفاف",[0,2,0,0],[0,1]],["sco","مهاراتي الكشفية من الاستعداد إلى الإنجاز",[0,0,3,0],[1,1]],["sco","أفقي الكشفي الواسع",[0,0,0,4],[1,1]],
+ ["day","اليوم الوطني",[4,4,4,4],[1,1],"*"],["day","يوم التأسيس",[4,4,4,4],[1,1],"*"],["day","يوم السعودية الخضراء",[3,3,2,2],[1,1]],["day","يوم العلم",[3,3,2,2],[1,1]],
+ ["day","يوم الصحة العالمي",[2,2,2,2],[1,0]],["day","اليوم العالمي للتعليم",[2,2,2,2],[1,1]],["day","يوم اللغة العربية العالمي",[2,2,1,1],[1,0]],
+ ["day","يوم التسامح العالمي",[2,2,1,1],[1,0]],["day","اليوم العالمي للطفل",[2,2,0,0],[1,1]],["day","اليوم العالمي لذوي الإعاقة",[2,2,2,2],[1,1]],
+ ["day","يوم المعلم العالمي",[2,2,2,2],[1,0]],["day","اليوم الدولي للأسرة",[2,2,2,2],[1,0]],
+ ["per","رحلة نجاح",[11,11,11,10],[1,1]],["per","صحتي مسؤوليتي",[11,11,11,10],[0,1]],["per","سفراء الاستدامة والوعي البيئي",[11,11,11,10],[0,1]],
+ ["per","مهارات المستقبل",[11,11,11,10],[1,0]],["per","كن واعيًا",[11,11,11,10],[1,1]],["per","النادي الثقافي",[11,11,11,10],[1,1]],
+ ["per","الإرث والأمجاد",[11,11,11,10],[1,1]],["per","صانع الأثر",[6,6,6,5],[1,1]],["per","القيم",[20,20,20,20],[1,1]],["per","النسك",[4,4,4,3],[1,1]]
+];
+const ICONS=["بنك الإثراءات","التطوير الذاتي","قيمنا الغالية","نادي القراءة"];
+const SEMS=["الأول","الثاني","الثالث"];
+const DAYS=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس"];
+const GRADES={"ابتدائي":["الأول","الثاني","الثالث","الرابع","الخامس","السادس"],"متوسط":["الأول المتوسط","الثاني المتوسط","الثالث المتوسط"],"ثانوي":["الأول الثانوي","الثاني الثانوي","الثالث الثانوي"]};
+
+/* ===================== الحالة والتخزين ===================== */
+function blank(){ return {v:1, school:{name:"",admin:"",stage:"",gender:"",year:"1448",sem:"",leader:"",principal:"",dayPeriods:"7"},
+  teachers:[], entries:[], step:0}; }
+function load(){
+  let d=null; try{ d=JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){}
+  const b=blank(); if(!d||typeof d!=="object") return b;
+  for(const k in b) if(d[k]===undefined||d[k]===null) d[k]=b[k];
+  for(const k in b.school) if(d.school[k]===undefined) d.school[k]=b.school[k];
+  if(!Array.isArray(d.teachers)) d.teachers=[]; if(!Array.isArray(d.entries)) d.entries=[];
+  d.entries.forEach(e=>{ if(!e.card||typeof e.card!=="object") e.card={}; });
+  if(!(d.step>=0&&d.step<7)) d.step=0;
+  return d;
+}
+let S=load(), saveT=null;
+function save(){ clearTimeout(saveT); saveT=setTimeout(()=>{ try{ S.updated=new Date().toISOString(); localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){ alert("تعذر الحفظ: "+e.message); } renderBackupWarn(); markSteps(); },250); }
+
+/* ===================== أدوات ===================== */
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function uid(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4); }
+function num(v){ if(v==null) return null; const s=String(v).trim().replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[٫,]/g,".").replace(/[^\d.]/g,""); if(s==="") return null; const n=parseFloat(s); return isFinite(n)?n:null; }
+function fmt(n){ return n==null?"":String(Math.round(n*100)/100); }
+function getPath(p){ return p.split(".").reduce((o,k)=>o==null?undefined:o[k],S); }
+function setPath(p,v){ const ks=p.split("."); let o=S; for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null||typeof o[ks[i]]!=="object") o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=v; }
+function inp(p,ph,ex){ const v=getPath(p); return `<input data-k="${p}" value="${esc(v==null?"":v)}" placeholder="${esc(ph||"")}" ${ex||""}>`; }
+function sel(p,opts,ph){ const v=getPath(p)||""; return `<select data-k="${p}"><option value="">${esc(ph||"— اختر —")}</option>${opts.map(o=>{ const val=Array.isArray(o)?o[0]:o, lab=Array.isArray(o)?o[1]:o; return `<option value="${esc(val)}"${String(val)===String(v)?" selected":""}>${esc(lab)}</option>`; }).join("")}</select>`; }
+function ta(p,ph){ const v=getPath(p); return `<textarea data-k="${p}" placeholder="${esc(ph||"")}">${esc(v==null?"":v)}</textarea>`; }
+function field(l,h){ return `<div><label class="lb">${l}</label>${h}</div>`; }
+function domName(id){ const d=DOMS.find(x=>x.id===id); return d?d.name:id; }
+function stageGroups(){ const s=S.school.stage; return s==="ابتدائي"?[0,1]:s==="متوسط"?[2]:s==="ثانوي"?[3]:[]; }
+function libItem(name){ return LIB.find(x=>x[1]===name); }
+function sessOf(e){ const it=libItem(e.name); if(!it||e.kind==="comp") return e.sessions||""; const v=it[2][e.grp]; return v==null?"":String(v); }
+function sessNum(e){ const n=num(sessOf(e)); return n==null?0:n; }
+function yearLabel(){ const y=parseInt(num(S.school.year))||1448; return `${y} – ${y+1} هـ`; }
+function teacherName(id){ const t=S.teachers.find(x=>x.id===id); return t?t.name:""; }
+function cardDone(e){ const c=e.card||{}; return !!(c.participants && c.endDate); }
+
+/* ===================== الخطوات ===================== */
+const STEPS=[{t:"البيانات الأساسية",r:vBasic},{t:"المعلمون والحصص المتاحة",r:vTeachers},{t:"خطة البرامج والإسناد",r:vPlan},{t:"بطاقات التنفيذ",r:vCards},{t:"الربط بالمستهدفات",r:vLink},{t:"الجدول ونسبة النشاط",r:vSchedule},{t:"الطباعة",r:vPrint}];
+function stepDone(i){ switch(i){ case 0: return !!(S.school.name&&S.school.stage); case 1: return S.teachers.length>0; case 2: return S.entries.length>0; case 3: return S.entries.some(cardDone); default: return false; } }
+function markSteps(){ document.querySelectorAll(".step").forEach((b,i)=>{ b.classList.toggle("done",stepDone(i)); b.classList.toggle("active",i===S.step); }); }
+function renderSteps(){ document.getElementById("steps").innerHTML=STEPS.map((s,i)=>`<button class="step" data-step="${i}"><span class="n">${i+1}</span>${s.t}</button>`).join(""); markSteps(); }
+function go(i){ S.step=Math.max(0,Math.min(STEPS.length-1,i)); save(); render(); window.scrollTo({top:0,behavior:"smooth"}); }
+function navBtns(){ return `<div class="navbtns">${S.step>0?`<button class="btn light" data-go="${S.step-1}">→ السابق</button>`:"<span></span>"}${S.step<STEPS.length-1?`<button class="btn primary" data-go="${S.step+1}">التالي ←</button>`:""}</div>`; }
+function render(){ markSteps(); document.getElementById("view").innerHTML=STEPS[S.step].r()+navBtns(); document.querySelectorAll("[data-live]").forEach(updateLive); }
+
+/* ===================== 1) البيانات ===================== */
+function vBasic(){
+  const s="school.";
+  return `<div class="card"><h2>بيانات المدرسة والخطة</h2><div class="g g3">
+    ${field("اسم المدرسة",inp(s+"name"))}${field("إدارة التعليم",inp(s+"admin","مثال: الإدارة العامة للتعليم بالمنطقة الشرقية"))}
+    ${field("المرحلة",sel(s+"stage",["ابتدائي","متوسط","ثانوي"]))}${field("جنس المدرسة",sel(s+"gender",["بنين","بنات"]))}
+    ${field("العام الدراسي (هـ) — بداية العام",inp(s+"year","1448"))}${field("الفصل الدراسي",sel(s+"sem",SEMS))}
+    ${field("رائد/ة النشاط",inp(s+"leader"))}${field("مدير/ة المدرسة",inp(s+"principal"))}
+    </div><p class="hint" style="margin-top:10px">المرحلة تحدد البرامج المتاحة وعدد حصصها وفق دليل الخطط الدراسية (الإصدار السادس).</p></div>`;
+}
+
+/* ===================== 2) المعلمون ===================== */
+function avail(t){
+  const w=num(t.weekly), k=num(t.weeks), p=num(t.pct);
+  if(w!==null&&k!==null&&p!==null) return Math.floor(w*k*p/100);
+  return num(t.avail);
+}
+function used(tid){ return S.entries.filter(e=>e.teacher===tid).reduce((a,e)=>a+sessNum(e),0); }
+function vTeachers(){
+  return `<div class="card"><div class="row between"><h2 style="margin:0">المعلمون/ات والحصص المتاحة للنشاط</h2><button class="btn gold" data-act="tAdd">+ معلم/ة</button></div>
+  <p class="hint" style="margin-top:8px">يُحسب عدد الحصص التي يمكن الاستفادة منها تلقائيًا = (حصص المادة الأسبوعية × عدد أسابيع الفصل × النسبة %)، أو اكتبه مباشرة. ويُحسب المتبقي بعد إسناد البرامج.</p>
+  ${S.teachers.length?`<div class="scroll"><table class="tbl"><thead><tr><th>اسم المعلم/ة</th><th>مادة التدريس</th><th class="num">حصص المادة الأسبوعية</th><th class="num">أسابيع الفصل</th><th class="num">النسبة %</th><th class="num">أو العدد مباشرة</th><th class="num">المتاح</th><th class="num">المسند</th><th class="num">المتبقي</th><th></th></tr></thead><tbody>
+  ${S.teachers.map((t,i)=>`<tr><td>${inp(`teachers.${i}.name`)}</td><td>${inp(`teachers.${i}.subject`)}</td>
+    <td>${inp(`teachers.${i}.weekly`,"",'class="num" inputmode="numeric"')}</td><td>${inp(`teachers.${i}.weeks`,"",'class="num" inputmode="numeric"')}</td>
+    <td>${inp(`teachers.${i}.pct`,"5",'class="num" inputmode="numeric"')}</td><td>${inp(`teachers.${i}.avail`,"",'class="num" inputmode="numeric"')}</td>
+    <td class="num"><b data-live="avail" data-i="${i}"></b></td><td class="num" data-live="used" data-i="${i}"></td><td class="num" data-live="rem" data-i="${i}"></td>
+    <td class="num"><button class="btn danger" data-act="tDel" data-i="${i}">حذف</button></td></tr>`).join("")}</tbody></table></div>`:`<p class="hint">لم يُضف معلمون بعد.</p>`}</div>`;
+}
+
+/* ===================== 3) الخطة ===================== */
+function vPlan(){
+  const gs=stageGroups();
+  if(!gs.length) return `<div class="card"><p class="note">حدد المرحلة في «البيانات الأساسية» أولًا لتظهر البرامج المعتمدة لها.</p></div>`;
+  let h=`<div class="card"><h2>مكتبة البرامج المعتمدة — ${esc(gs.map(g=>GROUPS[g]).join(" / "))}</h2>
+    <p class="hint">اضغط «+» لإضافة البرنامج للخطة. عدد الحصص خلال العام الدراسي وفق دليل الخطط الدراسية، ولا يُعدَّل إلا بموافقة المركز الوطني للمناهج. (*) يتضمن ساعات إضافية خارج المدرسة.</p>`;
+  DOMS.forEach(d=>{
+    const items=LIB.filter(x=>x[0]===d.id && gs.some(g=>String(x[2][g])!=="0"));
+    if(!items.length) return;
+    h+=`<details class="dom"><summary>${d.name} <span class="pill">${items.length} برنامج</span></summary><div class="lib" style="margin-top:8px">
+      ${items.map(x=>{ const cnt=S.entries.filter(e=>e.name===x[1]).length; return `<div class="libi${cnt?" added":""}"><span><b>${esc(x[1])}</b><br><span class="s">${gs.map(g=>(gs.length>1?GROUPS[g]+": ":"")+x[2][g]+" حصص").join(" — ")}${cnt?` · مضاف ${cnt}`:""}</span></span><button class="btn light sm" data-act="eAdd" data-n="${esc(x[1])}">+</button></div>`; }).join("")}
+    </div></details>`;
+  });
+  h+=`<div class="row" style="margin-top:6px"><button class="btn light" data-act="cAdd">+ مسابقة نشاط</button><span class="hint" style="margin:0">المسابقة تُختار من المسابقات المعتمدة من المركز، وتُحدد حصص الإعداد والتأهيل لها.</span></div></div>`;
+  const tOpts=S.teachers.map(t=>[t.id,t.name||"(بدون اسم)"]);
+  h+=`<div class="card"><h2>برامج الخطة وإسنادها <span class="pill blue">${S.entries.length}</span></h2>
+    ${S.teachers.length?"":`<p class="note">أضف المعلمين في الخطوة السابقة ليظهروا في قائمة الإسناد.</p>`}`;
+  DOMS.concat([{id:"comp",name:"المسابقات"}]).forEach(d=>{
+    const es=S.entries.filter(e=>(d.id==="comp"?e.kind==="comp":e.kind!=="comp"&&e.dom===d.id)); if(!es.length) return;
+    h+=`<h3>${d.name}</h3>`;
+    es.forEach(e=>{ const i=S.entries.indexOf(e);
+      h+=`<div class="ent"><div class="g g4" style="align-items:end">
+        ${e.kind==="comp"?field("اسم المسابقة",inp(`entries.${i}.name`)):field("البرنامج",`<input value="${esc(e.name)}" disabled>`)}
+        ${e.kind==="comp"?field("المجال",sel(`entries.${i}.dom`,DOMS.filter(x=>x.id!=="per"&&x.id!=="day").map(x=>[x.id,x.name]))):(gs.length>1?field("الصفوف",sel(`entries.${i}.grp`,gs.map(g=>[g,GROUPS[g]]))):field("المجال",`<input value="${esc(domName(e.dom))}" disabled>`))}
+        ${e.kind==="comp"?field("حصص الإعداد والتأهيل",inp(`entries.${i}.sessions`,"",'inputmode="numeric"')):field("عدد حصص البرنامج",`<input value="${esc(sessOf(e))}" disabled data-live="sess" data-i="${i}">`)}
+        ${field("الصف / الفصل",inp(`entries.${i}.cls`,"مثال: 2/1"))}
+        ${field("المعلم/ة المنفذ/ة",tOpts.length?sel(`entries.${i}.teacher`,tOpts):`<input disabled placeholder="أضف المعلمين أولًا">`)}
+        ${field("تاريخ بداية التنفيذ",inp(`entries.${i}.start`,"1448/  /  هـ"))}
+        ${field("الفصل الدراسي",sel(`entries.${i}.sem`,SEMS,S.school.sem||"— الفصل —"))}
+        <div class="row" style="justify-content:flex-end">${cardDone(e)?'<span class="pill">✔ بطاقة مكتملة</span>':""}<button class="btn danger" data-act="eDel" data-i="${i}">حذف</button></div>
+      </div></div>`; });
+  });
+  if(!S.entries.length) h+=`<p class="hint">لم تُضف برامج بعد.</p>`;
+  return h+`</div>`;
+}
+
+/* ===================== 4) بطاقات التنفيذ ===================== */
+let OPEN_CARD=null;
+function vCards(){
+  if(!S.entries.length) return `<div class="card"><p class="note">أضف البرامج في «خطة البرامج والإسناد» أولًا.</p></div>`;
+  let h=`<div class="card"><h2>بطاقات التنفيذ</h2><p class="hint">تُعبأ البطاقة عند استكمال الحصص المخصصة للبرنامج (أو لإعداد وتأهيل الطلاب للمسابقة) وفق دليل الخطط الدراسية/الإصدار السادس. البيانات الأساسية تُنقل من الخطة تلقائيًا.</p>
+    <div class="scroll"><table class="tbl"><thead><tr><th>البرنامج / المسابقة</th><th>النوع</th><th>الصف</th><th>المعلم/ة</th><th class="num">الحالة</th><th></th></tr></thead><tbody>
+    ${S.entries.map((e,i)=>`<tr><td><b>${esc(e.name||"—")}</b></td><td>${e.kind==="comp"?"مسابقة":"برنامج"}</td><td>${esc(e.cls||"")}</td><td>${esc(teacherName(e.teacher))}</td>
+      <td class="num">${cardDone(e)?'<span class="pill">✔ مكتملة</span>':'<span class="pill warn">لم تُعبأ</span>'}</td>
+      <td class="num"><button class="btn light sm" data-act="cOpen" data-i="${i}">${OPEN_CARD===i?"إغلاق":"تعبئة"}</button> <button class="btn light sm" data-act="cPrint" data-i="${i}">🖨️</button></td></tr>`).join("")}
+    </tbody></table></div></div>`;
+  if(OPEN_CARD!==null && S.entries[OPEN_CARD]){
+    const i=OPEN_CARD, e=S.entries[i], c=`entries.${i}.card.`;
+    h+=`<div class="card"><h2>${e.kind==="comp"?"بطاقة تنفيذ مسابقة نشاط طلابي":"بطاقة تنفيذ برنامج نشاط طلابي"}: ${esc(e.name)}</h2>
+      <div class="g g4">
+        ${field("بداية التنفيذ — اليوم",sel(c+"startDay",DAYS))}${field("الأسبوع",inp(c+"startWeek"))}${field("التاريخ",inp(c+"startDate",e.start||"1448/  /  "))}<div></div>
+        ${field("نهاية التنفيذ — اليوم",sel(c+"endDay",DAYS))}${field("الأسبوع",inp(c+"endWeek"))}${field("التاريخ",inp(c+"endDate","1448/  /  "))}<div></div>
+      </div>
+      <div class="g g4" style="margin-top:12px">
+        ${field(e.kind==="comp"?"عدد الطلبة المشاركين في المسابقة":"عدد الطلبة المشاركين",inp(c+"participants","",'inputmode="numeric"'))}
+        ${field("عدد الطلبة المشاركين من ذوي الإعاقة",inp(c+"disabled","",'inputmode="numeric"'))}
+        ${field(e.kind==="comp"?"عدد أولياء الأمور المشاركين في المسابقة":"عدد أولياء الأمور المشاركين في البرنامج",inp(c+"parents","",'inputmode="numeric"'))}
+        ${field("عدد الشراكات المجتمعية",inp(c+"partnerCount","",'inputmode="numeric"'))}
+        ${e.kind==="comp"?field("عدد الفائزين",inp(c+"winners","",'inputmode="numeric"'))+field("عدد الطلبة المتأهلين للمرحلة المقبلة",inp(c+"qualified","",'inputmode="numeric"'))+field("عدد الجوائز",inp(c+"prizes","",'inputmode="numeric"')):field("أيقونة التنفيذ عند المشاركة عبر منصة مدرستي",sel(c+"icon",ICONS))}
+      </div>
+      <div class="g g2" style="margin-top:12px">${field("أسماء الشراكات المجتمعية",ta(c+"partnerNames"))}${e.kind==="comp"?field("نواتج المسابقة",ta(c+"outcomes")):""}${field("ملاحظات",ta(c+"notes"))}</div>
+      <div class="row" style="margin-top:12px"><button class="btn primary" data-act="cPrint" data-i="${i}">🖨️ طباعة البطاقة</button></div></div>`;
+  }
+  return h;
+}
+
+/* ===================== 5) الربط بالمستهدفات ===================== */
+function vLink(){
+  const names=[...new Set(S.entries.filter(e=>e.kind!=="comp").map(e=>e.name))];
+  return `<div class="card"><h2>نموذج ربط برامج النشاط الطلابي بالمستهدفات</h2>
+    <p class="hint">يوضح النموذج المستهدفات التي يسهم فيها كل برنامج، كما وردت في نموذج الوزارة 1448هـ. يمكن طباعة البرامج المختارة في خطتك فقط أو النموذج كاملًا من خطوة «الطباعة».</p>
+    ${names.length?`<div class="scroll"><table class="tbl"><thead><tr><th>البرنامج</th>${TARGETS.map(t=>`<th class="num" style="font-size:11.5px">${t.replace("يساهم في ","")}</th>`).join("")}</tr></thead><tbody>
+    ${names.map(n=>{ const it=libItem(n); return `<tr><td><b>${esc(n)}</b></td>${TARGETS.map((t,k)=>`<td class="num">${it&&(k<5||it[3][k-5])?"✓":""}</td>`).join("")}</tr>`; }).join("")}</tbody></table></div>`:`<p class="hint">لا توجد برامج في الخطة بعد.</p>`}</div>`;
+}
+
+/* ===================== 6) الجدول ونسبة النشاط ===================== */
+function vSchedule(){
+  const per=num(S.school.dayPeriods)||7, week=per*5, min=Math.ceil(week*0.1);
+  return `<div class="card"><h2>الجدول المدرسي ونسبة النشاط — تلميحات</h2>
+    <p class="hint">الجدول المدرسي يُبنى في نظام نور أو برنامج الجداول المعتمد لدى المدرسة. هذه الضوابط من دليل الخطط الدراسية (الإصدار السادس) لتراعيها عند إعداد الجدول:</p>
+    <ul style="margin:0 0 10px;padding-inline-start:20px;font-size:13.5px">
+      <li>تخصص المدرسة <b>ما لا يقل عن 10%</b> من الجدول الأسبوعي لبرامج النشاط الطلابي.</li>
+      <li>تستثمر المدرسة الحصص المتاحة الناتجة عن تطبيق <b>الحد الأدنى</b> لعدد حصص المواد لتخصيصها لحصص النشاط ضمن الجدول، على ألا تتجاوز <b>10% من الحد الأعلى</b> المعتمد لكل مادة.</li>
+      <li>يصمم الجدول بعدد حصص بين (6–7) حصص يوميًا، ويُخصص في اليوم الدراسي فترات لاصفية لا تقل في مجموعها عن ساعة يوميًا.</li>
+      <li>للمدرسة تطبيق حصص مرنة لبرامج النشاط تمتد إلى حصتين متتاليتين في اليوم الدراسي.</li>
+      <li>يلتزم المعلم بتنفيذ حصص المواد الدراسية والنشاط المسندة له من قبل مدير المدرسة في نظام نور.</li>
+      <li>يُحتسب الزمن المخصص لتنفيذ برامج الفترات اللاصفية ضمن النصاب الأسبوعي للمعلم، بجمع الزمن المنفذ فعليًا واحتسابه بما يعادل حصة دراسية واحدة.</li>
+    </ul></div>
+  <div class="card"><h2>حاسبة الحد الأدنى لحصص النشاط</h2>
+    <div class="g g3">${field("عدد الحصص اليومية",sel("school.dayPeriods",["6","7"]))}<div><label class="lb">حصص الجدول الأسبوعي (5 أيام)</label><b style="font-size:20px">${week}</b></div><div><label class="lb">الحد الأدنى لحصص النشاط أسبوعيًا (10%)</label><b style="font-size:20px;color:#13824a">${min} حصص</b></div></div></div>
+  <div class="card"><h2>طريقة توضيح النشاط في الجدول</h2>
+    <p class="hint">كما في قالب خطة النشاط المقترح: اكتب في خانة الحصة اسم البرنامج ورقم الحصة منه، والصف/الفصل، واسم المعلم/ة، وميّز الحصة المأخوذة من نسبة حصص المادة بالرمز (5–10%) ليتضح مصدرها عند المتابعة.</p>
+    <div class="row" style="gap:14px">
+      <div class="example"><div class="t">الذكاء الاصطناعي ٣</div><div>٢/٣</div><div>أ/ اسم المعلم <span class="p">5–10%</span></div></div>
+      <div class="example"><div class="t">الرياضات الذهنية ١</div><div>١/٢</div><div>أ/ اسم المعلم</div></div>
+      <div class="example" style="background:#fff8e8"><div class="t">اليوم الوطني</div><div>تفعيل يوم كامل</div><div>إضافة للحصص المعتمدة</div></div>
+    </div>
+    <ul style="margin:12px 0 0;padding-inline-start:20px;font-size:13px">
+      <li><b>رقم الحصة</b> (١، ٢، ٣…) يوضح التقدم في البرنامج حتى اكتمال عدد حصصه، وعندها تُعبأ بطاقة التنفيذ.</li>
+      <li><b>(5–10%)</b> تعني أن الحصة من الحصص المتاحة من المادة، وتُخصم من «المتاح» للمعلم في جدول الإسناد.</li>
+      <li>اليوم الوطني ويوم التأسيس: تخصص المدارس يومًا دراسيًا كاملًا للاحتفاء بهما، إضافةً إلى الحصص المعتمدة ضمن خطة النشاط.</li>
+    </ul></div>`;
+}
+
+/* ===================== 7) الطباعة ===================== */
+function vPrint(){
+  const done=S.entries.filter(cardDone).length;
+  return `<div class="card"><h2>الطباعة</h2><div class="g g2">
+    <label class="row" style="font-weight:700"><input type="checkbox" id="pPlan" checked style="width:auto"> خطة برامج النشاط الطلابي (الهدف العام والمجالات والبرامج)</label>
+    <label class="row" style="font-weight:700"><input type="checkbox" id="pAssign" checked style="width:auto"> جدول إسناد برامج النشاط للمعلمين/ات</label>
+    <label class="row" style="font-weight:700"><input type="checkbox" id="pLink" checked style="width:auto"> نموذج ربط البرامج بالمستهدفات</label>
+    <div>${sel("_linkScope",[["mine","البرامج المختارة في الخطة"],["all","النموذج كاملًا (جميع البرامج)"]],"— نطاق نموذج الربط —")}</div>
+    <label class="row" style="font-weight:700"><input type="checkbox" id="pCards" style="width:auto"> بطاقات التنفيذ المكتملة (${done})</label>
+    <label class="row" style="font-weight:700"><input type="checkbox" id="pBlank" style="width:auto"> بطاقة برنامج فارغة + بطاقة مسابقة فارغة</label>
+  </div><div class="row" style="margin-top:14px"><button class="btn primary" data-act="doPrint">🖨️ طباعة / حفظ PDF</button></div></div>
+  <div class="card"><h2>إدارة البيانات</h2><p class="hint">البيانات محفوظة في متصفح هذا الجهاز فقط. صدّر نسخة احتياطية بانتظام.</p>
+    <div class="row"><button class="btn gold" data-act="backup">💾 النسخ الاحتياطي ونقل البيانات</button><button class="btn danger" data-act="reset" style="padding:9px 14px">مسح جميع بيانات الأداة</button></div></div>`;
+}
+function P(v){ return esc(v==null?"":v); }
+function hdr(){
+  const s=S.school, lines=["المملكة العربية السعودية","وزارة التعليم"]; if(s.admin) lines.push(s.admin); lines.push("مدرسة: "+(s.name||".................."));
+  return `<div class="ph"><div class="r">${lines.map(esc).join("<br>")}</div><img src="${LOGO}" alt="وزارة التعليم"><div class="l">العام الدراسي<br>${yearLabel()}</div></div>`;
+}
+function semLabel(){ return S.school.sem||"........"; }
+function sigs(){ return `<div class="sig"><span>رائد/ة النشاط: ${P(S.school.leader)||"........................."}</span><span>مدير/ة المدرسة: ${P(S.school.principal)||"........................."}</span></div>`; }
+function printPlan(){
+  const gs=stageGroups();
+  let h=`<section class="pg land">${hdr()}<h1>خطة برامج النشاط الطلابي للفصل الدراسي ${esc(semLabel())}</h1>
+    <div class="goal"><b>الهدف العام:</b> ${GENERAL_GOAL}</div><h2>مجالات الأنشطة الطلابية</h2>
+    <div class="doms">${DOMS.filter(d=>d.goal).map(d=>`<div><b>${d.name}</b>${d.goal}</div>`).join("")}</div>${sigs()}</section>`;
+  h+=`<section class="pg land">${hdr()}<h1>برامج النشاط الطلابي — ${esc(gs.map(g=>GROUPS[g]).join(" / ")||"المرحلة ....")}</h1>
+    <table><thead><tr><th style="width:13%">المجال</th><th>البرنامج</th><th style="width:9%">عدد الحصص</th><th style="width:11%">الصف</th><th style="width:20%">المعلم/ة المنفذ/ة</th><th style="width:13%">بداية التنفيذ</th></tr></thead><tbody>`;
+  DOMS.concat([{id:"comp",name:"المسابقات"}]).forEach(d=>{
+    const es=S.entries.filter(e=>(d.id==="comp"?e.kind==="comp":e.kind!=="comp"&&e.dom===d.id)); if(!es.length) return;
+    es.forEach((e,i)=>{ h+=`<tr>${i===0?`<td rowspan="${es.length}" class="c"><b>${d.name}</b></td>`:""}<td>${P(e.name)}</td><td class="c">${P(sessOf(e))}</td><td class="c">${P(e.cls)}</td><td>${P(teacherName(e.teacher))}</td><td class="c">${P(e.start)}</td></tr>`; });
+  });
+  if(!S.entries.length) h+=`<tr><td colspan="6" class="c">لا توجد برامج</td></tr>`;
+  return h+`</tbody></table>${sigs()}</section>`;
+}
+function printAssign(){
+  let rows="";
+  S.teachers.forEach(t=>{ const es=S.entries.filter(e=>e.teacher===t.id), a=avail(t), n=Math.max(es.length,1);
+    let rem=a; (es.length?es:[null]).forEach((e,i)=>{ if(e) rem=a==null?null:rem-sessNum(e);
+      rows+=`<tr>${i===0?`<td rowspan="${n}">${P(t.name)}</td><td rowspan="${n}" class="c">${P(t.subject)}</td><td rowspan="${n}" class="c">${a==null?"":a}</td>`:""}
+        <td>${e?P(e.name):""}</td><td class="c">${e?P(sessOf(e)):""}</td><td class="c">${e?P(e.start):""}</td><td class="c">${e&&rem!=null?fmt(rem):""}</td></tr>`; }); });
+  return `<section class="pg land">${hdr()}<h1>جدول إسناد برامج النشاط للمعلمين/ات بعد احتساب الـ 5 - 10٪ من حصص المواد</h1>
+    <table><thead><tr><th>اسم المعلم/ة</th><th>مادة التدريس</th><th style="width:12%">عدد الحصص التي يمكن الاستفادة منها</th><th>اسم البرنامج المسند للمعلم/ة</th><th style="width:9%">عدد حصص البرنامج</th><th style="width:12%">تاريخ بداية التنفيذ</th><th style="width:10%">المتبقي بعد التنفيذ</th></tr></thead>
+    <tbody>${rows||`<tr><td colspan="7" class="c">لا يوجد معلمون</td></tr>`}</tbody></table>${sigs()}</section>`;
+}
+function printLink(scope){
+  const mine=new Set(S.entries.filter(e=>e.kind!=="comp").map(e=>e.name));
+  const list=LIB.filter(x=>scope==="all"||mine.has(x[1]));
+  let rows="";
+  DOMS.forEach(d=>{ const its=list.filter(x=>x[0]===d.id); its.forEach((x,i)=>{ rows+=`<tr>${i===0?`<td rowspan="${its.length}" class="d">${d.name}</td>`:""}<td class="p">${esc(x[1])}</td>${TARGETS.map((t,k)=>`<td>${k<5||x[3][k-5]?"✓":""}</td>`).join("")}</tr>`; }); });
+  return `<section class="pg land">${hdr()}<h1>نموذج ربط برامج النشاط الطلابي بالمستهدفات</h1><p style="text-align:center;margin:0 0 6px;font-weight:800">${esc(String(parseInt(num(S.school.year))||1448))} هـ</p>
+    <table class="mx"><thead><tr><th rowspan="2" style="width:10%">مجال النشاط</th><th rowspan="2" style="width:20%">البرنامج</th><th colspan="7">مستهدفات البرنامج</th></tr>
+    <tr>${TARGETS.map(t=>`<th>${t}</th>`).join("")}</tr></thead><tbody>${rows||`<tr><td colspan="9">لا توجد برامج</td></tr>`}</tbody></table></section>`;
+}
+function dt(c,p){ return `<td class="sub">اليوم: ${P(c[p+"Day"])}</td><td class="sub">الأسبوع: ${P(c[p+"Week"])}</td><td class="sub">التاريخ: ${P(c[p+"Date"])||"&nbsp;&nbsp;/&nbsp;&nbsp;/1448"}هـ</td>`; }
+function cardHead(t){ return `<div class="cardhd"><h1>${t}</h1><img src="${LOGO}" alt="وزارة التعليم"></div>`; }
+function cardSigs(e){ return `<div class="sigs"><div>المعلم/ة المنفذ/ة<br>الاسم: ${P(e?teacherName(e.teacher):"")}<br>التاريخ:<br>التوقيع:</div><div>رائد/ة النشاط<br>الاسم: ${P(S.school.leader)}<br>التاريخ:<br>التوقيع:</div></div>`; }
+function printProgCard(e){
+  const c=(e&&e.card)||{}; e=e||{};
+  return `<section class="pg"><div class="cardpg">${cardHead("بطاقة تنفيذ برنامج نشاط طلابي*")}
+  <table class="ec">
+  <tr><td class="l">اسم البرنامج</td><td colspan="3">${P(e.name)}</td></tr>
+  <tr><td class="l">المجال</td><td colspan="3">${P(e.dom?domName(e.dom):"")}</td></tr>
+  <tr><td class="l">عدد حصص البرنامج</td><td colspan="3">${e.name?P(sessOf(e)):""}</td></tr>
+  <tr><td class="l">الفصل الدراسي</td><td colspan="3">${P(e.sem||(e.name?S.school.sem:""))}</td></tr>
+  <tr><td class="l">بداية التنفيذ</td>${dt(c,"start")}</tr>
+  <tr><td class="l">نهاية التنفيذ</td>${dt(c,"end")}</tr>
+  <tr><td class="l">الصف</td><td colspan="3">${P(e.cls)}</td></tr>
+  <tr><td class="l">المعلم/ة المنفذ/ة</td><td colspan="3">${P(teacherName(e.teacher))}</td></tr>
+  <tr><td class="l">عدد الطلبة المشاركين</td><td colspan="3">${P(c.participants)}</td></tr>
+  <tr><td class="l">عدد الطلبة المشاركين من ذوي الإعاقة</td><td colspan="3">${P(c.disabled)}</td></tr>
+  <tr><td class="l">عدد أولياء الأمور المشاركين في البرنامج</td><td>${P(c.parents)}</td><td class="sub">عند تنفيذ المشاركة عبر منصة مدرستي ماهي أيقونة التنفيذ:</td><td style="font-size:9.5pt">${ICONS.map(x=>`<span class="cb"><i>${c.icon===x?"✓":""}</i>${x}</span>`).join("<br>")}</td></tr>
+  <tr><td class="l">عدد الشراكات المجتمعية</td><td>${P(c.partnerCount)}</td><td class="sub">أسماء الشراكات المجتمعية</td><td>${P(c.partnerNames)}</td></tr>
+  <tr><td class="l">ملاحظات</td><td colspan="3" style="height:16mm">${P(c.notes)}</td></tr>
+  </table>${cardSigs(e.name?e:null)}
+  <div class="fnote">• يتم تعبئة هذه البطاقة عند استكمال الحصص المخصصة للبرنامج وفق ما ورد للبرنامج من حصص في دليل الخطط الدراسية /الإصدار السادس.</div></div></section>`;
+}
+function printCompCard(e){
+  const c=(e&&e.card)||{}; e=e||{};
+  return `<section class="pg"><div class="cardpg">${cardHead("بطاقة تنفيذ مسابقة نشاط طلابي *")}
+  <table class="ec">
+  <tr><td class="l">اسم المدرسة</td><td colspan="3">${P(S.school.name)}</td></tr>
+  <tr><td class="l">اسم المسابقة</td><td colspan="3">${P(e.name)}</td></tr>
+  <tr><td class="l">المجال</td><td colspan="3">${P(e.dom?domName(e.dom):"")}</td></tr>
+  <tr><td class="l">عدد الحصص للإعداد والتأهيل للمسابقة</td><td colspan="3">${P(e.sessions)}</td></tr>
+  <tr><td class="l">الفصل الدراسي</td><td colspan="3">${P(e.sem||(e.name?S.school.sem:""))}</td></tr>
+  <tr><td class="l">بداية التنفيذ</td>${dt(c,"start")}</tr>
+  <tr><td class="l">نهاية التنفيذ</td>${dt(c,"end")}</tr>
+  <tr><td class="l">الصف</td><td colspan="3">${P(e.cls)}</td></tr>
+  <tr><td class="l">المعلم/ة المنفذ/ة</td><td colspan="3">${P(teacherName(e.teacher))}</td></tr>
+  <tr><td class="l">عدد الطلبة المشاركين في المسابقة</td><td>${P(c.participants)}</td><td class="sub">عدد الفائزين</td><td>${P(c.winners)}</td></tr>
+  <tr><td class="l">عدد الطلبة المتأهلين للمرحلة المقبلة</td><td>${P(c.qualified)}</td><td class="sub">عدد الجوائز</td><td>${P(c.prizes)}</td></tr>
+  <tr><td class="l">عدد أولياء الأمور المشاركين في المسابقة</td><td>${P(c.parents)}</td><td class="sub">عدد الطلبة المشاركين من ذوي الإعاقة</td><td>${P(c.disabled)}</td></tr>
+  <tr><td class="l">عدد الشراكات المجتمعية</td><td>${P(c.partnerCount)}</td><td class="sub">أسماء الشراكات المجتمعية</td><td>${P(c.partnerNames)}</td></tr>
+  <tr><td class="l">نواتج المسابقة</td><td colspan="3" style="height:16mm">${P(c.outcomes)}</td></tr>
+  <tr><td class="l">ملاحظات</td><td colspan="3" style="height:14mm">${P(c.notes)}</td></tr>
+  </table>${cardSigs(e.name?e:null)}
+  <div class="fnote">• يتم تعبئة هذه البطاقة عند استكمال الحصص المخصصة لإعداد وتأهيل الطلاب للمسابقة وفق ما ورد في دليل الخطط الدراسية /الإصدار السادس.</div></div></section>`;
+}
+function cardOf(e){ return e&&e.kind==="comp"?printCompCard(e):printProgCard(e); }
+function doPrint(parts){ const h=parts.join(""); if(!h){ alert("اختر جزءًا واحدًا على الأقل للطباعة."); return; } document.getElementById("printArea").innerHTML=h; document.body.classList.add("printing"); setTimeout(()=>window.print(),80); }
+window.addEventListener("afterprint",()=>{ document.body.classList.remove("printing"); document.getElementById("printArea").innerHTML=""; });
+function printSelected(){
+  const on=id=>{ const e=document.getElementById(id); return e&&e.checked; }, parts=[];
+  if(on("pPlan")) parts.push(printPlan());
+  if(on("pAssign")) parts.push(printAssign());
+  if(on("pLink")) parts.push(printLink(S._linkScope==="all"?"all":"mine"));
+  if(on("pCards")) S.entries.filter(cardDone).forEach(e=>parts.push(cardOf(e)));
+  if(on("pBlank")){ parts.push(printProgCard(null)); parts.push(printCompCard(null)); }
+  doPrint(parts);
+}
+
+/* ===================== النسخ الاحتياطي ===================== */
+function hasData(){ return !!(S.school.name||S.entries.length||S.teachers.length); }
+function renderBackupWarn(){
+  const box=document.getElementById("backupWarn"); if(!box) return;
+  let last=null; try{ last=localStorage.getItem("portal_lastBackup_activity")||localStorage.getItem("portal_lastBackup_all"); }catch(e){}
+  const stale=hasData()&&(!last||(Date.now()-new Date(last).getTime())/86400000>=14);
+  box.innerHTML=stale?`<div class="warnbar">⚠️ ${last?"مضى أكثر من 14 يومًا على آخر نسخة احتياطية.":"لم تصدّر نسخة احتياطية لهذه الأداة بعد."} البيانات محفوظة في متصفح هذا الجهاز فقط.<button class="btn gold sm" data-act="backup">تصدير نسخة الآن</button></div>`:"";
+}
+function toast(m){ const t=document.getElementById("pnToast"); if(t){ t.textContent=m; t.classList.add("show"); clearTimeout(toast._h); toast._h=setTimeout(()=>t.classList.remove("show"),3000); } }
+function updateLive(el){
+  const k=el.getAttribute("data-live"), i=+el.getAttribute("data-i"), t=S.teachers[i];
+  if(k==="avail"){ const a=t?avail(t):null; el.textContent=a==null?"":a; }
+  else if(k==="used"){ el.textContent=t?used(t.id):""; }
+  else if(k==="rem"){ const a=t?avail(t):null; if(a==null){ el.innerHTML=""; return; } const r=a-used(t.id); el.innerHTML=`<span class="pill${r<0?" warn":""}">${r}</span>`; }
+  else if(k==="sess"){ const e=S.entries[i]; if(e) el.value=sessOf(e); }
+}
+
+/* ===================== الأحداث ===================== */
+const view=document.getElementById("app");
+function onField(e){
+  const t=e.target, k=t.getAttribute&&t.getAttribute("data-k"); if(!k) return;
+  setPath(k,/\.grp$/.test(k)?(t.value===""?"":+t.value):t.value);
+  document.querySelectorAll("[data-live]").forEach(updateLive); save();
+  if(e.type==="change"&&(k==="school.stage"||k==="school.dayPeriods"||/\.teacher$/.test(k))) render();
+}
+view.addEventListener("input",onField); view.addEventListener("change",onField);
+document.getElementById("steps").addEventListener("click",e=>{ const b=e.target.closest("[data-step]"); if(b) go(+b.getAttribute("data-step")); });
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]"); if(g){ go(+g.getAttribute("data-go")); return; }
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const a=b.getAttribute("data-act"), i=+b.getAttribute("data-i");
+  switch(a){
+    case "tAdd": S.teachers.push({id:uid(),name:"",subject:"",weekly:"",weeks:"",pct:"5",avail:""}); break;
+    case "tDel": if(!confirm("حذف المعلم/ة؟ ستبقى البرامج المسندة له بدون معلم.")) return; { const id=S.teachers[i].id; S.entries.forEach(x=>{ if(x.teacher===id) x.teacher=""; }); S.teachers.splice(i,1); } break;
+    case "eAdd": { const n=b.getAttribute("data-n"), it=libItem(n), gs=stageGroups(); const grp=gs.find(g=>String(it[2][g])!=="0"); S.entries.push({id:uid(),kind:it[0]==="per"?"per":"prog",dom:it[0],name:n,grp:grp==null?gs[0]:grp,cls:"",teacher:"",start:"",sem:"",card:{}}); toast("أُضيف: "+n); break; }
+    case "cAdd": S.entries.push({id:uid(),kind:"comp",dom:"",name:"",sessions:"",cls:"",teacher:"",start:"",sem:"",card:{}}); break;
+    case "eDel": if(!confirm("حذف البرنامج من الخطة مع بطاقة تنفيذه؟")) return; S.entries.splice(i,1); OPEN_CARD=null; break;
+    case "cOpen": OPEN_CARD=OPEN_CARD===i?null:i; break;
+    case "cPrint": doPrint([cardOf(S.entries[i])]); return;
+    case "doPrint": printSelected(); return;
+    case "backup": if(window.PN) PN.open(); return;
+    case "reset": if(!confirm("حذف جميع بيانات هذه الأداة من هذا الجهاز؟ هل صدّرت نسخة احتياطية؟")) return; if(!confirm("تأكيد نهائي؟")) return; localStorage.removeItem(KEY); S=blank(); render(); renderBackupWarn(); return;
+    default: return;
+  }
+  save(); render();
+});
+renderSteps(); render(); renderBackupWarn();
+</script>
+<!-- ===== PORTAL NAV & BACKUP v1 (شريط التنقل والنسخ الاحتياطي الموحّد) ===== -->
+<style>
+.pn-bar{position:relative;z-index:900;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:0;padding:8px 14px;background:#0b3d2e;color:#fff;direction:rtl;
+  font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;font-size:14px;line-height:1.4;
+  box-shadow:0 2px 10px rgba(0,0,0,.15);}
+.pn-bar *{box-sizing:border-box;}
+.pn-home{display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-weight:800;
+  padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);}
+.pn-home:hover,.pn-home:focus-visible{background:rgba(255,255,255,.22);outline:none;}
+.pn-home svg,.pn-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;}
+.pn-sec{display:flex;align-items:center;gap:6px;flex:1;min-width:200px;}
+.pn-sec label{opacity:.8;font-size:12.5px;white-space:nowrap;}
+.pn-sec select{flex:1;max-width:330px;font:inherit;font-size:13.5px;font-weight:700;color:#0b3d2e;background:#fff;
+  border:0;border-radius:8px;padding:6px 10px;cursor:pointer;}
+.pn-btn{position:relative;display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:800;color:#0b3d2e;
+  background:#f4c95d;border:0;border-radius:8px;padding:7px 13px;cursor:pointer;}
+.pn-btn:hover,.pn-btn:focus-visible{background:#ffd978;outline:2px solid #fff;outline-offset:1px;}
+.pn-btn .pn-dot{position:absolute;top:-4px;left:-4px;width:11px;height:11px;border-radius:50%;background:#d93a2b;border:2px solid #0b3d2e;display:none;}
+.pn-btn.warn .pn-dot{display:block;}
+@media (max-width:600px){ .pn-sec label{display:none;} .pn-btn .pn-t{display:none;} }
+
+.pn-ov{position:fixed;inset:0;z-index:9500;background:rgba(10,30,22,.55);display:none;align-items:flex-start;justify-content:center;
+  padding:5vh 12px;overflow:auto;direction:rtl;font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;}
+.pn-ov.open{display:flex;}
+.pn-modal{background:#fff;color:#1b2a24;width:100%;max-width:620px;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.3);
+  font-size:14.5px;line-height:1.75;overflow:hidden;}
+.pn-mh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#0b3d2e;color:#fff;}
+.pn-mh h2{margin:0;font-size:17px;}
+.pn-x{background:none;border:0;color:#fff;font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:6px;}
+.pn-x:hover{background:rgba(255,255,255,.15);}
+.pn-mb{padding:16px 18px 18px;}
+.pn-steps{margin:0 0 14px;padding:10px 14px 10px 10px;background:#f2f8f5;border-radius:10px;border-inline-start:4px solid #178a5a;font-size:13.5px;}
+.pn-steps ol{margin:4px 0 0;padding-inline-start:20px;}
+.pn-box{border:1px solid #d7e6de;border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+.pn-box h3{margin:0 0 4px;font-size:15px;color:#0b3d2e;}
+.pn-meta{font-size:12.5px;color:#5d6b65;margin-bottom:8px;}
+.pn-meta b{color:#1b2a24;}
+.pn-sum{font-size:13px;margin:0 0 10px;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px;}
+.pn-sum li{background:#eef5f1;border-radius:20px;padding:2px 10px;}
+.pn-acts{display:flex;gap:8px;flex-wrap:wrap;}
+.pn-acts button,.pn-acts label{font:inherit;font-size:13.5px;font-weight:800;border-radius:8px;padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.pn-exp{background:#13704b;color:#fff;border:0;}
+.pn-exp:hover{background:#0f5c3f;}
+.pn-imp{background:#fff;color:#13704b;border:1.5px solid #13704b;}
+.pn-imp:hover{background:#f2f8f5;}
+.pn-imp input{display:none;}
+.pn-note{font-size:13px;color:#5d6b65;margin:0;}
+.pn-warn{font-size:13px;color:#a3312a;background:#fbeceb;border-radius:8px;padding:6px 10px;margin:0 0 10px;}
+.pn-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9800;background:#0b3d2e;color:#fff;
+  padding:11px 20px;border-radius:30px;font-family:'Tajawal',Tahoma,sans-serif;font-weight:700;font-size:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s;}
+.pn-toast.show{opacity:1;}
+@media print{ .pn-bar,.pn-ov,.pn-toast{display:none !important;} }
+</style>
+<script>
+(function(){
+  "use strict";
+  var PAGE = "activity";
+  var APP = "school-tools-portal";
+  var SECTIONS = [
+    {id:"positive",   href:"positive.html",   title:"محلل السلوك المتميز", keys:[]},
+    {id:"attendance", href:"attendance.html", title:"محلل الغياب", keys:[]},
+    {id:"violations", href:"violations.html", title:"محلل المخالفات", keys:["VIOL_"]},
+    {id:"forms",      href:"behavior-attendance-forms.html", title:"نماذج السلوك والمواظبة", keys:["moe_"]},
+    {id:"grades",     href:"grades.html",     title:"تحليل النتائج", keys:[], disabled:true},
+    {id:"committees", href:"committees.html", title:"اللجان والتكليفات", keys:["SCV2"]},
+    {id:"jobs",       href:"job-description.html", title:"الوصف الوظيفي للتشكيلات المدرسية", keys:["JOBDESC_"]},
+    {id:"improvement", href:"improvement-plan.html", title:"تحليل الواقع وخطة التحسين", keys:["IMPPLAN_"]},
+    {id:"activity", href:"activity-plan.html", title:"خطة النشاط الطلابي وبطاقات التنفيذ", keys:["ACTPLAN_"]}
+  ];
+  var ALL_PREFIXES = ["moe_","SCV2","JOBDESC_","VIOL_","IMPPLAN_","ACTPLAN_"];
+  var LABELS = {
+    moe_behavior_records_v1:"مخالفة سلوكية", moe_absence_records_v1:"سجل غياب",
+    moe_compensation_records_v1:"فرصة تعويض", moe_roster_v1:"طالب مستورد من نور",
+    JOBDESC_V1:"وصف وظيفي", JOBDESC_PRINTLOG_V1:"عملية طباعة"
+  };
+  var REMIND_DAYS = 14;
+  var cur = SECTIONS.filter(function(s){return s.id===PAGE;})[0] || null;
+
+  function $(id){ return document.getElementById(id); }
+  function ls(){ try{ return window.localStorage; }catch(e){ return null; } }
+  function matches(k, prefixes){ return prefixes.some(function(p){ return k===p || k.indexOf(p)===0; }); }
+  function keysFor(prefixes){
+    var s = ls(), out = []; if(!s) return out;
+    for(var i=0;i<s.length;i++){ var k = s.key(i); if(k && matches(k, prefixes)) out.push(k); }
+    return out.sort();
+  }
+  function fmtDate(iso){ try{ return new Date(iso).toLocaleString("ar-SA",{dateStyle:"medium",timeStyle:"short"}); }catch(e){ return iso; } }
+  function toast(msg){
+    var t = $("pnToast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toast._h); toast._h = setTimeout(function(){ t.classList.remove("show"); }, 3200);
+  }
+  function lastKey(scope){ return "portal_lastBackup_" + scope; }
+  function getLast(scope){ var s=ls(); return s ? s.getItem(lastKey(scope)) : null; }
+
+  /* ---- summary of what is stored ---- */
+  function summary(prefixes){
+    var s = ls(), items = [], keys = keysFor(prefixes);
+    keys.forEach(function(k){
+      var v = s.getItem(k), p = null;
+      try{ p = JSON.parse(v); }catch(e){}
+      if(k === "SCV2" && p && typeof p === "object"){
+        items.push((p.staff||[]).length + " منسوب");
+        items.push((p.comms||[]).length + " لجنة");
+        items.push((p.decs||[]).length + " قرار");
+        items.push((p.meets||[]).length + " اجتماع");
+      } else if(k === "VIOL_LAST_V1" && p && Array.isArray(p.arr)){
+        items.push("تحليل محفوظ: " + (p.total||0) + " مخالفة لـ " + p.arr.length + " طالبًا");
+      } else if(k === "IMPPLAN_V1" && p && typeof p === "object"){
+        items.push("تحليل واقع وخطة تحسين");
+        items.push(((p.plan && p.plan.rows) || []).length + " إجراء تحسين");
+        items.push((p.exec || []).length + " أسبوع تنفيذ");
+      } else if(k === "ACTPLAN_V1" && p && typeof p === "object"){
+        items.push((p.entries || []).length + " برنامج نشاط");
+        items.push((p.teachers || []).length + " معلم في الإسناد");
+      } else if(Array.isArray(p) && LABELS[k]){
+        items.push(p.length + " " + LABELS[k]);
+      }
+    });
+    var meta = keys.filter(function(k){ return k.indexOf("moe_meta_")===0 && s.getItem(k); }).length;
+    if(meta) items.push("بيانات المدرسة");
+    var RECORD_KEYS = ["moe_behavior_records_v1","moe_absence_records_v1","moe_compensation_records_v1","JOBDESC_PRINTLOG_V1"];
+    var hasData = keys.some(function(k){
+      var p = null; try{ p = JSON.parse(s.getItem(k)); }catch(e){ return false; }
+      if(k === "VIOL_LAST_V1") return !!(p && Array.isArray(p.arr) && p.arr.length);
+      if(k === "SCV2") return !!(p && ["staff","comms","decs","meets"].some(function(x){ return (p[x]||[]).length; }));
+      if(k === "IMPPLAN_V1") return !!(p && typeof p === "object" && ((p.school && p.school.name) || (p.plan && p.plan.rows && p.plan.rows.length) || (p.exec && p.exec.length) || (p.prio && p.prio.length)));
+      if(k === "ACTPLAN_V1") return !!(p && typeof p === "object" && ((p.entries && p.entries.length) || (p.teachers && p.teachers.length)));
+      return RECORD_KEYS.indexOf(k) > -1 && Array.isArray(p) && p.length > 0;
+    });
+    return {keys:keys, items:items, hasData:hasData};
+  }
+
+  /* ---- export ---- */
+  function doExport(scope){
+    var s = ls(); if(!s){ alert("المتصفح لا يسمح بالوصول للتخزين المحلي."); return; }
+    var prefixes = scope === "all" ? ALL_PREFIXES : cur.keys;
+    var keys = keysFor(prefixes);
+    if(keys.indexOf("SCV2") > -1){ // مزامنة تاريخ آخر نسخة مع تنبيه نظام اللجان
+      try{
+        if(PAGE === "committees" && typeof db === "object" && db && db.meta){
+          db.meta.lastExport = new Date().toISOString(); s.setItem("SCV2", JSON.stringify(db));
+          if(typeof renderDbWarn === "function") renderDbWarn();
+          if(typeof renderBackupInfo === "function") renderBackupInfo();
+        } else {
+          var sc = JSON.parse(s.getItem("SCV2")||"null");
+          if(sc && typeof sc === "object"){ sc.meta = sc.meta || {}; sc.meta.lastExport = new Date().toISOString(); s.setItem("SCV2", JSON.stringify(sc)); }
+        }
+      }catch(e){}
+    }
+    if(!keys.length){ toast("لا توجد بيانات محفوظة لتصديرها"); return; }
+    var data = {}; keys.forEach(function(k){ data[k] = s.getItem(k); });
+    var now = new Date();
+    var pack = {app:APP, v:1, scope:scope, title: scope==="all" ? "جميع الأقسام" : cur.title,
+                createdAt: now.toISOString(), keys:data};
+    var name = (scope==="all" ? "جميع-الأقسام" : cur.title.replace(/\s+/g,"-")) + "-نسخة-احتياطية-" + now.toISOString().slice(0,10) + ".json";
+    var blob = new Blob([JSON.stringify(pack)], {type:"application/json"});
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    s.setItem(lastKey(scope), now.toISOString());
+    if(scope === "all") SECTIONS.forEach(function(sec){ if(sec.keys.length) s.setItem(lastKey(sec.id), now.toISOString()); });
+    else s.setItem(lastKey(scope), now.toISOString());
+    render(); refreshDot();
+    toast("تم تنزيل النسخة الاحتياطية ✓ احفظها في بريدك أو OneDrive");
+  }
+
+  /* ---- import ---- */
+  function doImport(scope, file){
+    if(!file) return;
+    var r = new FileReader();
+    r.onload = function(){
+      var p; try{ p = JSON.parse(r.result); }catch(e){ alert("الملف ليس نسخة احتياطية صالحة (JSON)."); return; }
+      var s = ls(); if(!s) return;
+      var prefixes = scope === "all" ? ALL_PREFIXES : cur.keys;
+      var incoming = {};
+      if(p && p.app === APP && p.keys && typeof p.keys === "object"){
+        Object.keys(p.keys).forEach(function(k){ if(matches(k, prefixes) && typeof p.keys[k] === "string") incoming[k] = p.keys[k]; });
+      } else if(p && Array.isArray(p.staff) && Array.isArray(p.comms) && matches("SCV2", prefixes)){
+        incoming.SCV2 = JSON.stringify(p); // نسخة قديمة من نظام اللجان
+      } else {
+        alert("هذا الملف لا يطابق نسخ هذا الموقع، لم تتم الاستعادة."); return;
+      }
+      var n = Object.keys(incoming).length;
+      if(!n){ alert("الملف لا يحتوي بيانات خاصة بهذا القسم. جرّب الاستيراد من «النسخة الشاملة» أو من القسم الصحيح."); return; }
+      var when = p.createdAt ? "\nتاريخ النسخة: " + fmtDate(p.createdAt) : "";
+      if(!confirm("سيتم استبدال بيانات " + (scope==="all" ? "جميع الأقسام" : "هذا القسم") + " على هذا الجهاز ببيانات الملف." + when + "\n\nمتابعة؟")) return;
+      keysFor(prefixes).forEach(function(k){ s.removeItem(k); });
+      Object.keys(incoming).forEach(function(k){ s.setItem(k, incoming[k]); });
+      var stamp = p.createdAt || new Date().toISOString(); // البيانات مطابقة لهذه النسخة
+      s.setItem(lastKey(scope), stamp);
+      if(scope === "all") SECTIONS.forEach(function(sec){ if(sec.keys.length) s.setItem(lastKey(sec.id), stamp); });
+      alert("تمت الاستعادة بنجاح ✓ سيُعاد تحميل الصفحة لعرض البيانات.");
+      location.reload();
+    };
+    r.readAsText(file);
+  }
+
+  /* ---- UI ---- */
+  var icoHome = '<svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M3.5 11L12 4l8.5 7"/><path stroke-linejoin="round" d="M6 9.5V20h4.5v-5.5h3V20H18V9.5"/></svg>';
+  var icoSave = '<svg viewBox="0 0 24 24"><path stroke-linejoin="round" d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg>';
+
+  function box(scope, title, prefixes, extra){
+    var sm = summary(prefixes), last = getLast(scope);
+    return '<div class="pn-box"><h3>' + title + '</h3>' + (extra||"") +
+      '<div class="pn-meta">آخر نسخة احتياطية من هذا الجهاز: <b>' + (last ? fmtDate(last) : "لم تُنشأ بعد") + '</b></div>' +
+      (sm.items.length ? '<ul class="pn-sum">' + sm.items.map(function(x){return "<li>"+x+"</li>";}).join("") + '</ul>'
+                       : '<p class="pn-note" style="margin-bottom:10px">لا توجد بيانات محفوظة على هذا الجهاز حاليًا.</p>') +
+      '<div class="pn-acts"><button type="button" class="pn-exp" data-exp="' + scope + '">⬇️ تصدير نسخة</button>' +
+      '<label class="pn-imp">⬆️ استيراد نسخة<input type="file" accept=".json,application/json" data-imp="' + scope + '"></label></div></div>';
+  }
+
+  function render(){
+    var body = $("pnBody"); if(!body) return;
+    var html = '<div class="pn-steps"><b>لنقل بياناتك إلى جهاز آخر:</b><ol>' +
+      '<li>اضغط «تصدير نسخة» على هذا الجهاز، فيُنزَّل ملف بصيغة JSON.</li>' +
+      '<li>أرسل الملف لنفسك (البريد، OneDrive، واتساب…).</li>' +
+      '<li>افتح نفس القسم على الجهاز الآخر، ثم «استيراد نسخة» واختر الملف.</li></ol></div>';
+    if(cur && cur.keys.length){
+      var stale = isStale(cur.id, cur.keys);
+      html += box(cur.id, "نسخة هذا القسم: " + cur.title, cur.keys,
+        stale ? '<p class="pn-warn">⚠️ لديك بيانات بدون نسخة احتياطية حديثة. البيانات محفوظة في متصفح هذا الجهاز فقط، ومسح المتصفح يفقدها.</p>' : "");
+    } else if(cur){
+      html += '<div class="pn-box"><h3>' + cur.title + '</h3><p class="pn-note">هذا القسم لا يحفظ بيانات على الجهاز؛ فهو يحلل الملفات التي ترفعها مباشرة، لذلك لا يحتاج نسخة خاصة. لنقل بيانات الأقسام الأخرى استخدم النسخة الشاملة.</p></div>';
+    }
+    html += box("all", "نسخة شاملة لجميع الأقسام", ALL_PREFIXES,
+      '<p class="pn-note" style="margin-bottom:6px">تشمل: نماذج السلوك والمواظبة، وآخر تحليل لمحلل المخالفات، واللجان والتكليفات، والوصف الوظيفي، وتحليل الواقع وخطة التحسين، وخطة النشاط الطلابي — في ملف واحد.</p>');
+    body.innerHTML = html;
+  }
+
+  function isStale(scope, prefixes){
+    if(!summary(prefixes).hasData) return false;
+    var last = getLast(scope) || getLast("all");
+    if(!last) return true;
+    return (Date.now() - new Date(last).getTime()) / 86400000 >= REMIND_DAYS;
+  }
+  function refreshDot(){
+    var b = $("pnBackupBtn"); if(!b) return;
+    var warn = cur && cur.keys.length ? isStale(cur.id, cur.keys) : false;
+    b.classList.toggle("warn", !!warn);
+    b.title = warn ? "لا توجد نسخة احتياطية حديثة لبيانات هذا القسم" : "النسخ الاحتياطي ونقل البيانات";
+  }
+
+  function open(){ render(); $("pnOv").classList.add("open"); var x=$("pnOv").querySelector(".pn-x"); if(x) x.focus(); }
+  function close(){ $("pnOv").classList.remove("open"); }
+
+  function build(){
+    if(PAGE !== "home"){
+      var bar = document.createElement("nav");
+      bar.className = "pn-bar"; bar.setAttribute("aria-label","التنقل بين الأقسام");
+      var opts = SECTIONS.map(function(s){
+        return '<option value="' + s.href + '"' + (s.id===PAGE?" selected":"") + (s.disabled?" disabled":"") + '>' +
+          s.title + (s.disabled?" (مغلق للتطوير)":"") + '</option>';
+      }).join("");
+      bar.innerHTML = '<a class="pn-home" href="index.html">' + icoHome + '<span>الرئيسية</span></a>' +
+        '<div class="pn-sec"><label for="pnSel">الانتقال إلى:</label><select id="pnSel">' + opts + '</select></div>' +
+        '<button type="button" class="pn-btn" id="pnBackupBtn">' + icoSave + '<span class="pn-t">النسخ الاحتياطي</span><span class="pn-dot"></span></button>';
+      document.body.insertBefore(bar, document.body.firstChild);
+      $("pnSel").addEventListener("change", function(){ if(this.value) location.href = this.value; });
+      $("pnBackupBtn").addEventListener("click", open);
+    }
+    var ov = document.createElement("div");
+    ov.className = "pn-ov"; ov.id = "pnOv";
+    ov.innerHTML = '<div class="pn-modal" role="dialog" aria-modal="true" aria-labelledby="pnTitle">' +
+      '<div class="pn-mh"><h2 id="pnTitle">النسخ الاحتياطي ونقل البيانات</h2><button type="button" class="pn-x" aria-label="إغلاق">✕</button></div>' +
+      '<div class="pn-mb" id="pnBody"></div></div>';
+    document.body.appendChild(ov);
+    var t = document.createElement("div"); t.className = "pn-toast"; t.id = "pnToast"; document.body.appendChild(t);
+    ov.addEventListener("click", function(e){
+      if(e.target === ov || e.target.closest(".pn-x")) return close();
+      var ex = e.target.closest("[data-exp]"); if(ex) doExport(ex.getAttribute("data-exp"));
+    });
+    ov.addEventListener("change", function(e){
+      var inp = e.target.closest("[data-imp]"); if(inp){ doImport(inp.getAttribute("data-imp"), inp.files[0]); inp.value = ""; }
+    });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && ov.classList.contains("open")) close(); });
+    refreshDot();
+  }
+
+  window.PN = {open:open};
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", build); else build();
+})();
+</script>
+<!-- ===== /PORTAL NAV & BACKUP ===== -->
+</body>
+</html>
