@@ -281,6 +281,10 @@
   .btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink);}
   .btn-ghost:hover{border-color:var(--green-600);color:var(--green-800);}
   .btn-danger{background:var(--red-bg);color:var(--red);border:1px solid #eccfcd;}
+  .btn-gold{background:#c99a45;color:#3a2a06;}
+  .btn-gold:hover{background:#b98a37;}
+  .icon-btn.of-go{background:var(--green-700);color:#fff;border-color:var(--green-700);}
+  .of-casebar{border:2px solid #c99a45;background:#fffaf0;}
   .btn-danger:hover{background:#f6dcd9;}
 
   table.log{width:100%;border-collapse:collapse;font-size:13px;}
@@ -425,6 +429,21 @@
   .of-side .btnrow{flex-direction:column;align-items:stretch;margin-top:10px;}
   .of-side .btnrow .btn{width:100%;justify-content:center;}
   .of-stage{overflow-x:auto;background:#dfe6e2;border-radius:var(--radius);padding:20px 12px;}
+  /* ===== ملاءمة الجوال ===== */
+  .of-layout > *{min-width:0;}
+  @media screen and (max-width:760px){
+    .tabbar{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+    .tabbar::-webkit-scrollbar{display:none;}
+    .tabbar button{flex:0 0 auto;white-space:nowrap;padding:11px 14px;font-size:14px;}
+    .of-side{position:static;}
+    .of-stage{padding:12px 6px;}
+    .of-stage .sheet{zoom:.8;}
+    table.log{display:block;overflow-x:auto;white-space:nowrap;}
+  }
+  @media screen and (max-width:600px){ .of-stage .sheet{zoom:.6;} .shell{padding:0 10px;} }
+  @media screen and (max-width:500px){ .of-stage .sheet{zoom:.5;} }
+  @media screen and (max-width:420px){ .of-stage .sheet{zoom:.42;} }
+  @media screen and (max-width:640px){ .top-eyebrow{padding-inline-start:44px;padding-inline-end:48px;} }
 
   /* ---------- A4 sheet ---------- */
   .sheet{
@@ -644,7 +663,8 @@
       </div>
       <div class="btnrow no-print">
         <button class="btn btn-primary" onclick="saveBehaviorRecord()">💾 حفظ السجل محليًا</button>
-        <button class="btn btn-ghost" onclick="printBehavior()">🖨️ طباعة النموذج</button>
+        <button class="btn btn-gold" onclick="saveAndForms('beh')">🖨️ حفظ وطباعة النماذج الرسمية</button>
+        <button class="btn btn-ghost" onclick="printBehavior()">🖨️ طباعة ملخص الإجراءات</button>
         <button class="btn btn-ghost" onclick="resetBehaviorForm()">➕ نموذج جديد</button>
       </div>
     </div>
@@ -713,7 +733,8 @@
       </div>
       <div class="btnrow no-print">
         <button class="btn btn-primary" onclick="saveAttendanceRecord()">💾 حفظ السجل محليًا</button>
-        <button class="btn btn-ghost" onclick="printAttendance()">🖨️ طباعة النموذج</button>
+        <button class="btn btn-gold" onclick="saveAndForms('att')">🖨️ حفظ وطباعة النماذج الرسمية</button>
+        <button class="btn btn-ghost" onclick="printAttendance()">🖨️ طباعة ملخص الإجراءات</button>
         <button class="btn btn-ghost" onclick="resetAttendanceForm()">➕ نموذج جديد</button>
       </div>
     </div>
@@ -846,7 +867,8 @@
       </div>
       <div class="btnrow no-print">
         <button class="btn btn-primary" onclick="saveCompensationRecord()">💾 حفظ السجل محليًا</button>
-        <button class="btn btn-ghost" onclick="printCompensation()">🖨️ طباعة النموذج</button>
+        <button class="btn btn-gold" onclick="saveAndForms('comp')">🖨️ حفظ وطباعة النموذج الرسمي</button>
+        <button class="btn btn-ghost" onclick="printCompensation()">🖨️ طباعة ملخص الإجراءات</button>
         <button class="btn btn-ghost" onclick="resetCompensationForm()">➕ نموذج جديد</button>
       </div>
     </div>
@@ -868,13 +890,15 @@
         <div class="field"><label>اسم الطالب</label><input type="text" id="ofStudent" list="studentNamesList" placeholder="اتركه فارغًا لطباعة نماذج فارغة" onchange="ofOnStudent()"></div>
         <div class="field"><label>الصف / الفصل</label><input type="text" id="ofClass" placeholder="مثال: ثالث متوسط / 2" onchange="ofRefill()"></div>
         <div class="field"><label>المرحلة</label><input type="text" id="ofStage" placeholder="مثال: المتوسطة" onchange="ofRefill()"></div>
-        <div class="field"><label>المخالفة المرجعية</label><select id="ofBehRec" onchange="ofRefill()"><option value="">—</option></select></div>
+        <div class="field"><label>المخالفة المرجعية</label><select id="ofBehRec" onchange="ofState.noBeh=false;ofRefill()"><option value="">—</option></select></div>
       </div>
       <div class="hint" style="margin-top:8px;">تُعبّأ النماذج تلقائيًا من بيانات المدرسة (أعلى الصفحة) ومن سجلات الطالب المحفوظة: المخالفات، الغياب، وفرص التعويض. ويمكنك الكتابة أو التعديل مباشرة على أي حقل داخل النموذج قبل الطباعة. تغيير بيانات الطالب يعيد تعبئة النماذج ويلغي التعديلات اليدوية.</div>
       <div class="btnrow no-print" style="margin-top:10px;">
         <button class="btn btn-ghost" onclick="ofClearStudent()">📄 نماذج فارغة</button>
       </div>
     </div>
+
+    <div class="card no-print of-casebar" id="ofCaseBar" style="display:none"></div>
 
     <div class="of-layout">
       <aside class="card of-side no-print">
@@ -1222,6 +1246,8 @@ function activateTab(tabName){
   document.querySelectorAll(".tabbar button").forEach(b=>b.classList.toggle("active", b.dataset.tab===tabName));
   document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
   $("panel-"+tabName).classList.add("active");
+  const ab = document.querySelector(".tabbar button.active");
+  if(ab && window.innerWidth <= 760 && ab.scrollIntoView) ab.scrollIntoView({inline:"center", block:"nearest"});
   if(tabName === "reports"){
     refreshStudentNamesList();
     if(reportMode === "student") renderStudentReport();
@@ -1429,6 +1455,7 @@ function saveBehaviorRecord(){
     student, cls: $("bClass").value,
     stage: bState.stage, degree: bState.degree,
     violations,
+    occ: Object.assign({}, bState.occ),
     counselorLogs,
     notes: $("bNotes").value,
     staffName: $("bStaffName").value,
@@ -1439,11 +1466,13 @@ function saveBehaviorRecord(){
     school: $("metaSchool").value, area: $("metaArea").value, viceDean: $("metaViceDean").value, counselor: $("metaCounselor").value
   };
   const list = getBehaviorRecords();
+  const dup = ofDupId("beh", record, list); if(dup) return dup;
   list.unshift(record);
   setBehaviorRecords(list);
   toast("تم حفظ السجل محليًا ✓");
   renderBehaviorLog();
   refreshStudentNamesList();
+  return record.id;
 }
 
 function resetBehaviorForm(){
@@ -1488,6 +1517,7 @@ function renderBehaviorLog(){
       <td>${["","الأولى","الثانية","الثالثة","الرابعة","الخامسة"][r.degree]}</td>
       <td>${r.date||""}</td>
       <td class="log-actions">
+        <button class="icon-btn of-go" onclick="ofOpenFor('beh','${r.id}')">النماذج</button>
         <button class="icon-btn" onclick="loadBehaviorRecord('${r.id}')">تحميل</button>
         <button class="icon-btn" onclick="deleteBehaviorRecord('${r.id}')">حذف</button>
       </td>
@@ -1503,7 +1533,7 @@ function loadBehaviorRecord(id){
   $("bDate").value=r.date; $("bNotes").value=r.notes; $("bStaffName").value=r.staffName;
   $("bSignStudent").value=r.signStudent; $("bSignParent").value=r.signParent;
   $("bSignStaff").value=r.signStaff; $("bSignDate").value=r.signDate;
-  bState.stage = r.stage; bState.degree = r.degree; bState.occ={};
+  bState.stage = r.stage; bState.degree = r.degree; bState.occ = Object.assign({}, r.occ||{});
   $("bStage").value = r.stage;
   renderDegreeButtons(); renderCategories();
   setTimeout(()=>{
@@ -1633,11 +1663,13 @@ function saveAttendanceRecord(){
     school: $("metaSchool").value, area: $("metaArea").value, viceDean: $("metaViceDean").value, counselor: $("metaCounselor").value
   };
   const list = getAttendanceRecords();
+  const dup = ofDupId("att", record, list); if(dup) return dup;
   list.unshift(record);
   setAttendanceRecords(list);
   toast("تم حفظ السجل محليًا ✓");
   renderAttendanceLog();
   refreshStudentNamesList();
+  return record.id;
 }
 function resetAttendanceForm(){
   $("aStudent").value=""; $("aClass").value=""; $("aDaysTotal").value="";
@@ -1667,6 +1699,7 @@ function renderAttendanceLog(){
       <td>${r.mode==="excused"?"بعذر":"بدون عذر"}</td>
       <td>${r.daysTotal||"-"}</td><td>${r.date||""}</td>
       <td class="log-actions">
+        <button class="icon-btn of-go" onclick="ofOpenFor('att','${r.id}')">النماذج</button>
         <button class="icon-btn" onclick="loadAttendanceRecord('${r.id}')">تحميل</button>
         <button class="icon-btn" onclick="deleteAttendanceRecord('${r.id}')">حذف</button>
       </td>
@@ -1790,11 +1823,13 @@ function saveCompensationRecord(){
     school: $("metaSchool").value, area: $("metaArea").value, viceDean: $("metaViceDean").value
   };
   const list = getCompensationRecords();
+  const dup = ofDupId("comp", record, list); if(dup) return dup;
   list.unshift(record);
   setCompensationRecords(list);
   toast("تم حفظ سجل التعويض محليًا ✓");
   renderCompensationLog();
   refreshStudentNamesList();
+  return record.id;
 }
 
 function resetCompensationForm(){
@@ -1829,6 +1864,7 @@ function renderCompensationLog(){
       <td>${r.student}</td><td>${r.cls||""}</td><td>${(r.items||[]).length}</td>
       <td>${r.totalPoints||0}</td><td>${r.date||""}</td>
       <td class="log-actions">
+        <button class="icon-btn of-go" onclick="ofOpenFor('comp','${r.id}')">النماذج</button>
         <button class="icon-btn" onclick="loadCompensationRecord('${r.id}')">تحميل</button>
         <button class="icon-btn" onclick="deleteCompensationRecord('${r.id}')">حذف</button>
       </td>
@@ -2343,7 +2379,7 @@ function ofCtx(){
   const behs  = student ? getBehaviorRecords().filter(r=>(r.student||"").trim()===student) : [];
   const comps = student ? getCompensationRecords().filter(r=>(r.student||"").trim()===student) : [];
   const atts  = student ? getAttendanceRecords().filter(r=>(r.student||"").trim()===student) : [];
-  const beh = behs.find(r=>r.id===v("ofBehRec")) || behs[0] || null;
+  const beh = ofState.noBeh ? null : (behs.find(r=>r.id===v("ofBehRec")) || behs[0] || null);
   return {
     student, clsFull, cls: parts[0]||"", section: parts[1]||"",
     stage: v("ofStage"),
@@ -2353,8 +2389,8 @@ function ofCtx(){
     violation: beh ? (beh.violations||[]).join("، ") : "",
     degree: beh ? degreeLabel(beh.degree) : "",
     behDate: beh ? beh.date : "",
-    attExc: atts.find(a=>a.mode==="excused") || null,
-    attUnx: atts.find(a=>a.mode!=="excused") || null
+    attExc: ofPickAtt(atts, true),
+    attUnx: ofPickAtt(atts, false)
   };
 }
 
@@ -2675,6 +2711,7 @@ function ofRenderPreview(){ $("ofStageHost").innerHTML = ofBuild(ofState.current
 function ofRefill(){ ofState.edits = {}; ofRenderPreview(); }
 
 function ofOnStudent(){
+  ofState.attId = ""; ofState.noBeh = false; ofHideCase();
   const name = ($("ofStudent").value||"").trim();
   $("ofClass").value = "";
   autofillClassFromRoster("ofStudent","ofClass");
@@ -2729,6 +2766,90 @@ function ofPrintBatch(){ ofPrint(OF_FORMS.map(f=>f.k).filter(k=>ofState.batch.ha
     document.execCommand("insertText", false, t);
   });
 })();
+/* ---------- دمج: طباعة النماذج الرسمية مباشرة من سجل الحالة ---------- */
+let ofLastSaved = {};
+function ofSig(r){ const x = Object.assign({}, r); delete x.id; return JSON.stringify(x); }
+function ofDupId(kind, record, list){
+  const sig = ofSig(record), last = ofLastSaved[kind];
+  if(last && last.sig === sig && list.some(x=>x.id===last.id)){ toast("هذا السجل محفوظ مسبقًا ✓"); return last.id; }
+  ofLastSaved[kind] = {sig, id:record.id};
+  return null;
+}
+function ofPickAtt(atts, excused){
+  const sel = ofState.attId ? atts.find(a=>a.id===ofState.attId) : null;
+  if(sel && (sel.mode==="excused") === excused) return sel;
+  return atts.find(a=>(a.mode==="excused") === excused) || null;
+}
+/* الإجراءات المنطبقة على سجل المخالفة: إجراء مرة الحدوث المختارة لكل فئة تتضمن المخالفة */
+function behActiveItems(r){
+  const cats = ((DATA[r.stage]||{})[r.degree]) || [];
+  const vs = r.violations || [];
+  let used = cats.filter(c=>c.violations.some(v=>vs.includes(v)));
+  if(!used.length) used = cats;
+  let items = [];
+  used.forEach(c=>{
+    if(c.steps){ const i = (r.occ && r.occ[c.key]) || 0; items = items.concat((c.steps[i]||c.steps[0]).items); }
+    else if(c.single) items = items.concat(c.single);
+    (c.notes||[]).forEach(n=>items.push(n));
+  });
+  return items;
+}
+const OF_RULES = [
+  [/سجل المشكلات السلوكية|تدوين المشكلة السلوكية/, "teacher"],
+  [/خطة\s*(ل)?تعديل السلوك|خطة لتعديل السلوك/, "plan"],
+  [/فرص التعويض/, "comp"],
+  [/(تحويل|إحالة) الطالب (إلى|لل)\s?(ال)?موجه/, "referral"],
+  [/تعهد/, "pledgeB"],
+  [/إشعار ولي|إبلاغ ولي|تبليغه/, "notify"],
+  [/دعوة ولي|استدعاء ولي/, "invite"],
+  [/محضرًا لإثبات|محضرا لإثبات|محضر ضبط|إعداد محضر/, "incident"],
+  [/لجنة التوجيه/, "committee"]
+];
+function behFormKeys(r){
+  const txt = behActiveItems(r), set = new Set();
+  txt.forEach(t=>OF_RULES.forEach(([re,k])=>{ if(re.test(t)) set.add(k); }));
+  return OF_FORMS.map(f=>f.k).filter(k=>set.has(k));
+}
+function attFormKeys(r){
+  const d = Number(r.daysTotal) || 0, out = [];
+  if(r.mode === "excused"){ out.push("absExc"); if(d >= 3) out.push("invite"); }
+  else { out.push("absUnx"); if(d >= 3){ out.push("invite"); out.push("pledgeA"); } if(d >= 5) out.push("committee"); }
+  return OF_FORMS.map(f=>f.k).filter(k=>out.includes(k));
+}
+function saveAndForms(kind){
+  const id = kind==="beh" ? saveBehaviorRecord() : kind==="att" ? saveAttendanceRecord() : saveCompensationRecord();
+  if(id) ofOpenFor(kind, id);
+}
+function ofOpenFor(kind, id){
+  const list = kind==="beh" ? getBehaviorRecords() : kind==="att" ? getAttendanceRecords() : getCompensationRecords();
+  const r = list.find(x=>x.id===id);
+  if(!r){ toast("السجل غير موجود"); return; }
+  activateTab("forms");
+  $("ofStudent").value = r.student || "";
+  ofOnStudent();
+  if(r.cls) $("ofClass").value = r.cls;
+  if(kind === "beh") $("ofBehRec").value = r.id;
+  ofState.attId = kind === "att" ? r.id : "";
+  ofState.noBeh = kind !== "beh";
+  if(kind !== "beh") $("ofBehRec").value = "";
+  const keys = kind==="beh" ? behFormKeys(r) : kind==="att" ? attFormKeys(r) : ["comp"];
+  ofState.batch = new Set(keys);
+  if(keys.length) ofState.current = keys[0];
+  ofState.edits = {};
+  ofRenderList(); ofRenderPreview();
+  const what = kind==="beh" ? `مخالفة من الدرجة ${degreeLabel(r.degree)}` : kind==="att" ? `غياب ${r.mode==="excused"?"بعذر":"بدون عذر"} (${r.daysTotal||0} أيام)` : "فرصة تعويض";
+  const names = keys.map(k=>(OF_FORMS.find(f=>f.k===k)||{}).t).filter(Boolean);
+  const bar = $("ofCaseBar");
+  bar.innerHTML = `<h2 style="margin-bottom:6px">🖨️ النماذج الرسمية لحالة: ${ofEsc(r.student)} — ${ofEsc(what)}</h2>
+    ${names.length ? `<div class="hint">حُددت النماذج المرتبطة بالإجراء المطبّق: <b>${names.map(ofEsc).join("، ")}</b>. راجع كل نموذج من القائمة وعدّل ما تحتاجه، وأضف أو ألغِ أي نموذج بعلامة التحديد.</div>`
+      : `<div class="hint">الإجراء المطبّق لا يتطلب نموذجًا رسميًا (مثل التنبيه الشفهي). يمكنك اختيار أي نموذج من القائمة عند الحاجة.</div>`}
+    <div class="btnrow" style="margin-top:10px">${names.length?`<button class="btn btn-primary" onclick="ofPrintBatch()">🖨️ طباعة نماذج الحالة (${names.length})</button>`:""}
+      <button class="btn btn-ghost" onclick="ofHideCase()">إغلاق</button></div>`;
+  bar.style.display = "";
+  window.scrollTo({top: bar.getBoundingClientRect().top + window.scrollY - 80, behavior:"smooth"});
+}
+function ofHideCase(){ const b = $("ofCaseBar"); if(b){ b.style.display = "none"; b.innerHTML = ""; } }
+
 function ofActivate(){
   refreshStudentNamesList();
   ofRenderList();
