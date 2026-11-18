@@ -139,6 +139,24 @@ textarea{min-height:70px;resize:vertical;line-height:1.7;}
 #printArea ul.b{margin:0;padding-inline-start:18px;}
 #printArea .swot td{vertical-align:top;}
 #printArea .swot .side{width:7mm;padding:0;text-align:center;color:#fff;font-weight:900;writing-mode:vertical-rl;}
+
+/* ===== ملاءمة الجوال ===== */
+@media(max-width:700px){
+  header.top{padding:14px 16px;} header.top h1{font-size:18px;} header.top p{font-size:12px;line-height:1.6;}
+  .wrap{padding:10px 10px 30px;}
+  .steps{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:0;z-index:30;background:var(--bg);margin:0 -10px 12px;padding:8px 10px;}
+  .steps::-webkit-scrollbar{display:none;}
+  .step{flex:0 0 auto;white-space:nowrap;}
+  .card{padding:14px 12px;border-radius:12px;}
+  .card h2{font-size:15.5px;}
+  .tbl.stack thead{display:none;}
+  .tbl.stack,.tbl.stack tbody,.tbl.stack tr,.tbl.stack td{display:block;width:100%;}
+  .tbl.stack tr{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:10px;background:#fbfdfd;}
+  .tbl.stack td{border:0;padding:4px 0;text-align:right !important;}
+  .tbl.stack td[data-label]::before{content:attr(data-label);display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:2px;}
+  .navbtns{position:sticky;bottom:0;z-index:20;background:var(--bg);padding:8px 0;margin-top:0;}
+  .btn{padding:9px 13px;}
+}
 </style>
 </head>
 <body>
@@ -1292,6 +1310,21 @@ document.addEventListener("click",e=>{
   save(); render();
 });
 
+
+/* ===== ملاءمة الجوال: تحويل جداول الإدخال إلى بطاقات، وإظهار الخطوة الحالية ===== */
+function mobileFix(){
+  document.querySelectorAll("#view .tbl").forEach(t=>{
+    const heads=t.querySelectorAll("thead tr"); if(heads.length!==1) return;
+    const ths=[...heads[0].children]; if(ths.some(th=>th.colSpan>1||th.rowSpan>1)) return;
+    const labels=ths.map(th=>th.textContent.trim());
+    let ok=true; t.querySelectorAll("tbody tr").forEach(tr=>{ if(tr.children.length!==labels.length) ok=false; });
+    if(!ok) return;
+    t.classList.add("stack");
+    t.querySelectorAll("tbody tr").forEach(tr=>[...tr.children].forEach((td,i)=>{ if(labels[i]) td.setAttribute("data-label",labels[i]); }));
+  });
+  const a=document.querySelector(".step.active"); if(a&&window.innerWidth<=700) a.scrollIntoView({inline:"center",block:"nearest"});
+}
+(function(){ const _render=render; render=function(){ _render.apply(this,arguments); mobileFix(); }; })();
 renderSteps(); render(); renderBackupWarn();
 </script>
 <!-- ===== PORTAL NAV & BACKUP v1 (شريط التنقل والنسخ الاحتياطي الموحّد) ===== -->
