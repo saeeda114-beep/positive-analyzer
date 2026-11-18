@@ -541,7 +541,7 @@ function go(i){ S.step=Math.max(0,Math.min(STEPS.length-1,i)); save(); render();
 function navBtns(){
   return `<div class="navbtns">${S.step>0?`<button class="btn light" data-go="${S.step-1}">→ السابق</button>`:"<span></span>"}${S.step<STEPS.length-1?`<button class="btn primary" data-go="${S.step+1}">التالي ←</button>`:""}</div>`;
 }
-function render(){ markSteps(); document.getElementById("view").innerHTML = STEPS[S.step].r() + navBtns(); document.querySelectorAll("[data-live]").forEach(updateLive); }
+function render(){ markSteps(); document.getElementById("view").innerHTML = STEPS[S.step].r() + navBtns(); document.querySelectorAll("[data-live]").forEach(updateLive); if(typeof renderImport==="function") renderImport(); }
 
 /* ===================== 1) البيانات الأساسية ===================== */
 function viewBasic(){
@@ -598,7 +598,11 @@ function stuTotal(f){ let sum=0,any=false; stageGrades().forEach(g=>{ const n=nu
 function yearsBack(){ const y=parseInt(num(S.school.year))||1448; return [y-3,y-2,y-1]; }
 function viewResults(){
   const yrs=yearsBack();
-  return `<div class="card"><h2>3- ملخص نتائج أداء المدرسة وفق آخر تقرير للتقويم المدرسي</h2>
+  return `<div class="card" style="border:2px dashed var(--gold)"><h2>استيراد تلقائي من تقرير التقويم المدرسي</h2>
+    <p class="hint">ارفع ملف PDF لتقرير التقويم المدرسي (الذاتي أو الخارجي) كما نزّلته من المنصة، فتُستخرج نسبة الأداء العام ونسب المجالات ونسب جميع المؤشرات تلقائيًا. تتم القراءة داخل متصفحك ولا يُرفع الملف لأي جهة، وتستغرق نحو دقيقة.</p>
+    <label class="btn gold" style="cursor:pointer">📄 اختيار ملف التقرير (PDF)<input type="file" id="repFile" accept="application/pdf,.pdf" hidden></label>
+    <div id="impStatus" style="margin-top:12px"></div></div>
+  <div class="card"><h2>3- ملخص نتائج أداء المدرسة وفق آخر تقرير للتقويم المدرسي</h2>
     <div class="g g3" style="margin-bottom:12px">${field("نوع التقرير",sel("evalType",["ذاتي","خارجي"]))}</div>
     <div class="legend"><span class="lv ex">التميز 90 فأكثر</span><span class="lv pr">التقدم 75 إلى أقل من 90</span><span class="lv st">الانطلاق 50 إلى أقل من 75</span><span class="lv pp">التهيئة أقل من 50</span></div>
     <div class="scroll"><table class="tbl"><thead><tr><th>الوصف</th><th class="num" style="width:150px">نسبة الأداء (رقماً)</th><th class="num" style="width:130px">مستوى المدرسة</th></tr></thead><tbody>
@@ -1053,6 +1057,175 @@ function renderBackupWarn(){
 }
 function toast(m){ const t=document.getElementById("pnToast"); if(t){ t.textContent=m; t.classList.add("show"); clearTimeout(toast._h); toast._h=setTimeout(()=>t.classList.remove("show"),3200); } }
 
+/* ===================== الاستيراد من تقرير التقويم المدرسي (PDF) =====================
+   pdf.js لقراءة الملف، وTesseract.js للتعرف على الأرقام عند كون التقرير صورًا.
+   يُحمَّلان من CDN موثوق عند الحاجة فقط، وتتم المعالجة داخل المتصفح. */
+const CDN = {
+  pdf:"https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js",
+  pdfWorker:"https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js",
+  tess:"https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js",
+  tessWorker:"https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js",
+  tessCore:"https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1",
+  tessLang:"https://cdn.jsdelivr.net/npm/@tesseract.js-data/eng@1.0.0/4.0.0_best_int"
+};
+let IMP=null;
+/* ترقيم مؤشرات «التطوير المؤسسي» في تقرير التقويم يختلف عن ترقيمها في النموذج الإشرافي، فتُطابق بالنص:
+   1-4-1-1 الرخصة المهنية = 1-4-1-4 في النموذج، 1-4-1-2 التطوير المهني = 1-4-1-5، 1-4-1-3 التقويم الذاتي = 1-4-1-6،
+   و1-4-1-4 في التقرير (تنفيذ خطة التحسين) ليس ضمن جداول النموذج. بقية الرموز متطابقة. */
+const REPORT_MAP = {"1-4-1-1":"1-4-1-4","1-4-1-2":"1-4-1-5","1-4-1-3":"1-4-1-6","1-4-1-4":null,"1-4-1-5":null,"1-4-1-6":null};
+function mapReport(ind){ const out={}; for(const k in ind){ const t=Object.prototype.hasOwnProperty.call(REPORT_MAP,k)?REPORT_MAP[k]:k; if(t) out[t]=ind[k]; } return out; }
+function pv(v){ return String(Math.round(v*10000)/10000); }
+function loadScript(src){
+  return new Promise((ok,fail)=>{
+    if(document.querySelector(`script[data-src="${src}"]`)) return ok();
+    const s=document.createElement("script"); s.src=src; s.setAttribute("data-src",src);
+    s.onload=()=>ok(); s.onerror=()=>fail(new Error("تعذر تحميل أدوات القراءة. تأكد من اتصال الإنترنت ثم أعد المحاولة."));
+    document.head.appendChild(s);
+  });
+}
+const EVAL_LABEL = Object.fromEntries(EVAL_ROWS);
+function impSet(msg){ IMP={busy:true,msg}; renderImport(); }
+function renderImport(){
+  const box=document.getElementById("impStatus"); if(!box||!IMP) return;
+  if(IMP.busy){ box.innerHTML=`<div class="note">⏳ ${esc(IMP.msg)}</div>`; return; }
+  if(IMP.err){ box.innerHTML=`<div class="warnbar">⚠️ ${esc(IMP.err)}</div>`; return; }
+  const r=IMP.res, ours=allItems().filter(x=>x.id.indexOf("SEC-")!==0);
+  const found=ours.filter(x=>r.ind[x.id]!==undefined), missing=ours.filter(x=>r.ind[x.id]===undefined);
+  const evRows=EVAL_ROWS.map(e=>`<tr><td>${e[1]}</td><td class="num">${r.eval[e[0]]!==undefined?`<b>${esc(r.eval[e[0]])}%</b> ${lvBadge(r.eval[e[0]])}`:'<span class="no">لم يُقرأ — أدخله يدويًا</span>'}</td></tr>`).join("");
+  box.innerHTML=`<div class="sugg"><b>تمت قراءة ${r.pages} صفحة.</b> راجع القيم المستخرجة مقابل التقرير ثم اضغط «اعتماد القيم».</div>
+    <div class="g g2">
+      <div><table class="tbl"><thead><tr><th colspan="2">بيانات التقرير</th></tr></thead><tbody>
+        <tr><td>اسم المدرسة</td><td>${esc(r.name||"—")}</td></tr>
+        <tr><td>الرقم الوزاري</td><td>${esc(r.mno||"—")}</td></tr>
+        <tr><td>نوع التقرير</td><td>${esc(r.type||"—")}</td></tr>${evRows}</tbody></table></div>
+      <div><table class="tbl"><thead><tr><th>مؤشرات النموذج الإشرافي</th></tr></thead><tbody>
+        <tr><td><span class="ok">✔ مستخرجة: ${found.length} من ${ours.length}</span></td></tr>
+        ${missing.length?`<tr><td><span class="no">غير موجودة في التقرير أو لم تُقرأ (أدخلها يدويًا إن وُجدت):</span><br>${missing.map(x=>esc(x.code)).join("، ")}</td></tr>`:""}
+        </tbody></table>
+        <details style="margin-top:8px"><summary class="hint" style="cursor:pointer">عرض نسب المؤشرات المستخرجة</summary>
+        <div class="scroll"><table class="tbl">${found.map(x=>`<tr><td class="num" style="direction:ltr">${esc(x.code)}</td><td>${esc(x.text)}</td><td class="num"><b>${esc(r.ind[x.id])}%</b></td></tr>`).join("")}</table></div></details></div>
+    </div>
+    <label class="row" style="margin-top:10px;font-weight:700"><input type="checkbox" id="impBasic" checked style="width:auto"> تعبئة اسم المدرسة والرقم الوزاري إن كانا فارغين</label>
+    <div class="row" style="margin-top:10px"><button class="btn primary" data-act="impApply">✔ اعتماد القيم المستخرجة</button><button class="btn light" data-act="impCancel">إلغاء</button></div>`;
+}
+function wordsOf(data){
+  if(Array.isArray(data.words) && data.words.length) return data.words;
+  const out=[]; (data.blocks||[]).forEach(b=>(b.paragraphs||[]).forEach(p=>(p.lines||[]).forEach(l=>(l.words||[]).forEach(w=>out.push(w)))));
+  return out;
+}
+function parseTextSeq(txt,res){
+  const tok=txt.match(/\d-\d-\d-\d|\d{1,3}(?:\.\d+)?\s*%/g)||[], used={};
+  tok.forEach((t,i)=>{
+    if(!/^\d-\d-\d-\d$/.test(t)) return;
+    const isP=j=>j>=0&&j<tok.length&&!used[j]&&/%$/.test(tok[j]);
+    const j=isP(i-1)?i-1:(isP(i+1)?i+1:-1);
+    if(j>-1){ used[j]=1; const v=parseFloat(tok[j]); if(v<=100) res.ind[t]=pv(v); }
+  });
+  const m=txt.match(/[S$5]-(\d{4,6})/); if(m&&!res.mno) res.mno="S-"+m[1];
+}
+function findBadge(cv,X0,Y0,X1,Y1){
+  /* يحدد أول شارة ملونة (نص أبيض على خلفية ملونة) داخل المنطقة، ويجهزها للقراءة */
+  X0=Math.max(0,Math.round(X0)); Y0=Math.max(0,Math.round(Y0)); X1=Math.min(cv.width,Math.round(X1)); Y1=Math.min(cv.height,Math.round(Y1));
+  const w0=X1-X0, h0=Y1-Y0; if(w0<10||h0<10) return null;
+  const d=cv.getContext("2d").getImageData(X0,Y0,w0,h0).data;
+  const sat=(x,y)=>{ const i=(y*w0+x)*4, r=d[i],g=d[i+1],b=d[i+2]; return Math.max(r,g,b)-Math.min(r,g,b)>70 && Math.max(r,g,b)>80; };
+  let top=-1,bot=-1;
+  for(let y=0;y<h0;y++){ let c=0; for(let x=0;x<w0;x+=2) if(sat(x,y)) c++; if(c>12){ if(top<0) top=y; bot=y; } else if(top>=0 && y-bot>4) break; }
+  if(top<0||bot-top<12) return null;
+  let l=-1,rr=-1;
+  for(let y=top;y<=bot;y+=Math.max(1,Math.floor((bot-top)/6))) for(let x=0;x<w0;x++) if(sat(x,y)){ if(l<0||x<l) l=x; if(x>rr) rr=x; }
+  if(l<0||rr-l<20) return null;
+  /* إزالة الحواف الدائرية للشارة قبل القراءة */
+  const ix=Math.round(Math.min((bot-top)/2,(rr-l)*0.15)), iy=2;
+  l+=ix; rr-=ix; top+=iy; bot-=iy;
+  const w=rr-l, h=bot-top, k=h<80?4:3, c=document.createElement("canvas"); c.width=w*k; c.height=h*k;
+  const cx=c.getContext("2d"); cx.fillStyle="#fff"; cx.fillRect(0,0,c.width,c.height); cx.drawImage(cv,X0+l,Y0+top,w,h,0,0,w*k,h*k);
+  const im=cx.getImageData(0,0,c.width,c.height), p=im.data;
+  for(let i=0;i<p.length;i+=4){ const v=Math.min(p[i],p[i+1],p[i+2])>170?0:255; p[i]=p[i+1]=p[i+2]=v; }
+  cx.putImageData(im,0,0);
+  return {canvas:c, box:{x0:X0+l,x1:X0+rr,y0:Y0+top,y1:Y0+bot}};
+}
+async function readBadge(worker,badge){
+  if(!badge) return null;
+  const r=await worker.recognize(badge.canvas), m=String(r.data.text||"").replace(/[ \t]/g,"").match(/(\d{1,3}(?:\.\d+)?)%/);
+  if(!m) return null; const v=parseFloat(m[1]); return (v>=0&&v<=100)?v:null;
+}
+async function importReport(file){
+  if(!file) return;
+  try{
+    impSet("جارٍ تحميل أدوات القراءة...");
+    await loadScript(CDN.pdf);
+    pdfjsLib.GlobalWorkerOptions.workerSrc=CDN.pdfWorker;
+    const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;
+    const res={ind:{},eval:{},name:"",type:"",mno:"",pages:pdf.numPages};
+    try{
+      const meta=await pdf.getMetadata(), title=(meta&&meta.info&&meta.info.Title)||file.name||"";
+      const m=title.match(/^(.+?)\s*-\s*تقرير التقويم المدرسي\s*-\s*(\S+)/);
+      if(m){ res.name=m[1].trim(); res.type=/خارجي/.test(m[2])?"خارجي":/ذاتي/.test(m[2])?"ذاتي":""; }
+    }catch(e){}
+    let worker=null;
+    for(let p=1;p<=pdf.numPages;p++){
+      impSet(`قراءة الصفحة ${p} من ${pdf.numPages}...`);
+      const page=await pdf.getPage(p);
+      const tc=await page.getTextContent(), txt=tc.items.map(i=>i.str).join(" ");
+      if(/\d-\d-\d-\d/.test(txt)){ parseTextSeq(txt,res); continue; }
+      const vp=page.getViewport({scale:1650/page.getViewport({scale:1}).width});
+      const cv=document.createElement("canvas"); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height);
+      await page.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise;
+      if(!worker){
+        impSet(`تحميل محرك التعرف على الأرقام (مرة واحدة)... الصفحة ${p} من ${pdf.numPages}`);
+        await loadScript(CDN.tess);
+        worker=await Tesseract.createWorker("eng",1,{workerPath:CDN.tessWorker,corePath:CDN.tessCore,langPath:CDN.tessLang});
+        impSet(`قراءة الصفحة ${p} من ${pdf.numPages}...`);
+      }
+      await worker.setParameters({tessedit_pageseg_mode:"11",tessedit_char_whitelist:""});
+      const {data}=await worker.recognize(cv);
+      const W=cv.width, H=cv.height, codes=[], pcts=[];
+      wordsOf(data).forEach(w=>{
+        const t=String(w.text||"").replace(/[|,،]/g,"").trim(), b=w.bbox||{};
+        const cx=(b.x0+b.x1)/2, cy=(b.y0+b.y1)/2;
+        let m=t.match(/^(\d)-(\d)-(\d)-(\d)$/); if(m) codes.push({code:m.slice(1).join("-"),cx,cy});
+        m=t.match(/^(\d{1,3}(?:\.\d+)?)%$/); if(m && parseFloat(m[1])<=100) pcts.push({v:parseFloat(m[1]),cx,cy,used:false});
+        m=t.match(/^[S$5]-(\d{4,6})$/); if(m && !res.mno) res.mno="S-"+m[1];
+      });
+      /* قراءة شارة النسبة لكل مؤشر مباشرة (أدق)، ثم المطابقة بالموضع احتياطًا */
+      await worker.setParameters({tessedit_pageseg_mode:"6",tessedit_char_whitelist:""});
+      for(const c of codes){
+        const v=await readBadge(worker,findBadge(cv,0,c.cy-H*0.04,W*0.3,c.cy+H*0.035));
+        if(v!==null){ res.ind[c.code]=pv(v); pcts.forEach(q=>{ if(Math.abs(q.cy-c.cy)<H*0.03 && q.cx<c.cx) q.used=true; }); continue; }
+        let best=null,bd=1e9;
+        pcts.forEach(q=>{ if(q.used||q.cx>c.cx) return; const d=Math.abs(q.cy-c.cy); if(d<H*0.03&&d<bd){bd=d;best=q;} });
+        if(best){ best.used=true; res.ind[c.code]=pv(best.v); }
+      }
+      let pill=null;
+      if(p===1){
+        pill=findBadge(cv,0,H*0.3,W*0.35,H*0.5);
+        const v=await readBadge(worker,pill); if(v!==null) res.eval.overall=pv(v);
+      }
+      if(p===1 && !codes.length){
+        /* أعمدة «أداء المدرسة وفق المجالات» من اليمين: الإدارة المدرسية، التعليم والتعلم، نواتج التعلم، البيئة المدرسية */
+        const band=pcts.filter(q=>q.cy>H*0.33&&q.cy<H*0.75&&!(pill&&q.cx<=pill.box.x1+5&&q.cy>=pill.box.y0-5&&q.cy<=pill.box.y1+5)).sort((a,b)=>b.cx-a.cx);
+        if(band.length===4) ["adm","tl","out","env"].forEach((k,i)=>res.eval[k]=pv(band[i].v));
+      }
+    }
+    if(worker) await worker.terminate();
+    res.ind=mapReport(res.ind);
+    if(!Object.keys(res.ind).length && !Object.keys(res.eval).length) throw new Error("لم أتمكن من قراءة نسب من هذا الملف. تأكد أنه تقرير التقويم المدرسي المنزّل من المنصة، أو أدخل النسب يدويًا.");
+    IMP={res};
+  }catch(err){ IMP={err:String((err&&err.message)||err)}; }
+  renderImport();
+}
+function applyImport(){
+  if(!IMP||!IMP.res) return;
+  const r=IMP.res; let n=0;
+  for(const k in r.eval){ S.evalVals[k]=r.eval[k]; n++; }
+  if(r.type) S.evalType=r.type;
+  allItems().forEach(x=>{ if(x.id.indexOf("SEC-")===0) return; if(r.ind[x.id]!==undefined){ S.ind[x.id]=r.ind[x.id]; n++; } });
+  const cbx=document.getElementById("impBasic");
+  if(cbx&&cbx.checked){ if(r.name&&!S.school.name) S.school.name=r.name; if(r.mno&&!S.school.ministryNo) S.school.ministryNo=r.mno; }
+  IMP=null; save(); render(); toast(`تم اعتماد ${n} قيمة من التقرير ✓ راجع خطوة «تحليل المؤشرات»`);
+}
+
 /* ===================== التحديث اللحظي ===================== */
 function updateLive(el){
   const k=el.getAttribute("data-live");
@@ -1074,6 +1247,7 @@ function onField(e){
 }
 view.addEventListener("input",onField);
 view.addEventListener("change",onField);
+view.addEventListener("change",e=>{ if(e.target&&e.target.id==="repFile"){ const f=e.target.files[0]; e.target.value=""; importReport(f); } });
 document.getElementById("steps").addEventListener("click",e=>{ const b=e.target.closest("[data-step]"); if(b) go(+b.getAttribute("data-step")); });
 document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]"); if(g){ go(+g.getAttribute("data-go")); return; }
@@ -1106,6 +1280,8 @@ document.addEventListener("click",e=>{
     case "exRowDel": S.exec[i].rows.splice(+b.getAttribute("data-j"),1); break;
     case "printWeek": doPrint([printWeek(S.exec[i])]); return;
     case "doPrint": printSelected(); return;
+    case "impApply": applyImport(); return;
+    case "impCancel": IMP=null; render(); return;
     case "backup": if(window.PN) PN.open(); return;
     case "reset":
       if(!confirm("سيتم حذف جميع بيانات هذه الأداة من هذا الجهاز. هل صدّرت نسخة احتياطية؟")) return;
