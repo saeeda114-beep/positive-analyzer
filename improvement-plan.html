@@ -562,9 +562,14 @@ function navBtns(){
 function render(){ markSteps(); document.getElementById("view").innerHTML = STEPS[S.step].r() + navBtns(); document.querySelectorAll("[data-live]").forEach(updateLive); if(typeof renderImport==="function") renderImport(); if(typeof renderNafsImport==="function") renderNafsImport(); }
 
 /* ===================== 1) البيانات الأساسية ===================== */
+function importCard(){ return `<div class="card" style="border:2px dashed var(--gold)"><h2>ابدأ برفع تقرير التقويم المدرسي وبطاقة نافس</h2>
+    <p class="hint">ارفع ملف PDF لتقرير التقويم المدرسي (الذاتي أو الخارجي) كما نزّلته من المنصة، فتُستخرج نسبة الأداء العام ونسب المجالات ونسب جميع المؤشرات تلقائيًا. وارفع بطاقة نافس (PDF من منصة تميز) فتُستخرج نسب الإتقان العامة والتفصيلية للمدرسة. تتم القراءة داخل متصفحك ولا يُرفع أي ملف لأي جهة.</p>
+    <div class="row"><label class="btn gold" style="cursor:pointer">📄 تقرير التقويم المدرسي (PDF)<input type="file" id="repFile" accept="application/pdf,.pdf" hidden></label>
+    <label class="btn primary" style="cursor:pointer">📊 بطاقة نافس (PDF)<input type="file" id="nafsFile" accept="application/pdf,.pdf" hidden></label></div>
+    <div id="impStatus" style="margin-top:12px"></div><div id="nafsStatus" style="margin-top:12px"></div></div>`; }
 function viewBasic(){
   const s="school.";
-  return `<div class="card"><h2>بيانات الترويسة</h2>
+  return importCard()+`<div class="card"><h2>بيانات الترويسة</h2>
     <p class="hint">تظهر في أعلى النماذج المطبوعة بجوار شعار الوزارة. اكتب اسم الإدارة كما هو معتمد لديكم.</p>
     <div class="g g2">
       ${field("إدارة التعليم",inp(s+"admin","مثال: الإدارة العامة للتعليم بالمنطقة الشرقية"))}
@@ -616,11 +621,7 @@ function stuTotal(f){ let sum=0,any=false; stageGrades().forEach(g=>{ const n=nu
 function yearsBack(){ const y=parseInt(num(S.school.year))||1448; return [y-3,y-2,y-1]; }
 function viewResults(){
   const yrs=yearsBack();
-  return `<div class="card" style="border:2px dashed var(--gold)"><h2>استيراد تلقائي من تقرير التقويم المدرسي وبطاقة نافس</h2>
-    <p class="hint">ارفع ملف PDF لتقرير التقويم المدرسي (الذاتي أو الخارجي) كما نزّلته من المنصة، فتُستخرج نسبة الأداء العام ونسب المجالات ونسب جميع المؤشرات تلقائيًا. وارفع بطاقة نافس (PDF من منصة تميز) فتُستخرج نسب الإتقان العامة والتفصيلية للمدرسة. تتم القراءة داخل متصفحك ولا يُرفع أي ملف لأي جهة.</p>
-    <div class="row"><label class="btn gold" style="cursor:pointer">📄 تقرير التقويم المدرسي (PDF)<input type="file" id="repFile" accept="application/pdf,.pdf" hidden></label>
-    <label class="btn primary" style="cursor:pointer">📊 بطاقة نافس (PDF)<input type="file" id="nafsFile" accept="application/pdf,.pdf" hidden></label></div>
-    <div id="impStatus" style="margin-top:12px"></div><div id="nafsStatus" style="margin-top:12px"></div></div>
+  return `<div class="card" style="border:1px dashed var(--gold)"><p class="hint" style="margin:0">💡 لتعبئة هذه الصفحة تلقائيًا ارفع تقرير التقويم المدرسي وبطاقة نافس من الخطوة الأولى. <button class="btn light sm" data-go="0">الذهاب للرفع</button></p></div>
   <div class="card"><h2>3- ملخص نتائج أداء المدرسة وفق آخر تقرير للتقويم المدرسي</h2>
     <div class="g g3" style="margin-bottom:12px">${field("نوع التقرير",sel("evalType",["ذاتي","خارجي"]))}</div>
     <div class="legend"><span class="lv ex">التميز 90 فأكثر</span><span class="lv pr">التقدم 75 إلى أقل من 90</span><span class="lv st">الانطلاق 50 إلى أقل من 75</span><span class="lv pp">التهيئة أقل من 50</span></div>
