@@ -559,7 +559,7 @@ function go(i){ S.step=Math.max(0,Math.min(STEPS.length-1,i)); save(); render();
 function navBtns(){
   return `<div class="navbtns">${S.step>0?`<button class="btn light" data-go="${S.step-1}">→ السابق</button>`:"<span></span>"}${S.step<STEPS.length-1?`<button class="btn primary" data-go="${S.step+1}">التالي ←</button>`:""}</div>`;
 }
-function render(){ markSteps(); document.getElementById("view").innerHTML = STEPS[S.step].r() + navBtns(); document.querySelectorAll("[data-live]").forEach(updateLive); if(typeof renderImport==="function") renderImport(); }
+function render(){ markSteps(); document.getElementById("view").innerHTML = STEPS[S.step].r() + navBtns(); document.querySelectorAll("[data-live]").forEach(updateLive); if(typeof renderImport==="function") renderImport(); if(typeof renderNafsImport==="function") renderNafsImport(); }
 
 /* ===================== 1) البيانات الأساسية ===================== */
 function viewBasic(){
@@ -616,10 +616,11 @@ function stuTotal(f){ let sum=0,any=false; stageGrades().forEach(g=>{ const n=nu
 function yearsBack(){ const y=parseInt(num(S.school.year))||1448; return [y-3,y-2,y-1]; }
 function viewResults(){
   const yrs=yearsBack();
-  return `<div class="card" style="border:2px dashed var(--gold)"><h2>استيراد تلقائي من تقرير التقويم المدرسي</h2>
-    <p class="hint">ارفع ملف PDF لتقرير التقويم المدرسي (الذاتي أو الخارجي) كما نزّلته من المنصة، فتُستخرج نسبة الأداء العام ونسب المجالات ونسب جميع المؤشرات تلقائيًا. تتم القراءة داخل متصفحك ولا يُرفع الملف لأي جهة، وتستغرق نحو دقيقة.</p>
-    <label class="btn gold" style="cursor:pointer">📄 اختيار ملف التقرير (PDF)<input type="file" id="repFile" accept="application/pdf,.pdf" hidden></label>
-    <div id="impStatus" style="margin-top:12px"></div></div>
+  return `<div class="card" style="border:2px dashed var(--gold)"><h2>استيراد تلقائي من تقرير التقويم المدرسي وبطاقة نافس</h2>
+    <p class="hint">ارفع ملف PDF لتقرير التقويم المدرسي (الذاتي أو الخارجي) كما نزّلته من المنصة، فتُستخرج نسبة الأداء العام ونسب المجالات ونسب جميع المؤشرات تلقائيًا. وارفع بطاقة نافس (PDF من منصة تميز) فتُستخرج نسب الإتقان العامة والتفصيلية للمدرسة. تتم القراءة داخل متصفحك ولا يُرفع أي ملف لأي جهة.</p>
+    <div class="row"><label class="btn gold" style="cursor:pointer">📄 تقرير التقويم المدرسي (PDF)<input type="file" id="repFile" accept="application/pdf,.pdf" hidden></label>
+    <label class="btn primary" style="cursor:pointer">📊 بطاقة نافس (PDF)<input type="file" id="nafsFile" accept="application/pdf,.pdf" hidden></label></div>
+    <div id="impStatus" style="margin-top:12px"></div><div id="nafsStatus" style="margin-top:12px"></div></div>
   <div class="card"><h2>3- ملخص نتائج أداء المدرسة وفق آخر تقرير للتقويم المدرسي</h2>
     <div class="g g3" style="margin-bottom:12px">${field("نوع التقرير",sel("evalType",["ذاتي","خارجي"]))}</div>
     <div class="legend"><span class="lv ex">التميز 90 فأكثر</span><span class="lv pr">التقدم 75 إلى أقل من 90</span><span class="lv st">الانطلاق 50 إلى أقل من 75</span><span class="lv pp">التهيئة أقل من 50</span></div>
@@ -627,7 +628,7 @@ function viewResults(){
     ${EVAL_ROWS.map(r=>`<tr><td><b>${r[1]}</b></td><td>${inp("evalVals."+r[0],"%",'inputmode="decimal" class="num"')}</td><td class="num" data-live="lv" data-p="evalVals.${r[0]}"></td></tr>`).join("")}
     </tbody></table></div></div>
   <div class="card"><h2>4- نتائج المدرسة في الاختبارات الوطنية "نافس" للمرحلة الابتدائية والمتوسطة</h2>
-    <p class="hint">من بطاقة نافس للمدرسة: نسبة الطلبة الذين اجتازوا الحد الأدنى للإتقان. *يراعى الصف والمرحلة. اتركه فارغًا للمرحلة الثانوية.</p>
+    <p class="hint">من بطاقة نافس للمدرسة: نسبة الطلبة الذين اجتازوا الحد الأدنى للإتقان (آخر عام). *يراعى الصف والمرحلة. اتركه فارغًا للمرحلة الثانوية. يمكن تعبئته تلقائيًا برفع البطاقة في أعلى الصفحة.</p>
     <div class="scroll"><table class="tbl"><thead><tr><th>المجال</th><th class="num" style="width:120px">المستوى العام</th><th>المستوى التفصيلي للمجالات</th></tr></thead><tbody>
     ${NAFS.map(n=>`<tr><td><b>${n.name}</b></td><td>${inp(`nafs.vals.${n.id}.g`,"%",'inputmode="decimal" class="num"')}</td>
       <td><div class="g g4">${n.subs.map((s,j)=>field(s,inp(`nafs.vals.${n.id}.s${j}`,"%",'inputmode="decimal" class="num"'))).join("")}</div></td></tr>`).join("")}
@@ -1244,6 +1245,102 @@ function applyImport(){
   IMP=null; save(); render(); toast(`تم اعتماد ${n} قيمة من التقرير ✓ راجع خطوة «تحليل المؤشرات»`);
 }
 
+/* ===================== استيراد بطاقة نافس (PDF من منصة تميز) =====================
+   البطاقة صور فقط: تُحدَّد عناصرها بلون المدرسة (الأزرق) ثم تُقرأ الأرقام بالتعرف الضوئي.
+   - صفحات المواد: عدد أعمدة المدرسة الزرقاء في «المجالات الفرعية» يحدد المادة (4 رياضيات، 3 علوم، 2 قراءة)،
+     وترتيبها من اليسار يطابق ترتيب المجالات في النموذج.
+   - المستوى العام: شارة المدرسة الزرقاء عند العام الأحدث في مخطط «نسبة الطلبة الذين اجتازوا الحد الأدنى للإتقان». */
+let NIMP=null;
+function nfSet(msg){ NIMP={busy:true,msg}; renderNafsImport(); }
+function nfBlue(D,i){ const r=D[i],g=D[i+1],b=D[i+2]; return b>200&&r<170&&g>150&&g<220&&b-r>70; }
+function nfCrop(cv,x0,y0,x1,y1,whiteText){
+  x0=Math.max(0,Math.round(x0)); y0=Math.max(0,Math.round(y0)); x1=Math.min(cv.width,Math.round(x1)); y1=Math.min(cv.height,Math.round(y1));
+  const w=x1-x0, h=y1-y0; if(w<8||h<8) return null;
+  const k=4, a=document.createElement("canvas"); a.width=w*k; a.height=h*k;
+  const ax=a.getContext("2d"); ax.drawImage(cv,x0,y0,w,h,0,0,w*k,h*k);
+  const im=ax.getImageData(0,0,a.width,a.height), p=im.data;
+  for(let i=0;i<p.length;i+=4){ const mx=Math.max(p[i],p[i+1],p[i+2]), mn=Math.min(p[i],p[i+1],p[i+2]); const ink=whiteText?mn>200:mx<110; const v=ink?0:255; p[i]=p[i+1]=p[i+2]=v; }
+  ax.putImageData(im,0,0);
+  const pad=30, c=document.createElement("canvas"); c.width=a.width+pad*2; c.height=a.height+pad*2;
+  const cx=c.getContext("2d"); cx.fillStyle="#fff"; cx.fillRect(0,0,c.width,c.height); cx.drawImage(a,pad,pad);
+  return c;
+}
+function nfPage(cv){
+  const W=cv.width, H=cv.height, D=cv.getContext("2d").getImageData(0,0,W,H).data, B=(x,y)=>nfBlue(D,(y*W+x)*4);
+  /* أعمدة المجالات الفرعية */
+  const y0=Math.round(H*0.64), y1=Math.round(H*0.80), xr=Math.round(W*0.88);
+  let best=-1, bc=0;
+  for(let y=y0;y<y1;y++){ let c=0; for(let x=0;x<xr;x+=2) if(B(x,y)) c++; if(c>bc){ bc=c; best=y; } }
+  if(bc<20) return null;
+  const runs=[]; for(let x=0;x<xr;x++){ if(!B(x,best)) continue; const s0=x; while(x<W&&B(x,best)) x++; if(x-s0>15) runs.push([s0,x]); }
+  if(runs.length<2||runs.length>4) return null;
+  const bars=runs.map(([a,b])=>{ const cx=Math.round((a+b)/2); let t=best; while(t>y0&&B(cx,t-1)) t--; return nfCrop(cv,a-25,t-38,b+25,t-2,false); });
+  /* شارة المدرسة عند العام الأحدث */
+  const xa=Math.round(W*0.57), xb=Math.round(W*0.66), ya=Math.round(H*0.36), yb=Math.round(H*0.47), rows=[];
+  for(let y=ya;y<yb;y++){ let c=0; for(let x=xa;x<xb;x++) if(B(x,y)) c++; if(c>25) rows.push(y); }
+  let badge=null, grp=[];
+  const flush=()=>{ if(grp.length>=14&&!badge){ const top=grp[0], bot=grp[grp.length-1], cy=Math.round((top+bot)/2); let l=-1,r=-1;
+      for(let x=xa-60;x<xb+60;x++) if(B(x,cy)){ if(l<0) l=x; r=x; }
+      const ins=Math.round((bot-top)/4); if(l>=0) badge=nfCrop(cv,l+ins,top+2,r-ins,bot-2,true); } grp=[]; };
+  rows.forEach(y=>{ if(grp.length&&y-grp[grp.length-1]>2) flush(); grp.push(y); }); flush();
+  return {n:runs.length, bars, badge};
+}
+async function nfRead(worker,c){
+  if(!c) return null;
+  const r=await worker.recognize(c), m=String(r.data.text||"").replace(/\s/g,"").match(/(\d{1,3}(?:\.\d+)?)%/);
+  if(!m) return null; const v=parseFloat(m[1]); return (v>=0&&v<=100)?pv(v):null;
+}
+async function importNafs(file){
+  if(!file) return;
+  try{
+    nfSet("جارٍ تحميل أدوات القراءة...");
+    await loadScript(CDN.pdf); pdfjsLib.GlobalWorkerOptions.workerSrc=CDN.pdfWorker;
+    const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;
+    const res={pages:pdf.numPages, vals:{}}, BYN={4:"math",3:"sci",2:"read"};
+    let worker=null;
+    for(let p=1;p<=pdf.numPages;p++){
+      nfSet(`قراءة الصفحة ${p} من ${pdf.numPages}...`);
+      const page=await pdf.getPage(p), vp=page.getViewport({scale:1650/page.getViewport({scale:1}).width});
+      const cv=document.createElement("canvas"); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height);
+      await page.render({canvasContext:cv.getContext("2d",{willReadFrequently:true}),viewport:vp}).promise;
+      const pg=nfPage(cv); if(!pg) continue;
+      const id=BYN[pg.n]; if(!id||res.vals[id]) continue;
+      if(!worker){
+        nfSet(`تحميل محرك التعرف على الأرقام (مرة واحدة)... الصفحة ${p} من ${pdf.numPages}`);
+        await loadScript(CDN.tess);
+        worker=await Tesseract.createWorker("eng",1,{workerPath:CDN.tessWorker,corePath:CDN.tessCore,langPath:CDN.tessLang});
+        await worker.setParameters({tessedit_pageseg_mode:"7",tessedit_char_whitelist:"0123456789.%"});
+        nfSet(`قراءة الصفحة ${p} من ${pdf.numPages}...`);
+      }
+      const v={g:await nfRead(worker,pg.badge)};
+      for(let j=0;j<pg.bars.length;j++) v["s"+j]=await nfRead(worker,pg.bars[j]);
+      res.vals[id]=v;
+    }
+    if(worker) await worker.terminate();
+    if(!Object.keys(res.vals).length) throw new Error("لم أتمكن من قراءة نسب من هذا الملف. تأكد أنه بطاقة نافس المنزّلة من منصة تميز (PDF)، أو أدخل النسب يدويًا.");
+    NIMP={res};
+  }catch(err){ NIMP={err:String((err&&err.message)||err)}; }
+  renderNafsImport();
+}
+function renderNafsImport(){
+  const box=document.getElementById("nafsStatus"); if(!box||!NIMP) return;
+  if(NIMP.busy){ box.innerHTML=`<div class="note">⏳ بطاقة نافس: ${esc(NIMP.msg)}</div>`; return; }
+  if(NIMP.err){ box.innerHTML=`<div class="warnbar">⚠️ ${esc(NIMP.err)}</div>`; return; }
+  const r=NIMP.res, cell=v=>v!==null&&v!==undefined?`<b>${esc(v)}%</b>`:'<span class="no">لم يُقرأ</span>';
+  box.innerHTML=`<div class="sugg"><b>بطاقة نافس: تمت قراءة ${r.pages} صفحات.</b> راجع النسب مقابل البطاقة ثم اضغط «اعتماد نسب نافس». القيم المعتمدة هي نسب المدرسة (اللون الأزرق) لآخر عام في البطاقة.</div>
+    <div class="scroll"><table class="tbl"><thead><tr><th>المجال</th><th class="num">المستوى العام</th><th>المستوى التفصيلي للمجالات</th></tr></thead><tbody>
+    ${NAFS.map(n=>{ const v=r.vals[n.id]; return `<tr><td><b>${n.name}</b></td><td class="num">${v?cell(v.g):'<span class="no">غير موجودة في البطاقة</span>'}</td><td>${v?n.subs.map((s,j)=>`${s}: ${cell(v["s"+j])}`).join(" — "):"—"}</td></tr>`; }).join("")}
+    </tbody></table></div>
+    <div class="row" style="margin-top:10px"><button class="btn primary" data-act="nafsApply">✔ اعتماد نسب نافس</button><button class="btn light" data-act="nafsCancel">إلغاء</button></div>`;
+}
+function applyNafs(){
+  if(!NIMP||!NIMP.res) return;
+  let n=0; const vals=NIMP.res.vals;
+  NAFS.forEach(x=>{ const v=vals[x.id]; if(!v) return; S.nafs.vals[x.id]=S.nafs.vals[x.id]||{};
+    Object.keys(v).forEach(k=>{ if(v[k]!==null&&v[k]!==undefined){ S.nafs.vals[x.id][k]=v[k]; n++; } }); });
+  NIMP=null; save(); render(); toast(`تم اعتماد ${n} نسبة من بطاقة نافس ✓`);
+}
+
 /* ===================== التحديث اللحظي ===================== */
 function updateLive(el){
   const k=el.getAttribute("data-live");
@@ -1266,6 +1363,7 @@ function onField(e){
 view.addEventListener("input",onField);
 view.addEventListener("change",onField);
 view.addEventListener("change",e=>{ if(e.target&&e.target.id==="repFile"){ const f=e.target.files[0]; e.target.value=""; importReport(f); } });
+view.addEventListener("change",e=>{ if(e.target&&e.target.id==="nafsFile"){ const f=e.target.files[0]; e.target.value=""; importNafs(f); } });
 document.getElementById("steps").addEventListener("click",e=>{ const b=e.target.closest("[data-step]"); if(b) go(+b.getAttribute("data-step")); });
 document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]"); if(g){ go(+g.getAttribute("data-go")); return; }
@@ -1300,6 +1398,8 @@ document.addEventListener("click",e=>{
     case "doPrint": printSelected(); return;
     case "impApply": applyImport(); return;
     case "impCancel": IMP=null; render(); return;
+    case "nafsApply": applyNafs(); return;
+    case "nafsCancel": NIMP=null; render(); return;
     case "backup": if(window.PN) PN.open(); return;
     case "reset":
       if(!confirm("سيتم حذف جميع بيانات هذه الأداة من هذا الجهاز. هل صدّرت نسخة احتياطية؟")) return;
